@@ -3,6 +3,7 @@ package com.platform45.weather45.features.fx
 import android.app.Application
 import android.location.Location
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.models.Conversion
@@ -19,7 +20,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
 
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
-            getHistorical("2019-03-25-13:00", "EURUSD, USDJPY", "hourly")
+            getHistorical("2019-03-25-13:00", "EURUSD", "hourly")
         }
     }
 
@@ -35,7 +36,10 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         val historical = fXRepository.getHistorical(API_KEY, date, currency, interval)
 
         uiScope.launch {
-            val price = historical?.price
+            val prices = historical?.price as LinkedTreeMap<String, Double>
+
+            val currentPrice = prices[currency]
+            val dd = currentPrice
         }
     }
 }

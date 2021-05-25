@@ -2,7 +2,6 @@ package com.platform45.weather45.features.dailyTemperatures
 
 import android.location.Location
 import android.os.Bundle
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.platform45.weather45.R
@@ -37,16 +36,15 @@ class DailyTemperaturesActivity : GooglePlayActivity() {
     }
 
     override fun onLocationRequestListenerSuccess(location: Location?) {
-        //Proceed
-        Toast.makeText(this, "We at ${location?.latitude}, ${location?.longitude}", Toast.LENGTH_SHORT).show()
+        dailyTemperaturesViewModel.setCurrentLocation(location)
     }
 
     private fun addObservers() {
-        dailyTemperaturesViewModel.message.observe(this, Observer { onMessageUpdated(it) })
+        dailyTemperaturesViewModel.location.observe(this, Observer { onLocationSet(it) })
     }
 
-    private fun onMessageUpdated(message: String){
-
+    private fun onLocationSet(location: Location){
+        //Fetch location weather
     }
 
 }

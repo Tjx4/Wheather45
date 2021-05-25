@@ -16,7 +16,6 @@ class App : Application(){
         startKoin {
             androidContext(this@App)
             modules(
-                // common modules
                 listOf(
                     viewModelModule,
                     repositoryModule,

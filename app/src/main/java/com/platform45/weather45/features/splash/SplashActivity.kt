@@ -10,5 +10,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navigateToActivity(DailyTemperaturesActivity::class.java, null, FADE_IN_ACTIVITY)
+        finish()
     }
 }

@@ -15,15 +15,6 @@
         android:layout_height="match_parent"
         tools:context=".features.dailyTemperatures.DailyTemperaturesActivity">
 
-        <TextView
-            style="@style/MediumTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Yo!"
-            android:text="@{dailyTemperaturesViewModel.message}"
-            android:layout_margin="@dimen/small_margin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

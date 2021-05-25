@@ -1,14 +1,17 @@
 package com.platform45.weather45.features.dailyTemperatures
 
+import android.location.Location
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.platform45.weather45.R
-import com.platform45.weather45.base.activities.BaseActivity
+import com.platform45.weather45.base.activities.GooglePlayActivity
 import com.platform45.weather45.databinding.ActivityDailyTemperaturesBinding
+import com.platform45.weather45.helpers.showErrorDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DailyTemperaturesActivity : BaseActivity() {
+class DailyTemperaturesActivity : GooglePlayActivity() {
     private lateinit var binding: ActivityDailyTemperaturesBinding
     private val dailyTemperaturesViewModel: DailyTemperaturesViewModel by viewModel()
 
@@ -19,13 +22,30 @@ class DailyTemperaturesActivity : BaseActivity() {
         binding.lifecycleOwner = this
 
         addObservers()
+        checkPlayServicesAndPermission()
+    }
+
+    override fun onLocationPermissionDenied() {
+        showErrorDialog(
+            this,
+            getString(R.string.error),
+            getString(R.string.permission_denied, "(Location permission),"),
+            getString(R.string.close)
+        ) {
+            finish()
+        }
+    }
+
+    override fun onLocationRequestListenerSuccess(location: Location?) {
+        //Proceed
+        Toast.makeText(this, "onLocationRequestListenerSuccess", Toast.LENGTH_SHORT).show()
     }
 
     private fun addObservers() {
         dailyTemperaturesViewModel.message.observe(this, Observer { onMessageUpdated(it) })
     }
 
-    fun onMessageUpdated(message: String){
+    private fun onMessageUpdated(message: String){
 
     }
 

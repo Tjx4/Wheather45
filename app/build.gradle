@@ -48,8 +48,13 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    //multidex
     implementation "androidx.multidex:multidex:$multidex_version"
+
+    //Google play
+    implementation "com.google.android.gms:play-services-maps:$gms_version"
+    implementation "com.google.android.gms:play-services-nearby:$gms_version"
+    implementation "com.google.android.gms:play-services-places:$gms_version"
+    implementation "com.google.android.gms:play-services-location:$gms_version"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

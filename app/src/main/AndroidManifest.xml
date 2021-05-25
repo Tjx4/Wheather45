@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Weather45">
+        <activity android:name=".features.dailyTemperatures.DailyTemperaturesActivity"></activity>
         <activity
             android:name=".features.splash.SplashActivity"
             android:theme="@style/SplashTheme">

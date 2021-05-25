@@ -5,6 +5,7 @@ import com.platform45.weather45.di.ModuleLoadHelper
 import com.platform45.weather45.di.networkingModule
 import com.platform45.weather45.di.repositoryModule
 import com.platform45.weather45.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : Application(){
@@ -13,6 +14,7 @@ class App : Application(){
         super.onCreate()
 
         startKoin {
+            androidContext(this@App)
             modules(
                 // common modules
                 listOf(

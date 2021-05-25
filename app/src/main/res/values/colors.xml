@@ -10,7 +10,7 @@
     <color name="lightText">#DDD</color>f
     <color name="greyText">#888</color>
     <color name="darkText">#111</color>
-    <color name="darkGreyBackground">#aaa</color>
+    <color name="darkGreyBackground">#ccc</color>
     <color name="greyBackground">#EEE</color>
     <color name="lightBackground">#FFF</color>
     <color name="gradientStart">#84c3f9</color>

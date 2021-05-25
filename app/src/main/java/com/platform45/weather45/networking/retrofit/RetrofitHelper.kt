@@ -1,14 +1,13 @@
 package com.platform45.weather45.networking.retrofit
 
-import com.platform45.weather45.constants.DAILY
-import com.platform45.weather45.constants.DETAILS
-import com.platform45.weather45.models.Daily
+import com.platform45.weather45.models.Conversion
+import com.platform45.weather45.models.Historical
 import retrofit2.http.*
 
 interface RetrofitHelper {
-    @GET(DAILY)
-    suspend fun getDaily(@Query("x-rapidapi-key") apiKey: String): List<Daily>?
+    @GET("apiconvert")
+    suspend fun convert(@Query("api_key") apiKey: String, @Query("from") from: String, @Query("to") to: String, @Query("amount")  amount: String): Conversion?
 
-    @GET(DETAILS)
-    suspend fun getDetails(@Query("x-rapidapi-key") apiKey: String): List<Daily>?
+    @GET("apihistorical")
+    suspend fun historical(@Query("api_key") apiKey: String, @Query("date") date: String, @Query("interval") interval: String, @Query("currency") currency: String): Historical?
 }

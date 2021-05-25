@@ -1,4 +1,4 @@
-package com.platform45.weather45
+package com.platform45.weather45.features.splash
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

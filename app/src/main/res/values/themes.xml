@@ -16,4 +16,21 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@drawable/splash_background</item>
     </style>
+
+    <style name="BaseTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="largeTextView" parent="BaseTextView">
+        <item name="android:textSize">@dimen/large_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/darkText</item>
+    </style>
+
+    <style name="MediumTextView" parent="BaseTextView">
+        <item name="android:textSize">@dimen/medium_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/darkText</item>
+    </style>
 </resources>

@@ -49,22 +49,22 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.multidex:multidex:$multidex_version"
-
     //Google play
     implementation "com.google.android.gms:play-services-maps:$gms_version"
     implementation "com.google.android.gms:play-services-nearby:$gms_version"
     implementation "com.google.android.gms:play-services-places:$gms_version"
     implementation "com.google.android.gms:play-services-location:$gms_version"
-
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
-    // koin
+    //koin
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-core-ext:$koin_version"
     testImplementation "org.koin:koin-test:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
+
+    //gson
+    //implementation 'com.google.code.gson:gson:2.8.6'
 }

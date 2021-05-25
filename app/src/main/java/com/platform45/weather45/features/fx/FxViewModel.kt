@@ -19,6 +19,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
 
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
+            getHistorical("2019-03-25-13:00", "EURUSD, USDJPY", "hourly")
         }
     }
 
@@ -27,6 +28,14 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
 
         uiScope.launch {
             _conversion.value = conversion
+        }
+    }
+
+    suspend fun getHistorical(date: String, currency: String, interval: String) {
+        val historical = fXRepository.getHistorical(API_KEY, date, currency, interval)
+
+        uiScope.launch {
+            val price = historical?.price
         }
     }
 }

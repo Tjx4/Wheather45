@@ -12,7 +12,6 @@ class DailyTemperaturesViewModel(application: Application, weatherRepository: We
         get() = _message
 
     init {
-        val dd = weatherRepository
-        _message.value = "Hello world"
+
     }
 }

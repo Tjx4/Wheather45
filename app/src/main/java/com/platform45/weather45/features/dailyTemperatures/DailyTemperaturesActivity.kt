@@ -38,7 +38,7 @@ class DailyTemperaturesActivity : GooglePlayActivity() {
 
     override fun onLocationRequestListenerSuccess(location: Location?) {
         //Proceed
-        Toast.makeText(this, "onLocationRequestListenerSuccess", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "We at ${location?.latitude}, ${location?.longitude}", Toast.LENGTH_SHORT).show()
     }
 
     private fun addObservers() {

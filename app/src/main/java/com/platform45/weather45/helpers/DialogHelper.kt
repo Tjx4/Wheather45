@@ -6,6 +6,15 @@ import android.content.DialogInterface
 import android.view.Window
 import com.platform45.weather45.R
 
+fun showConfirmDialog(context: Context, title: String, message: String, yesButtonText: String, noButtonText: String, yesCallbackFun: () -> Unit, noCallbackFun: () -> Unit){
+    val ab = setupBasicMessage(title, message, yesButtonText, "", noButtonText, yesCallbackFun,
+        { }, noCallbackFun, context
+    )
+    ab.setIcon(R.drawable.confirm_icon)
+    ab.setCancelable(false)
+    showAlertMessage(ab, context)
+}
+
 fun showErrorDialog(context: Context, title: String, message: String, buttonText: String = context.getString(
     R.string.ok), callbackFun: () -> Unit = {}){
     val ab = setupBasicMessage(title, message, buttonText, "", "", callbackFun, {}, {}, context)

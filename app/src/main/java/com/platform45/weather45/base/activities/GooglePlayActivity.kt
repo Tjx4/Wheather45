@@ -16,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.platform45.weather45.R
+import com.platform45.weather45.helpers.showConfirmDialog
 import com.platform45.weather45.helpers.showErrorDialog
 
  abstract class GooglePlayActivity : BaseActivity(), LocationListener {
@@ -147,18 +148,18 @@ import com.platform45.weather45.helpers.showErrorDialog
     }
 
     fun checkGPSAndProceed(onSuccessCallback: () -> Unit = {}) {
-     if (isGPSOn(this)) {
-         onSuccessCallback.invoke()
-     } else {
-         showErrorDialog(
-             this,
-             getString(R.string.gps_error_title),
-             getString(R.string.gps_error_message),
-             getString(R.string.try_again)
-         ) {
-             checkGPSAndProceed(onSuccessCallback)
+         if (isGPSOn(this)) {
+             onSuccessCallback.invoke()
+         } else {
+            showConfirmDialog(
+            this,
+            getString(R.string.gps_error_title),
+            getString(R.string.gps_error_message),
+            getString(R.string.try_again),
+            getString(R.string.exit),
+            { checkGPSAndProceed(onSuccessCallback) },
+            { finish() })
          }
-     }
     }
 
     @SuppressLint("MissingPermission")
@@ -167,19 +168,19 @@ import com.platform45.weather45.helpers.showErrorDialog
      val isConnected = connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
          .isConnected
 
-     if(isConnected){
-         onSuccessCallback.invoke()
-     }
-     else{
-         showErrorDialog(
-             this,
-             getString(R.string.internet_error),
-             getString(R.string.internet_error_message),
-             getString(R.string.try_again)
-         ) {
-             isNetworkAvailable(onSuccessCallback)
+         if(isConnected){
+             onSuccessCallback.invoke()
          }
-     }
+         else{
+            showConfirmDialog(
+            this,
+            getString(R.string.internet_error),
+            getString(R.string.internet_error_message),
+            getString(R.string.try_again),
+            getString(R.string.exit),
+            { isNetworkAvailable(onSuccessCallback) },
+            { finish() })
+        }
     }
 
     override fun onLocationChanged(location: Location) {}

@@ -8,6 +8,7 @@
     <string name="permission_denied">To use this app u need %1$s Please go to settings and enable it</string>
     <string name="unknown_location">Unknown Location</string>
     <string name="try_again">Try again</string>
+    <string name="exit">Exit</string>
     <string name="close">Close</string>
     <string name="error">Error</string>
     <string name="google_play_error">Google play error</string>

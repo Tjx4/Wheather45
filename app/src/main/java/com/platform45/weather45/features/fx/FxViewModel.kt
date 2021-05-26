@@ -11,28 +11,36 @@ import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
 class FxViewModel(application: Application, val fXRepository: FXRepository) : BaseVieModel(application) {
-    private val _conversion: MutableLiveData<Conversion?> = MutableLiveData()
-    val conversion: MutableLiveData<Conversion?>
-        get() = _conversion
+    private val _tradingPair: MutableLiveData<String?> = MutableLiveData()
+    val tradingPair: MutableLiveData<String?>
+        get() = _tradingPair
 
-    private val _dayData: MutableLiveData<List<DayData?>?> = MutableLiveData()
-    val dayData: MutableLiveData<List<DayData?>?>
-        get() = _dayData
+    private val _from: MutableLiveData<String?> = MutableLiveData()
+    val from: MutableLiveData<String?>
+        get() = _from
+
+    private val _to: MutableLiveData<String?> = MutableLiveData()
+    val to: MutableLiveData<String?>
+        get() = _to
+
+    private val _allPairData: MutableLiveData<List<List<DayData?>??>?> = MutableLiveData()
+    val allPairData: MutableLiveData<List<List<DayData?>??>?>
+        get() = _allPairData
 
     init {
+        _tradingPair.value = "EURUSD,USDJPY"
+        _from.value = "2021-05-10"
+        _to.value = "2021-05-25"
+
         ioScope.launch {
-            convertCurrency("EUR", "USD", "1")
-            getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
-            getSeries("2021-05-10", "2021-05-25", "EURUSD", "ohlc")
+            // convertCurrency("EUR", "USD", "1")
+            //getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
+            getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
         }
     }
 
     suspend fun convertCurrency(from: String, to: String, amount: String) {
         val conversion = fXRepository.getConvertion(API_KEY, from, to , amount)
-
-        uiScope.launch {
-            _conversion.value = conversion
-        }
     }
 
     suspend fun getHistorical(date: String, currency: String, interval: String) {
@@ -56,16 +64,19 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
-        val tempseriesDateData = ArrayList<DayData>()
-
         val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
         if(series?.price != null){
             val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
-            for(currentDayPrice in prices){
-                val currentDay = currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
 
-                val currencies = currency.split(",")
-                for(currentCurrency in currencies){
+            val allCurrencysDateData = ArrayList<ArrayList<DayData>>()
+            val currencies = currency.split(",")
+            for(currentCurrency in currencies){
+                val currencyDateData = ArrayList<DayData>()
+
+                for(currentDayPrice in prices) {
+                    val currentDay =
+                    currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
+
                     val dateData = currentDay[currentCurrency]
                     val seriesDateData = DayData(
                         currentDayPrice.key,
@@ -74,12 +85,14 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
                         dateData?.get("low")?.toFloat(),
                         dateData?.get("open")?.toFloat()
                     )
-                    tempseriesDateData.add(seriesDateData)
+                    currencyDateData.add(seriesDateData)
                 }
+
+                allCurrencysDateData.add(currencyDateData)
             }
 
             uiScope.launch {
-                _dayData.value = tempseriesDateData
+                _allPairData.value = allCurrencysDateData
             }
         }
         else{

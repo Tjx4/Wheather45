@@ -20,8 +20,8 @@
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Price: 100.00"
-                android:text="@{`Price: `+ fxViewModel.conversion.price}"
+                tools:text="ZARUSD"
+                android:text="@{fxViewModel.tradingPair}"
                 android:layout_margin="@dimen/medium_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -30,8 +30,8 @@
                 style="@style/MediumTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Total: 100.00"
-                android:text="@{`Total: `+ fxViewModel.conversion.total}"
+                tools:text="from: 00-00-00 to 00-00-00"
+                android:text="@{`from: `+ fxViewModel.from + `| to: `+ fxViewModel.to }"
                 android:layout_margin="@dimen/medium_margin"
                 app:layout_constraintLeft_toRightOf="@+id/tvPrice"
                 app:layout_constraintTop_toTopOf="parent"/>

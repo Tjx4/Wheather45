@@ -56,7 +56,19 @@ class FxActivity : BaseActivity() {
         l.isEnabled = false
     }
 
-    fun onDataSet(dayData: List<DayData?>?){
+    private fun addObservers() {
+        fxViewModel.tradingPair.observe(this, Observer { onTradingPairSet(it) })
+        fxViewModel.allPairData.observe(this, Observer { onDataSet(it) })
+    }
+
+    private fun onTradingPairSet(tradingPair: String?){
+        //Fetch location weather
+    }
+
+    fun onDataSet(allDayData: List<List<DayData?>?>?){
+
+        val dayData = allDayData?.get(0)
+
         val xValues = ArrayList<String>()
         val candleEntries = ArrayList<CandleEntry>()
         dayData?.let {
@@ -106,14 +118,5 @@ class FxActivity : BaseActivity() {
         candleStickChart.invalidate()
     }
 
-
-    private fun addObservers() {
-        fxViewModel.conversion.observe(this, Observer { onConversion(it) })
-        fxViewModel.dayData.observe(this, Observer { onDataSet(it) })
-    }
-
-    private fun onConversion(conversion: Conversion?){
-        //Fetch location weather
-    }
 
 }

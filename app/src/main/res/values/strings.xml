@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather45</string>
+    <string name="app_name">FX45</string>
     <string name="ok">Ok</string>
     <string name="weather_error">There was an error while fetching weather, please try again</string>
     <string name="location_error">Location Error</string>

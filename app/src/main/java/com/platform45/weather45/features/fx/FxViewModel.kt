@@ -7,6 +7,7 @@ import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.models.Conversion
+import com.platform45.weather45.models.SeriesDateData
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
@@ -21,6 +22,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
             getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
+            getSeries("2021-03-25", "2021-05-25", "EURUSD,USDJPY", "ohlc")
         }
     }
 
@@ -38,11 +40,34 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         uiScope.launch {
 
             if(historical?.price != null){
-                val prices = historical?.price as LinkedTreeMap<String, Double>
+                val prices = historical?.price as LinkedTreeMap<String?, Double?>
                 val currencies = currency.split(",")
                 for(currentCurrency in currencies){
                     val currentPrice = prices[currentCurrency]
                     val dd = currentPrice
+                }
+            }
+            else{
+                //Handle ex
+            }
+
+        }
+    }
+
+    suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
+        val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+        uiScope.launch {
+
+            if(series?.price != null){
+                val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
+                for(currentDayPrice in prices){
+                    val currentDay =  currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
+
+                    val currencies = currency.split(",")
+                    for(currentCurrency in currencies){
+                        val dateData = currentDay[currentCurrency] as SeriesDateData
+                        val ddf = dateData
+                    }
                 }
             }
             else{

@@ -12,8 +12,7 @@ import com.github.mikephil.charting.data.CandleEntry
 import com.platform45.weather45.R
 import com.platform45.weather45.base.activities.BaseActivity
 import com.platform45.weather45.databinding.ActivityFxBinding
-import com.platform45.weather45.models.Conversion
-import com.platform45.weather45.models.DayData
+import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.activity_fx.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,16 +57,16 @@ class FxActivity : BaseActivity() {
 
     private fun addObservers() {
         fxViewModel.tradingPair.observe(this, Observer { onTradingPairSet(it) })
-        fxViewModel.allPairData.observe(this, Observer { onDataSet(it) })
+        fxViewModel.pairTrades.observe(this, Observer { onTradeHistorySet(it) })
     }
 
     private fun onTradingPairSet(tradingPair: String?){
         //Fetch location weather
     }
 
-    fun onDataSet(allDayData: List<List<DayData?>?>?){
+    fun onTradeHistorySet(allDayData: List<PairTradeHistory?>?){
 
-        val dayData = allDayData?.get(0)
+        val dayData = allDayData?.get(0)?.history
 
         val xValues = ArrayList<String>()
         val candleEntries = ArrayList<CandleEntry>()

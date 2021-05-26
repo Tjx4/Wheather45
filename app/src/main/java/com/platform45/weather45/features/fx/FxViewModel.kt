@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
-import com.platform45.weather45.models.Conversion
 import com.platform45.weather45.models.DayData
+import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
@@ -23,9 +23,9 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val to: MutableLiveData<String?>
         get() = _to
 
-    private val _allPairData: MutableLiveData<List<List<DayData?>??>?> = MutableLiveData()
-    val allPairData: MutableLiveData<List<List<DayData?>??>?>
-        get() = _allPairData
+    private val _pairTrades: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
+    val pairTrades: MutableLiveData<List<PairTradeHistory>?>
+        get() = _pairTrades
 
     init {
         _tradingPair.value = "EURUSD,USDJPY"
@@ -68,16 +68,16 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         if(series?.price != null){
             val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
 
-            val allCurrencysDateData = ArrayList<ArrayList<DayData>>()
+            val tempPairTrades = ArrayList<PairTradeHistory>()
             val currencies = currency.split(",")
-            for(currentCurrency in currencies){
+            for(pairTrade in currencies){
                 val currencyDateData = ArrayList<DayData>()
 
                 for(currentDayPrice in prices) {
                     val currentDay =
                     currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
 
-                    val dateData = currentDay[currentCurrency]
+                    val dateData = currentDay[pairTrade]
                     val seriesDateData = DayData(
                         currentDayPrice.key,
                         dateData?.get("close")?.toFloat(),
@@ -88,11 +88,11 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
                     currencyDateData.add(seriesDateData)
                 }
 
-                allCurrencysDateData.add(currencyDateData)
+                tempPairTrades.add(PairTradeHistory(pairTrade, currencyDateData))
             }
 
             uiScope.launch {
-                _allPairData.value = allCurrencysDateData
+                _pairTrades.value = tempPairTrades
             }
         }
         else{

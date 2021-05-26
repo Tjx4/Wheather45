@@ -21,20 +21,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ZARUSD"
+                android:textStyle="bold"
                 android:text="@{fxViewModel.tradingPair}"
                 android:layout_margin="@dimen/medium_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                style="@style/MediumTextView"
+                style="@style/SmallTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="from: 00-00-00 to 00-00-00"
                 android:text="@{`from: `+ fxViewModel.from + `| to: `+ fxViewModel.to }"
-                android:layout_margin="@dimen/medium_margin"
-                app:layout_constraintLeft_toRightOf="@+id/tvPrice"
-                app:layout_constraintTop_toTopOf="parent"/>
+
+                app:layout_constraintLeft_toLeftOf="@+id/tvPrice"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice"/>
 
             <com.github.mikephil.charting.charts.CandleStickChart
                 android:id="@+id/candleStickChart"

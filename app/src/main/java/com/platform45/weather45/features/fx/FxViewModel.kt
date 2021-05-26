@@ -6,6 +6,7 @@ import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.models.Conversion
+import com.platform45.weather45.models.SeriesDateData
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
@@ -14,11 +15,15 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val conversion: MutableLiveData<Conversion?>
         get() = _conversion
 
+    private val _seriesDateData: MutableLiveData<List<SeriesDateData?>?> = MutableLiveData()
+    val seriesDateData: MutableLiveData<List<SeriesDateData?>?>
+        get() = _seriesDateData
+
     init {
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
             getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
-            getSeries("2021-05-20", "2021-05-25", "EURUSD,USDJPY", "ohlc")
+            getSeries("2021-04-27", "2021-05-25", "EURUSD", "ohlc")
         }
     }
 
@@ -51,21 +56,30 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
-        val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+        val tempseriesDateData = ArrayList<SeriesDateData>()
 
+        val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
         if(series?.price != null){
             val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
             for(currentDayPrice in prices){
-                val currentDay =  currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
+                val currentDay = currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
 
                 val currencies = currency.split(",")
                 for(currentCurrency in currencies){
                     val dateData = currentDay[currentCurrency]
-                    val ddf = dateData
+                    val seriesDateData = SeriesDateData(
+                        dateData?.get("close")?.toFloat(),
+                        dateData?.get("high")?.toFloat(),
+                        dateData?.get("low")?.toFloat(),
+                        dateData?.get("open")?.toFloat()
+                    )
+                    tempseriesDateData.add(seriesDateData)
                 }
             }
 
-            uiScope.launch { }
+            uiScope.launch {
+                _seriesDateData.value = tempseriesDateData
+            }
         }
         else{
             //Handle ex
@@ -73,3 +87,5 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         }
     }
 }
+
+

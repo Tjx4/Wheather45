@@ -8,13 +8,13 @@ import com.platform45.weather45.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class App : Application(){
+class MyApp : Application(){
 
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
-            androidContext(this@App)
+            androidContext(this@MyApp)
             modules(
                 listOf(
                     viewModelModule,

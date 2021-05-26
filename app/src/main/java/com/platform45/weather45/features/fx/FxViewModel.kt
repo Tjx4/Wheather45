@@ -6,7 +6,7 @@ import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.models.Conversion
-import com.platform45.weather45.models.SeriesDateData
+import com.platform45.weather45.models.DayData
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
@@ -15,15 +15,15 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val conversion: MutableLiveData<Conversion?>
         get() = _conversion
 
-    private val _seriesDateData: MutableLiveData<List<SeriesDateData?>?> = MutableLiveData()
-    val seriesDateData: MutableLiveData<List<SeriesDateData?>?>
-        get() = _seriesDateData
+    private val _dayData: MutableLiveData<List<DayData?>?> = MutableLiveData()
+    val dayData: MutableLiveData<List<DayData?>?>
+        get() = _dayData
 
     init {
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
             getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
-            getSeries("2021-04-27", "2021-05-25", "EURUSD", "ohlc")
+            getSeries("2021-05-10", "2021-05-25", "EURUSD", "ohlc")
         }
     }
 
@@ -56,7 +56,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
-        val tempseriesDateData = ArrayList<SeriesDateData>()
+        val tempseriesDateData = ArrayList<DayData>()
 
         val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
         if(series?.price != null){
@@ -67,7 +67,8 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
                 val currencies = currency.split(",")
                 for(currentCurrency in currencies){
                     val dateData = currentDay[currentCurrency]
-                    val seriesDateData = SeriesDateData(
+                    val seriesDateData = DayData(
+                        currentDayPrice.key,
                         dateData?.get("close")?.toFloat(),
                         dateData?.get("high")?.toFloat(),
                         dateData?.get("low")?.toFloat(),
@@ -78,7 +79,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
             }
 
             uiScope.launch {
-                _seriesDateData.value = tempseriesDateData
+                _dayData.value = tempseriesDateData
             }
         }
         else{

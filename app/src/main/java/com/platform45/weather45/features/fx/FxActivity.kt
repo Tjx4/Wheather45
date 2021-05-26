@@ -9,7 +9,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.platform45.weather45.R
 import com.platform45.weather45.base.activities.BaseActivity
 import com.platform45.weather45.databinding.ActivityFxBinding
@@ -67,12 +66,12 @@ class FxActivity : BaseActivity() {
                 val open = seriesCurrent?.open ?: 0f
                 val close = seriesCurrent?.close ?: 0f
                 candleEntries.add(CandleEntry(indx.toFloat(), high, low, open, close))
-                xValues.add(seriesCurrent?.date ?: "")
+                xValues.add(seriesCurrent?.dateTime ?: "")
             }
         }
 
         val candleDataSet = CandleDataSet(candleEntries, "Entries")
-        candleDataSet.color = Color.rgb(80, 80, 80)
+        candleDataSet.color = Color.BLUE
         candleDataSet.shadowColor = Color.DKGRAY
         candleDataSet.shadowWidth = 0.7f
         candleDataSet.decreasingColor = Color.RED
@@ -97,10 +96,11 @@ class FxActivity : BaseActivity() {
         xAxis.setLabelCount(xValues.count(),  false)
         //candleStickChart.extraBottomOffset = 160f
 
+
+        val candleData = CandleData(candleDataSet)
         candleStickChart.setDrawGridBackground(false)
         candleStickChart.axisRight.isEnabled = true
         candleStickChart.description.isEnabled = false
-        val candleData = CandleData(candleDataSet)
         candleStickChart.data = candleData
         //candleStickChart.animateXY(5000, 4000)
         candleStickChart.invalidate()

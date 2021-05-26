@@ -9,6 +9,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.platform45.weather45.R
 import com.platform45.weather45.base.activities.BaseActivity
 import com.platform45.weather45.databinding.ActivityFxBinding
@@ -57,23 +58,7 @@ class FxActivity : BaseActivity() {
     }
 
     fun onDataSet(dayData: List<DayData?>?){
-/*
-
-
-        val set1 = CandleDataSet(yValsCandleStick, "DataSet 1")
-        set1.color = Color.rgb(80, 80, 80)
-        set1.shadowColor = resources.getColor(R.color.black)
-        set1.shadowWidth = 0.8f
-        set1.decreasingColor = resources.getColor(R.color.red)
-        set1.decreasingPaintStyle = Paint.Style.FILL
-        set1.increasingColor = resources.getColor(R.color.teal_700)
-        set1.increasingPaintStyle = Paint.Style.FILL
-        set1.neutralColor = Color.LTGRAY
-
-
-*/
-
-        val xvalues = ArrayList<String>()
+        val xValues = ArrayList<String>()
         val candleEntries = ArrayList<CandleEntry>()
         dayData?.let {
             for ((indx, seriesCurrent) in dayData.withIndex()){
@@ -82,7 +67,7 @@ class FxActivity : BaseActivity() {
                 val open = seriesCurrent?.open ?: 0f
                 val close = seriesCurrent?.close ?: 0f
                 candleEntries.add(CandleEntry(indx.toFloat(), high, low, open, close))
-                xvalues.add(seriesCurrent?.date ?: "")
+                xValues.add(seriesCurrent?.date ?: "")
             }
         }
 
@@ -96,17 +81,28 @@ class FxActivity : BaseActivity() {
         candleDataSet.increasingPaintStyle = Paint.Style.FILL
         candleDataSet.neutralColor = Color.BLUE
         candleDataSet.valueTextColor = Color.RED
-        candleDataSet.setDrawValues(false)
+        candleDataSet.setDrawValues(true)
 
-        //candleStickChart.animateXY(5000, 4000)
+
         val xAxis = candleStickChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setValueFormatter { value, axis ->
-            xvalues[value.toInt()]
+            xValues[0]
         }
+        //xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.granularity = 1f
+        xAxis.setCenterAxisLabels(true)
+        xAxis.labelRotationAngle = -90f
+        xAxis.setLabelCount(xValues.count(),  false)
+        //candleStickChart.extraBottomOffset = 160f
 
+        candleStickChart.setDrawGridBackground(false)
+        candleStickChart.axisRight.isEnabled = true
+        candleStickChart.description.isEnabled = false
         val candleData = CandleData(candleDataSet)
         candleStickChart.data = candleData
+        //candleStickChart.animateXY(5000, 4000)
         candleStickChart.invalidate()
     }
 

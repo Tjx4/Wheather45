@@ -20,7 +20,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
 
         ioScope.launch {
             convertCurrency("EUR", "USD", "1")
-            getHistorical("2019-03-25-13:00", "EURUSD", "hourly")
+            getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
         }
     }
 
@@ -36,10 +36,19 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         val historical = fXRepository.getHistorical(API_KEY, date, currency, interval)
 
         uiScope.launch {
-            val prices = historical?.price as LinkedTreeMap<String, Double>
 
-            val currentPrice = prices[currency]
-            val dd = currentPrice
+            if(historical?.price != null){
+                val prices = historical?.price as LinkedTreeMap<String, Double>
+                val currencies = currency.split(",")
+                for(currentCurrency in currencies){
+                    val currentPrice = prices[currentCurrency]
+                    val dd = currentPrice
+                }
+            }
+            else{
+                //Handle ex
+            }
+
         }
     }
 }

@@ -21,7 +21,6 @@ class FxActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_fx)
         binding.fxViewModel = fxViewModel
         binding.lifecycleOwner = this
-
         addObservers()
     }
 

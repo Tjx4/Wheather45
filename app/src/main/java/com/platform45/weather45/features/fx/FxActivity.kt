@@ -13,6 +13,8 @@ import com.platform45.weather45.models.Conversion
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FxActivity : BaseActivity() {
+    //https://www.youtube.com/watch?v=DD1CxoVONFE
+    //AnyChart
     private lateinit var binding: ActivityFxBinding
     private val fxViewModel: FxViewModel by viewModel()
 

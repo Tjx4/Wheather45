@@ -10,20 +10,38 @@ import kotlinx.coroutines.launch
 
 class ConversionViewModel(application: Application, val fXRepository: FXRepository) : BaseVieModel(application) {
 
+    private val _from: MutableLiveData<String> = MutableLiveData()
+    val from: MutableLiveData<String>
+        get() = _from
+
+    private val _to: MutableLiveData<String> = MutableLiveData()
+    val to: MutableLiveData<String>
+        get() = _to
+
+    private val _amount: MutableLiveData<Int> = MutableLiveData()
+    val amount: MutableLiveData<Int>
+        get() = _amount
+
     private val _convert: MutableLiveData<Conversion?> = MutableLiveData()
     val convert: MutableLiveData<Conversion?>
         get() = _convert
 
+    init {
+        _from.value = "USD"
+        _to.value = "ZAR"
+        _amount.value = 5
+    }
+
     fun checkAndConvert(){
-        val from = _convert.value?.from ?: ""
-        val to = _convert.value?.to?: ""
-        val amount = _convert.value?.price ?: 0.0
+        val from = _from.value ?: ""
+        val to = _to.value ?: ""
+        val amount = _amount.value ?: 0
         ioScope.launch {
             convertCurrency(from, to, amount)
         }
     }
 
-    suspend fun convertCurrency(from: String, to: String, amount: Double) {
+    suspend fun convertCurrency(from: String, to: String, amount: Int) {
         val conversion = fXRepository.getConvertion(API_KEY, from, to , amount.toString())
         uiScope.launch {
             if(conversion != null){

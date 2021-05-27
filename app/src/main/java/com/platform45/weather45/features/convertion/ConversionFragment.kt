@@ -28,16 +28,23 @@ class ConversionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+    
     private fun addObservers() {
         conversionViewModel.convert.observe(this, Observer { onConversion(it) })
     }
 
-    private fun onConversion(conversion: Conversion?){
-        tvTotal.visibility = View.VISIBLE
+    private fun init() {
+        btnConvert.setOnClickListener {
+            conversionViewModel.checkAndConvert()
+        }
     }
 
-    fun onConvertButtonClicked(view: View){
-        conversionViewModel.checkAndConvert()
+    private fun onConversion(conversion: Conversion?){
+        tvTotal.visibility = View.VISIBLE
     }
 
 }

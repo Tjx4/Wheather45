@@ -58,4 +58,10 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:background">@drawable/rounded_background</item>
     </style>
+    <style name="FX4EditText" parent="ThemeColors">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:padding">@dimen/xsmall_margin</item>
+    </style>
 </resources>

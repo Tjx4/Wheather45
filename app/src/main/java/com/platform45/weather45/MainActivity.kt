@@ -5,20 +5,23 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(){
+    lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
         setSupportActionBar(toolbar)
-        val navController = this.findNavController(R.id.navControllerFragment)
-        setupWithNavController(toolbar, navController)
+         navController = this.findNavController(R.id.navControllerFragment)
+         setupWithNavController(toolbar, navController)
 
 
         /*
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //findNavController().navigate(R.id.history_to_conversion)
+        navController.navigate(R.id.history_to_conversion)
         return NavigationUI.onNavDestinationSelected(item, this.findNavController(R.id.navControllerFragment)) || super.onOptionsItemSelected(item)
     }
 }

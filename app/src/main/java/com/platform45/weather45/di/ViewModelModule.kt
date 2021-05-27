@@ -1,7 +1,7 @@
 package com.platform45.weather45.di
 
 import com.platform45.weather45.features.convertion.ConversionViewModel
-import com.platform45.weather45.features.fx.FxViewModel
+import com.platform45.weather45.features.history.FxViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

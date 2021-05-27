@@ -5,14 +5,14 @@
     <data>
         <variable
             name="fxViewModel"
-            type="com.platform45.weather45.features.fx.FxViewModel"/>
+            type="com.platform45.weather45.features.history.FxViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        tools:context=".features.fx.FxActivity">
+        tools:context=".MainActivity">
 
         <TextView
             android:id="@+id/tvConversion"

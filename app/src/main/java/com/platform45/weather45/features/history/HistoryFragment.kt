@@ -1,30 +1,33 @@
-package com.platform45.weather45.features.fx
+package com.platform45.weather45.features.history
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
-import com.platform45.weather45.base.activities.BaseActivity
-import com.platform45.weather45.databinding.ActivityFxBinding
+import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.activity_fx.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
-
-    private lateinit var binding: ActivityFxBinding
+class HistoryFragment : Fragment(), FxAdapter.AddTradeClickListener {
+    private lateinit var binding: FragmentHistoryBinding
     private val fxViewModel: FxViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_fx)
-        binding.fxViewModel = fxViewModel
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
+        binding.fxViewModel = fxViewModel
         addObservers()
+        return binding.root
     }
 
     private fun addObservers() {
@@ -32,16 +35,17 @@ class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
         fxViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
     }
 
+
     private fun onTradingPairSet(tradingPair: String?){
 
     }
 
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
-        val tradesLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tradesLayoutManager.initialPrefetchItemCount = tradeHistories?.size ?: 0
         rvtrades?.layoutManager = tradesLayoutManager
 
-        val fxtAdapter = FxAdapter(this, tradeHistories)
+        val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         fxtAdapter.setTradeClickListener(this)
         rvtrades?.adapter = fxtAdapter
         avlLoader.visibility = View.GONE
@@ -50,6 +54,5 @@ class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
     override fun onTradeClicked(view: View, position: Int) {
 
     }
-
 
 }

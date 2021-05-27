@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Weather45">
         <activity
-            android:name=".features.fx.FxActivity"
+            android:name=".MainActivity"
             android:theme="@style/NoActionBarTheme"></activity>
         <activity
             android:name=".features.splash.SplashActivity"

@@ -1,17 +1,16 @@
-package com.platform45.weather45.features.fx
+package com.platform45.weather45.features.history
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
-import com.platform45.weather45.models.Conversion
 import com.platform45.weather45.models.DayData
 import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
-class FxViewModel(application: Application, val fXRepository: FXRepository) : BaseVieModel(application) {
+class FxViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
     private val _tradingPair: MutableLiveData<String?> = MutableLiveData()
     val tradingPair: MutableLiveData<String?>
         get() = _tradingPair

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/app_nav">
+    android:id="@+id/app_nav"
+    app:startDestination="@id/historyFragment">
 
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.platform45.weather45.features.history.HistoryFragment"
+        android:label="HistoryFragment" >
+        <action
+            android:id="@+id/action_historyFragment_to_conversionFragment"
+            app:destination="@id/conversionFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/slide_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/conversionFragment"
+        android:name="com.platform45.weather45.features.convertion.ConversionFragment"
+        android:label="ConversionFragment" />
 </navigation>

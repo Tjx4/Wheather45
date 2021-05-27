@@ -12,7 +12,7 @@ import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.models.PairTradeHistory
-import kotlinx.android.synthetic.main.activity_fx.*
+import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryFragment : Fragment(), FxAdapter.AddTradeClickListener {

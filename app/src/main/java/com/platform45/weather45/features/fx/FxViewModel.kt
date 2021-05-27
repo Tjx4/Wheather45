@@ -16,10 +16,6 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val tradingPair: MutableLiveData<String?>
         get() = _tradingPair
 
-    private val _convert: MutableLiveData<Conversion?> = MutableLiveData()
-    val convert: MutableLiveData<Conversion?>
-        get() = _convert
-
     private val _from: MutableLiveData<String?> = MutableLiveData()
     val from: MutableLiveData<String?>
         get() = _from
@@ -38,18 +34,8 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         _to.value = "2021-05-25"
 
         ioScope.launch {
-            convertCurrency("EUR", "USD", "1")
             //getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
             getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
-        }
-    }
-
-    suspend fun convertCurrency(from: String, to: String, amount: String) {
-        val conversion = fXRepository.getConvertion(API_KEY, from, to , amount)
-        uiScope.launch {
-            if(conversion != null){
-                _convert.value = conversion
-            }
         }
     }
 

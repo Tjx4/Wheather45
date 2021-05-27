@@ -52,11 +52,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.multidex:multidex:$multidex_version"
-    //Google play
-    implementation "com.google.android.gms:play-services-maps:$gms_version"
-    implementation "com.google.android.gms:play-services-nearby:$gms_version"
-    implementation "com.google.android.gms:play-services-places:$gms_version"
-    implementation "com.google.android.gms:play-services-location:$gms_version"
+//Google play
+implementation "com.google.android.gms:play-services-maps:$gms_version"
+implementation "com.google.android.gms:play-services-nearby:$gms_version"
+implementation "com.google.android.gms:play-services-places:$gms_version"
+implementation "com.google.android.gms:play-services-location:$gms_version"
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -70,4 +70,6 @@ dependencies {
     //MPAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart-Realm:v3.0.3@aar'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    //Wang
+    implementation 'com.wang.avi:library:2.1.3'
 }

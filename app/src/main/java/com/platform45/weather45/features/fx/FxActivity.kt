@@ -1,16 +1,10 @@
 package com.platform45.weather45.features.fx
 
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.CandleData
-import com.github.mikephil.charting.data.CandleDataSet
-import com.github.mikephil.charting.data.CandleEntry
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
 import com.platform45.weather45.base.activities.BaseActivity
@@ -21,8 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
-    //https://www.youtube.com/watch?v=DD1CxoVONFE
-    //AnyChart
+
     private lateinit var binding: ActivityFxBinding
     private val fxViewModel: FxViewModel by viewModel()
 
@@ -32,31 +25,6 @@ class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
         binding.fxViewModel = fxViewModel
         binding.lifecycleOwner = this
         addObservers()
-/*
-        candleStickChart.isHighlightPerDragEnabled = true
-
-        candleStickChart.setDrawBorders(true)
-
-        candleStickChart.setBorderColor(resources.getColor(R.color.greyText))
-
-        val yAxis = candleStickChart.axisLeft
-        val rightAxis = candleStickChart.axisRight
-        yAxis.setDrawGridLines(false)
-        rightAxis.setDrawGridLines(false)
-        candleStickChart.requestDisallowInterceptTouchEvent(true)
-
-        val xAxis = candleStickChart.xAxis
-        xAxis.setDrawGridLines(false) // disable x axis grid lines
-        xAxis.setDrawLabels(false)
-        rightAxis.textColor = Color.BLACK
-        yAxis.setDrawLabels(false)
-        xAxis.granularity = 1f
-        xAxis.isGranularityEnabled = true
-        xAxis.setAvoidFirstLastClipping(true)
-
-        val l = candleStickChart.legend
-        l.isEnabled = false
-        */
     }
 
     private fun addObservers() {
@@ -76,6 +44,7 @@ class FxActivity : BaseActivity(), FxAdapter.AddTradeClickListener {
         val fxtAdapter = FxAdapter(this, tradeHistories)
         fxtAdapter.setTradeClickListener(this)
         rvtrades?.adapter = fxtAdapter
+        avlLoader.visibility = View.GONE
     }
 
     override fun onTradeClicked(view: View, position: Int) {

@@ -61,7 +61,6 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         candleDataSet.setDrawValues(true)
 
         val xAxis = holder.candleStickChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f

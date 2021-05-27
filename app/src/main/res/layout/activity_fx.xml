@@ -10,44 +10,64 @@
             type="com.platform45.weather45.features.fx.FxViewModel"/>
     </data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:context=".features.fx.FxActivity">
+
+        <TextView
+            android:id="@+id/tvConversion"
+            style="@style/MediumTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_margin"
+            android:text="@{`-> ` +fxViewModel.tradingPair}"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imbSearch"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imbSearch"
+            tools:text="-> ZARUSD" />
+
+        <ImageButton
+            android:id="@+id/imbSearch"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/xsmall_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_search"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/vDivider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".features.fx.FxActivity">
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            android:background="#eee"
+            app:layout_constraintTop_toBottomOf="@+id/imbSearch" />
 
-            <TextView
-                style="@style/MediumTextView"
-                android:id="@+id/tvConversion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="-> ZARUSD"
-                android:textStyle="bold"
-                android:text="@{`-> ` +fxViewModel.tradingPair}"
-                android:layout_margin="@dimen/medium_margin"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/imbSearch"
-                app:layout_constraintBottom_toBottomOf="@+id/imbSearch"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvtrades"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vDivider" />
 
-            <ImageButton
-                android:id="@+id/imbSearch"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_search"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:layout_margin="@dimen/small_margin"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/avlLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:visibility="visible"
+            app:indicatorColor="@color/darkText"
+            app:indicatorName="BallPulseIndicator"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvConversion" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvtrades"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/medium_margin"
-                app:layout_constraintTop_toBottomOf="@+id/tvConversion"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -37,7 +37,7 @@ class FxViewModel(application: Application, private val fXRepository: FXReposito
             getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
         }
     }
-
+/*
     suspend fun getHistorical(date: String, currency: String, interval: String) {
         val historical = fXRepository.getHistorical(API_KEY, date, currency, interval)
 
@@ -57,7 +57,7 @@ class FxViewModel(application: Application, private val fXRepository: FXReposito
             }
 
     }
-
+*/
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
         val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
         if(series?.price != null){

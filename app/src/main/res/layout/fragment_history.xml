@@ -14,17 +14,24 @@
         tools:context=".features.history.HistoryFragment">
 
         <TextView
-            android:id="@+id/tvConversion"
             style="@style/MediumTextView"
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Requested currency pairs >"
+            android:gravity="center"
+            android:layout_margin="@dimen/xsmall_margin"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPairs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/xsmall_margin"
-            android:text="@{`-> ` +fxViewModel.tradingPair}"
-            android:textStyle="bold"
+            android:clipToPadding="true"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginHorizontal="@dimen/xsmall_margin"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="-> ZARUSD" />
-
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
         <View
             android:id="@+id/vDivider"
@@ -32,7 +39,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/xsmall_margin"
             android:background="#eee"
-            app:layout_constraintTop_toBottomOf="@+id/tvConversion" />
+            app:layout_constraintTop_toBottomOf="@+id/rvPairs" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvtrades"
@@ -52,7 +59,7 @@
             app:indicatorName="BallPulseIndicator"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvConversion" />
+            app:layout_constraintTop_toTopOf="@+id/rvtrades" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

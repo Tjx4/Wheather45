@@ -20,7 +20,6 @@ import com.platform45.weather45.models.PairTradeHistory
 
 class FxAdapter(private val context: Context, private val addSlides: List<PairTradeHistory?>?) : RecyclerView.Adapter<FxAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
-    private var addTradeClickListener: AddTradeClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.fx_layout, parent, false)
@@ -91,20 +90,7 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         }
 
         override fun onClick(view: View) {
-            addTradeClickListener?.onTradeClicked(view, adapterPosition)
         }
-    }
-
-    internal fun getItem(indx: Int): PairTradeHistory? {
-        return addSlides?.get(indx)
-    }
-
-    interface AddTradeClickListener {
-        fun onTradeClicked(view: View, position: Int)
-    }
-
-    fun setTradeClickListener(addTradeClickListener: AddTradeClickListener) {
-        this.addTradeClickListener = addTradeClickListener
     }
 
     override fun getItemCount() = addSlides?.size ?: 0

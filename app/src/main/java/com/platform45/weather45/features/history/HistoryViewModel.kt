@@ -23,18 +23,22 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     val to: MutableLiveData<String?>
         get() = _to
 
+    private val _pairs: MutableLiveData<List<String?>?> = MutableLiveData()
+    val pairs: MutableLiveData<List<String?>?>
+        get() = _pairs
+
     private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
     val pairTradeHistories: MutableLiveData<List<PairTradeHistory>?>
         get() = _pairTradeHistories
 
     init {
-        _tradingPair.value = "EURUSD,USDJPY"
+        _tradingPair.value = "EURUSD,USDJPY,USDZAR,ZARJPY,EURGBP,ZARGBP,GBPUSD"
         _from.value = "2021-05-10"
         _to.value = "2021-05-25"
 
         ioScope.launch {
             //getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
-            //getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
+            getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
         }
     }
 /*
@@ -87,6 +91,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
             }
 
             uiScope.launch {
+                _pairs.value = currencies
                 _pairTradeHistories.value = tempPairTrades
             }
         }

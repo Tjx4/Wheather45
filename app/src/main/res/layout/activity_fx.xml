@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 tools:text="-> ZARUSD"
                 android:textStyle="bold"
-                android:text="@{`->` +fxViewModel.tradingPair}"
+                android:text="@{`-> ` +fxViewModel.tradingPair}"
                 android:layout_margin="@dimen/medium_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imbSearch"

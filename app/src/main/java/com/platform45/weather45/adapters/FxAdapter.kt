@@ -31,7 +31,7 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         val currentFx = addSlides?.get(position)
 
         holder.conversionTv.text = currentFx?.tradingPair
-        holder.timePeriodTv.text = "from: ${currentFx?.startDate} to ${currentFx?.endDate}"
+        holder.timePeriodTv.text = "From: ${currentFx?.startDate} to ${currentFx?.endDate}"
 
         val dayData = currentFx?.history
 

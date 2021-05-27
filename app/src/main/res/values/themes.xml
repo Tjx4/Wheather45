@@ -36,7 +36,7 @@
     <style name="ToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="android:textColor">@color/lightText</item>
         <item name="android:textColorPrimary">@color/lightText</item>
-        <item name="android:iconTint">@color/lightText</item>
+        <item name="android:fillColor">@color/lightText</item>
         <item name="colorOnPrimary">@color/lightText</item>
         <item name="android:background">#003366</item>
     </style>

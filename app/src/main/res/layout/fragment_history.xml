@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fxViewModel"
+            type="com.platform45.weather45.features.fx.FxViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:context=".features.fx.HistoryFragment">
+
+        <TextView
+            android:id="@+id/tvConversion"
+            style="@style/MediumTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_margin"
+            android:text="@{`-> ` +fxViewModel.tradingPair}"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imgbSearch"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgbSearch"
+            tools:text="-> ZARUSD" />
+
+        <ImageButton
+            android:id="@+id/imgbSearch"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/xsmall_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_search"
+            app:layout_constraintRight_toLeftOf="@+id/imgbConvert"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/imgbConvert"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/xsmall_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_convert"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            android:background="#eee"
+            app:layout_constraintTop_toBottomOf="@+id/imgbSearch" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvtrades"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vDivider" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/avlLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:visibility="visible"
+            app:indicatorColor="@color/darkText"
+            app:indicatorName="BallPulseIndicator"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvConversion" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

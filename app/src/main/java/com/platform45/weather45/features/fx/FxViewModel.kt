@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
+import com.platform45.weather45.models.Conversion
 import com.platform45.weather45.models.DayData
 import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.repositories.FXRepository
@@ -15,6 +16,10 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val tradingPair: MutableLiveData<String?>
         get() = _tradingPair
 
+    private val _convert: MutableLiveData<Conversion?> = MutableLiveData()
+    val convert: MutableLiveData<Conversion?>
+        get() = _convert
+
     private val _from: MutableLiveData<String?> = MutableLiveData()
     val from: MutableLiveData<String?>
         get() = _from
@@ -23,9 +28,9 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
     val to: MutableLiveData<String?>
         get() = _to
 
-    private val _pairTrades: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
-    val pairTrades: MutableLiveData<List<PairTradeHistory>?>
-        get() = _pairTrades
+    private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
+    val pairTradeHistories: MutableLiveData<List<PairTradeHistory>?>
+        get() = _pairTradeHistories
 
     init {
         _tradingPair.value = "EURUSD,USDJPY"
@@ -33,7 +38,7 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
         _to.value = "2021-05-25"
 
         ioScope.launch {
-            // convertCurrency("EUR", "USD", "1")
+            convertCurrency("EUR", "USD", "1")
             //getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
             getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
         }
@@ -41,6 +46,11 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
 
     suspend fun convertCurrency(from: String, to: String, amount: String) {
         val conversion = fXRepository.getConvertion(API_KEY, from, to , amount)
+        uiScope.launch {
+            if(conversion != null){
+                _convert.value = conversion
+            }
+        }
     }
 
     suspend fun getHistorical(date: String, currency: String, interval: String) {
@@ -88,11 +98,11 @@ class FxViewModel(application: Application, val fXRepository: FXRepository) : Ba
                     currencyDateData.add(seriesDateData)
                 }
 
-                tempPairTrades.add(PairTradeHistory(pairTrade, currencyDateData))
+                tempPairTrades.add(PairTradeHistory(pairTrade, startDate, endDate, currencyDateData))
             }
 
             uiScope.launch {
-                _pairTrades.value = tempPairTrades
+                _pairTradeHistories.value = tempPairTrades
             }
         }
         else{

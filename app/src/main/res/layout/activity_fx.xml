@@ -17,7 +17,7 @@
 
             <TextView
                 style="@style/MediumTextView"
-                android:id="@+id/tvPrice"
+                android:id="@+id/tvConversion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ZARUSD"
@@ -27,24 +27,14 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <TextView
-                style="@style/SmallTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="from: 00-00-00 to 00-00-00"
-                android:text="@{`from: `+ fxViewModel.from + `| to: `+ fxViewModel.to }"
-
-                app:layout_constraintLeft_toLeftOf="@+id/tvPrice"
-                app:layout_constraintTop_toBottomOf="@+id/tvPrice"/>
-
-            <com.github.mikephil.charting.charts.CandleStickChart
-                android:id="@+id/candleStickChart"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvtrades"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/medium_margin"
+                app:layout_constraintTop_toBottomOf="@+id/tvConversion"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

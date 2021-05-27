@@ -49,4 +49,10 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/darkText</item>
     </style>
+
+    <style name="FX45Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/rounded_background</item>
+    </style>
 </resources>

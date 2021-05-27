@@ -3,8 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import
-            type="android.text.Html"/>
         <variable
             name="fxViewModel"
             type="com.platform45.weather45.features.fx.FxViewModel"/>
@@ -24,19 +22,31 @@
             android:layout_margin="@dimen/medium_margin"
             android:text="@{`-> ` +fxViewModel.tradingPair}"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imbSearch"
+            app:layout_constraintBottom_toBottomOf="@+id/imgbSearch"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imbSearch"
+            app:layout_constraintTop_toTopOf="@+id/imgbSearch"
             tools:text="-> ZARUSD" />
 
         <ImageButton
-            android:id="@+id/imbSearch"
+            android:id="@+id/imgbSearch"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="@dimen/xsmall_margin"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_search"
+            app:layout_constraintRight_toLeftOf="@+id/imgbConvert"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/imgbConvert"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/xsmall_margin"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_convert"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +56,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/xsmall_margin"
             android:background="#eee"
-            app:layout_constraintTop_toBottomOf="@+id/imbSearch" />
+            app:layout_constraintTop_toBottomOf="@+id/imgbSearch" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvtrades"

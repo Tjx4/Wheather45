@@ -1,19 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="conversionViewModel"
+            type="com.platform45.weather45.features.convertion.ConversionViewModel"/>
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/small_margin"
+    android:animateLayoutChanges="true"
     tools:context=".features.convertion.ConversionFragment">
 
+    <EditText
+        android:id="@+id/tvFrom"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="From"
+        android:text="@={conversionViewModel.convert.from}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/tvTo" />
 
-    <!--
+    <EditText
+        android:id="@+id/tvTo"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="To"
+        android:text="@={conversionViewModel.convert.to}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvFrom"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <EditText
+        android:id="@+id/tvAmount"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Amount"
+        android:text="@={``+conversionViewModel.convert.price}"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrom"
+        app:layout_constraintEnd_toStartOf="@+id/tvFrom"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        style="@style/FX45Button"
+        android:id="@+id/btnConvert"
+        android:text="Convert"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        app:layout_constraintTop_toBottomOf="@+id/tvAmount"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="onConvertButtonClicked"/>
+
     <TextView
-        style="@style/MediumTextView"
-        android:id="@+id/tvExchangeRate"
+        android:visibility="invisible"
+        style="@style/largeTextView"
+        android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="from: USD - ZAR = 0.00"
-        app:layout_constraintLeft_toLeftOf="@+id/tvConversion"
-        app:layout_constraintTop_toBottomOf="@+id/tvConversion"/>
-    -->
-</FrameLayout>
+        tools:text="= (ZAR)0.00"
+        android:text="@{`= (`+ conversionViewModel.convert.to +`)`+ conversionViewModel.convert.total"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/large_margin"
+        app:layout_constraintTop_toBottomOf="@+id/btnConvert"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

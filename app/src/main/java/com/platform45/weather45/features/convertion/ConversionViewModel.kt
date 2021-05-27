@@ -14,9 +14,17 @@ class ConversionViewModel(application: Application, val fXRepository: FXReposito
     val convert: MutableLiveData<Conversion?>
         get() = _convert
 
+    fun checkAndConvert(){
+        val from = _convert.value?.from ?: ""
+        val to = _convert.value?.to?: ""
+        val amount = _convert.value?.price ?: 0.0
+        ioScope.launch {
+            convertCurrency(from, to, amount)
+        }
+    }
 
-    suspend fun convertCurrency(from: String, to: String, amount: String) {
-        val conversion = fXRepository.getConvertion(API_KEY, from, to , amount)
+    suspend fun convertCurrency(from: String, to: String, amount: Double) {
+        val conversion = fXRepository.getConvertion(API_KEY, from, to , amount.toString())
         uiScope.launch {
             if(conversion != null){
                 _convert.value = conversion

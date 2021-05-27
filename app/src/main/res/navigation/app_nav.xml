@@ -9,7 +9,7 @@
         android:name="com.platform45.weather45.features.history.HistoryFragment"
         android:label="HistoryFragment" >
         <action
-            android:id="@+id/action_historyFragment_to_conversionFragment"
+            android:id="@+id/history_to_conversion"
             app:destination="@id/conversionFragment"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/slide_right" />

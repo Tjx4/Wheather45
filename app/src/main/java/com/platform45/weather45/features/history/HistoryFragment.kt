@@ -55,4 +55,8 @@ class HistoryFragment : Fragment(), FxAdapter.AddTradeClickListener {
 
     }
 
+    fun goToConvertion(){
+        // findNavController().navigate(R.id.history_to_conversion)
+    }
+
 }

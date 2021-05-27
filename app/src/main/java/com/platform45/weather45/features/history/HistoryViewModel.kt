@@ -10,7 +10,7 @@ import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 
-class FxViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
+class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
     private val _tradingPair: MutableLiveData<String?> = MutableLiveData()
     val tradingPair: MutableLiveData<String?>
         get() = _tradingPair
@@ -34,7 +34,7 @@ class FxViewModel(application: Application, private val fXRepository: FXReposito
 
         ioScope.launch {
             //getHistorical("2019-03-25-13:00", "EURUSD,USDJPY", "hourly")
-            getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
+            //getSeries(_from.value ?: "", _to.value ?: "", _tradingPair.value ?: "", "ohlc")
         }
     }
 /*

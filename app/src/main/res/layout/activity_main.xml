@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:backgroundTint="@color/white"
-        app:titleTextColor="@color/darkText"
+        android:backgroundTint="#003366"
         android:elevation="0dp"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        style="@style/ToolbarStyle"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <fragment

@@ -1,19 +1,18 @@
 package com.platform45.weather45.features.convertion
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.platform45.weather45.R
+import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.databinding.FragmentConversionBinding
 import com.platform45.weather45.models.Conversion
 import kotlinx.android.synthetic.main.fragment_conversion.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ConversionFragment : Fragment() {
+class ConversionFragment : BaseFragment() {
     private lateinit var binding: FragmentConversionBinding
     private val conversionViewModel: ConversionViewModel by viewModel()
 
@@ -21,6 +20,8 @@ class ConversionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        myDrawerController.hideMenu()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_conversion, container, false)
         binding.lifecycleOwner = this
         binding.conversionViewModel = conversionViewModel
@@ -32,7 +33,7 @@ class ConversionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-    
+
     private fun addObservers() {
         conversionViewModel.convert.observe(this, Observer { onConversion(it) })
     }

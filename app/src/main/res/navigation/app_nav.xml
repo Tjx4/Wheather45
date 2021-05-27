@@ -11,7 +11,8 @@
         <action
             android:id="@+id/history_to_conversion"
             app:destination="@id/conversionFragment"
-            app:enterAnim="@anim/slide_left" />
+            app:enterAnim="@anim/slide_right"
+            app:exitAnim="@anim/no_transition" />
     </fragment>
     <fragment
         android:id="@+id/conversionFragment"

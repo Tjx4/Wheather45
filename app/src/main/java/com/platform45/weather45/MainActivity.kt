@@ -3,17 +3,19 @@ package com.platform45.weather45
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(){
-    lateinit var navController: NavController
+
+class MainActivity : AppCompatActivity(), MyDrawerController{
+    override lateinit var navController: NavController
+    override var toobarMenu: Menu? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,11 +46,25 @@ class MainActivity : AppCompatActivity(){
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
+        toobarMenu = menu
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        navController.navigate(R.id.history_to_conversion)
-        return NavigationUI.onNavDestinationSelected(item, this.findNavController(R.id.navControllerFragment)) || super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
+            R.id.action_search -> Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+        }
+        return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
+    }
+
+    override fun showMenu() {
+        toobarMenu?.let {
+            menuInflater.inflate(R.menu.history_menu, it)
+        }
+    }
+
+    override fun hideMenu() {
+        toobarMenu?.clear()
     }
 }

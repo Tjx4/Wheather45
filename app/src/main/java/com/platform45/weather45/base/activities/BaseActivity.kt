@@ -3,8 +3,6 @@ package com.platform45.weather45.base.activities
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.platform45.weather45.constants.ACTIVITY_TRANSITION
 import com.platform45.weather45.constants.PAYLOAD_KEY

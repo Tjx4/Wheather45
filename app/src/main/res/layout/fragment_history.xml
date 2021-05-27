@@ -5,12 +5,11 @@
     <data>
         <variable
             name="fxViewModel"
-            type="com.platform45.weather45.features.history.FxViewModel"/>
+            type="com.platform45.weather45.features.history.HistoryViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/ParentView"
         android:animateLayoutChanges="true"
         tools:context=".features.history.HistoryFragment">
 

@@ -1,38 +1,39 @@
 package com.platform45.weather45.features.history
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
+import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : Fragment(), FxAdapter.AddTradeClickListener {
+class HistoryFragment : BaseFragment(), FxAdapter.AddTradeClickListener {
     private lateinit var binding: FragmentHistoryBinding
-    private val fxViewModel: FxViewModel by viewModel()
+    private val historyViewModel: HistoryViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        myDrawerController.showMenu()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
-        binding.fxViewModel = fxViewModel
+        binding.fxViewModel = historyViewModel
         addObservers()
         return binding.root
     }
 
     private fun addObservers() {
-        fxViewModel.tradingPair.observe(this, Observer { onTradingPairSet(it) })
-        fxViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
+        historyViewModel.tradingPair.observe(this, Observer { onTradingPairSet(it) })
+        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
     }
 
 

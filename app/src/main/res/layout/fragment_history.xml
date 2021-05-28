@@ -127,19 +127,37 @@
 
             <TextView
                 style="@style/MediumTextView"
-                android:id="@+id/tvTradingPair"
+                android:id="@+id/tvComonPairs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please create a trading pair"
-                android:gravity="center"
+                android:text="Select porpular trading pairs"
+                android:gravity="left"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatSpinner
                 style="@style/mySpinnerItemStyle"
+                android:id="@+id/spnPorpularTradingPairs"
+                android:layout_marginHorizontal="@dimen/xsmall_margin"
+                android:entries="@{fxViewModel.currencies}"
+                app:layout_constraintTop_toBottomOf="@+id/tvComonPairs"
+                app:layout_constraintRight_toLeftOf="@+id/spnToCurrency"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                style="@style/MediumTextView"
+                android:id="@+id/tvTradingPair"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select currencies and create a trading pair"
+                android:gravity="left"
+                android:layout_margin="@dimen/xsmall_margin"
+                app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                style="@style/mySpinnerItemStyle"
                 android:id="@+id/spnFrmCurrency"
                 android:layout_width="0dp"
-                android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginLeft="@dimen/xsmall_margin"
                 android:entries="@{fxViewModel.currencies}"
                 app:layout_constraintTop_toBottomOf="@+id/tvTradingPair"
@@ -150,7 +168,6 @@
                 style="@style/mySpinnerItemStyle"
                 android:id="@+id/spnToCurrency"
                 android:layout_width="0dp"
-                android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
                 android:entries="@{fxViewModel.currencies}"
                 app:layout_constraintTop_toBottomOf="@+id/tvTradingPair"
@@ -182,11 +199,10 @@
                 app:layout_constraintLeft_toLeftOf="@+id/btnFrom"/>
 
             <Button
-                style="@style/FX45Button"
                 android:id="@+id/btnFrom"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                tools:text="Choose from date"
+                tools:text="0000-00-00"
                 android:text="@{fxViewModel.from}"
                 android:layout_marginTop="@dimen/xlarge_margin"
                 android:layout_marginLeft="@dimen/xsmall_margin"
@@ -204,11 +220,10 @@
                 app:layout_constraintLeft_toLeftOf="@+id/btnTo"/>
 
             <Button
-                style="@style/FX45Button"
                 android:id="@+id/btnTo"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                tools:text="Choose to date"
+                tools:text="0000-00-00"
                 android:text="@{fxViewModel.to}"
                 android:layout_marginTop="@dimen/xlarge_margin"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"

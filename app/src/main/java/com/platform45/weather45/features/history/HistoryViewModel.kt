@@ -42,6 +42,8 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         get() = _pairTradeHistories
 
     init {
+        _from.value = "0000-00-00"
+        _to.value = "0000-00-00"
         setCurrencies()
     }
 

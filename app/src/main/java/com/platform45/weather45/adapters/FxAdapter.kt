@@ -17,12 +17,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.platform45.weather45.R
 import com.platform45.weather45.models.PairTradeHistory
 
-
 class FxAdapter(private val context: Context, private val addSlides: List<PairTradeHistory?>?) : RecyclerView.Adapter<FxAdapter.ViewHolder>() {
-    private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = layoutInflater.inflate(R.layout.fx_layout, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.fx_layout, parent, false)
         return ViewHolder(view)
     }
 
@@ -68,7 +66,6 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         xAxis.setLabelCount(xValues.count(),  false)
         //candleStickChart.extraBottomOffset = 160f
 
-
         val candleData = CandleData(candleDataSet)
         holder.candleStickChart.setDrawGridBackground(false)
         holder.candleStickChart.axisLeft.isEnabled = false
@@ -94,5 +91,4 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
     }
 
     override fun getItemCount() = addSlides?.size ?: 0
-
 }

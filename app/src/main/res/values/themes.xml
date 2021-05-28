@@ -14,6 +14,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="DialogTheme">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
     <style name="NoActionBarTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -79,4 +84,25 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/lightBackground</item>
     </style>
+
+    <style name="DateTimePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#111</item>
+        <item name="android:headerBackground">#0f0f0f</item>
+        <!--
+        <item name="android:scaleX">1.0</item>
+        <item name="android:scaleY">0.80</item>
+         -->
+    </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/darkText</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@color/greyBackground</item>
+    </style>
+
 </resources>

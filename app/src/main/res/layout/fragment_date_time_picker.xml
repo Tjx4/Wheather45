@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".features.history.datetime.DateTimePickerFragment"
+    android:background="@color/lightBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:padding="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/large_margin">
+
+            <LinearLayout
+                android:id="@+id/llDatePickerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/MediumTextView"
+                    android:gravity="center"
+                    android:background="@color/greyBackground"
+                    android:padding="@dimen/small_margin"
+                    android:text="Please set appointment date" />
+
+                <DatePicker
+                    style="@style/DateTimePickerStyle"
+                    android:id="@+id/dpAppointmentDate"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/greyBackground"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/llTimePickerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/MediumTextView"
+                    android:gravity="center"
+                    android:background="@color/greyBackground"
+                    android:padding="@dimen/small_margin"
+                    android:text="Please set appointment time" />
+
+
+                <TimePicker
+                    style="@style/DateTimePickerStyle"
+                    android:id="@+id/tpAppointmentTime"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/cardview_light_background"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_margin"
+            android:background="@color/lightBackground">
+
+            <Button
+                android:id="@+id/btnDateTimeNext"
+                style="@style/FX45Button"
+                android:text="Next" />
+
+            <Button
+                android:id="@+id/btnDateTimeBack"
+                style="@style/FX45Button"
+                android:visibility="gone"
+                android:layout_marginRight="20dp"
+                android:text="Back" />
+
+            <Button
+                android:id="@+id/btnDateTimeDone"
+                style="@style/FX45Button"
+                android:visibility="gone"
+                android:text="Done" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

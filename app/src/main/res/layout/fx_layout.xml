@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="false">
 
     <TextView
         style="@style/MediumTextView"
@@ -33,7 +34,8 @@
         android:layout_marginTop="@dimen/xsmall_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimePeriod"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvTimePeriod"
+        android:focusableInTouchMode="false"/>
 
     <View
         android:id="@+id/vDivider"

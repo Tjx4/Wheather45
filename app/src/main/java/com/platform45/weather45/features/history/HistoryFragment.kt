@@ -13,13 +13,13 @@ import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
 import com.platform45.weather45.adapters.PairAdapter
 import com.platform45.weather45.base.fragments.BaseFragment
+import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
@@ -39,8 +39,30 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         return binding.root
     }
 
+    private fun addObservers() {
+        historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it) })
+        historyViewModel.currency.observe(this, Observer { onCurrencyListUpdated(it) })
+        historyViewModel.currencyPairs.observe(this, Observer { onCurrenciesSet(it) })
+        historyViewModel.requestedPairs.observe(this, Observer { onRequestedPairsSet(it) })
+        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        spnPorpularTradingPairs.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if((parent as MySpinner).isInit){
+                    historyViewModel.addPopularPairToList(position)
+                }
+                else{
+                    parent.isInit = true
+                }
+            }
+        }
+
         spnFrmCurrency.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -67,6 +89,10 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         btnTo.setOnClickListener {
             indx = 1
             showDateTimeDialogFragment(this)
+        }
+
+        btnAddCurrencyPair.setOnClickListener {
+            historyViewModel.addCurrentPairTolist()
         }
 
         btnGetHistory.setOnClickListener {
@@ -97,32 +123,44 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         }
     }
 
-    private fun addObservers() {
-        historyViewModel.currencies.observe(this, Observer { onCurrenciesSet(it) })
-        historyViewModel.pairs.observe(this, Observer { onTradingPairsSet(it) })
-        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
+    private fun onPopularCurrencyPairsSet(currency: List<String?>){
+        clSearch.visibility = View.VISIBLE
+    }
+
+    private fun onCurrencyListUpdated(currency: String){
+        val pairs = currency.split(",")
+        val cols = getCols(120f)
+        val pairsManager = GridLayoutManager(context, cols)
+        pairsManager.initialPrefetchItemCount = pairs?.size
+
+        val pairsAdapter = PairAdapter(requireContext(), pairs)
+        pairsAdapter.setPairClickListener(this)
+
+        rvRequestingPairs?.adapter = pairsAdapter
+        rvRequestingPairs?.layoutManager = pairsManager
+        tvRequestingPairs.visibility = View.VISIBLE
     }
 
     private fun onCurrenciesSet(currecies: List<String>) {
 
     }
 
-    private fun onTradingPairsSet(pairs: List<String?>?){
-        val getCols = { columnWidthDp: Float ->
-            val displayMetrics = requireContext().resources.displayMetrics
-            val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
-            (screenWidthDp / columnWidthDp + 0.5).toInt()
-        }
+    fun getCols(columnWidthDp: Float): Int{
+        val displayMetrics = requireContext().resources.displayMetrics
+        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+       return (screenWidthDp / columnWidthDp + 0.5).toInt()
+    }
 
+    private fun onRequestedPairsSet(pairs: List<String?>?){
         val cols = getCols(120f)
         val pairsManager = GridLayoutManager(context, cols)
-            pairsManager.initialPrefetchItemCount = pairs?.size ?: 0
-            rvPairs?.layoutManager = pairsManager
+        pairsManager.initialPrefetchItemCount = pairs?.size ?: 0
 
-            val pairsAdapter = PairAdapter(requireContext(), pairs)
-            pairsAdapter.setPairClickListener(this)
-            rvPairs?.adapter = pairsAdapter
+        val pairsAdapter = PairAdapter(requireContext(), pairs)
+        pairsAdapter.setPairClickListener(this)
 
+        rvPairs?.adapter = pairsAdapter
+        rvPairs?.layoutManager = pairsManager
     }
 
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
@@ -142,9 +180,6 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
     override fun onPairClicked(view: View, position: Int) {
         Toast.makeText(context, "$position clicked", Toast.LENGTH_SHORT).show()
         rvPairs.scrollToPosition(position)
-    }
-    fun goToConvertion(){
-        // findNavController().navigate(R.id.history_to_conversion)
     }
 
 }

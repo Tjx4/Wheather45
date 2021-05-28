@@ -32,7 +32,7 @@ class PairAdapter(private val context: Context, private val addSlides: List<Stri
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var conversionTv = itemView.findViewById<TextView>(R.id.tvPair)
-        internal var imbDeleteImgb = itemView.findViewById<ImageButton>(R.id.imbDelete)
+        internal var imbDeleteImgb = itemView.findViewById<ImageButton>(R.id.btnAddCurrencyPair)
 
         init {
             itemView.setOnClickListener(this)

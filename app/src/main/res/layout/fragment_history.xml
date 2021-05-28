@@ -15,6 +15,7 @@
         tools:context=".features.history.HistoryFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:visibility="invisible"
             style="@style/ParentView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -119,7 +120,7 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/clSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -131,15 +132,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Select popular trading pairs"
+                android:textStyle="bold"
                 android:gravity="left"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <com.platform45.weather45.customViews.MySpinner
                 style="@style/mySpinnerItemStyle"
                 android:id="@+id/spnPorpularTradingPairs"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
-                android:entries="@{fxViewModel.currencies}"
+                android:entries="@{fxViewModel.popularCurrencyPairs}"
                 app:layout_constraintTop_toBottomOf="@+id/tvComonPairs"
                 app:layout_constraintRight_toLeftOf="@+id/spnToCurrency"
                 app:layout_constraintLeft_toLeftOf="parent"/>
@@ -150,44 +152,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Select currencies and create a trading pair"
+                android:textStyle="bold"
                 android:gravity="left"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <com.platform45.weather45.customViews.MySpinner
                 style="@style/mySpinnerItemStyle"
                 android:id="@+id/spnFrmCurrency"
                 android:layout_width="0dp"
                 android:layout_marginLeft="@dimen/xsmall_margin"
-                android:entries="@{fxViewModel.currencies}"
+                android:entries="@{fxViewModel.currencyPairs}"
                 app:layout_constraintTop_toBottomOf="@+id/tvTradingPair"
                 app:layout_constraintRight_toLeftOf="@+id/spnToCurrency"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <com.platform45.weather45.customViews.MySpinner
                 style="@style/mySpinnerItemStyle"
                 android:id="@+id/spnToCurrency"
                 android:layout_width="0dp"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
-                android:entries="@{fxViewModel.currencies}"
+                android:entries="@{fxViewModel.currencyPairs}"
                 app:layout_constraintTop_toBottomOf="@+id/tvTradingPair"
                 app:layout_constraintLeft_toRightOf="@+id/spnFrmCurrency"
                 app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
-                style="@style/MediumTextView"
+                style="@style/FX45Button"
                 android:id="@+id/tvCurrentTradingPair"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="ZARUSD"
+                android:text="@{fxViewModel.currencyPair}"
                 android:textStyle="bold"
-                android:text="@{fxViewModel.tradingPair}"
                 android:gravity="left"
+                android:paddingVertical="@dimen/xsmall_margin"
+                android:paddingHorizontal="@dimen/small_margin"
                 android:layout_marginTop="@dimen/xsmall_margin"
                 android:layout_marginLeft="@dimen/xsmall_margin"
                 app:layout_constraintTop_toBottomOf="@+id/spnFrmCurrency"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <Button
+                android:id="@+id/btnAddCurrencyPair"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:textColor="@color/darkText"
+                android:padding="0dp"
+                android:textAllCaps="false"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="@dimen/xsmall_margin"
+                app:layout_constraintTop_toTopOf="@+id/tvCurrentTradingPair"
+                app:layout_constraintBottom_toBottomOf="@+id/tvCurrentTradingPair"
+                app:layout_constraintLeft_toRightOf="@+id/tvCurrentTradingPair"/>
 
             <TextView
                 style="@style/MediumTextView"
@@ -233,6 +251,30 @@
                 app:layout_constraintLeft_toRightOf="@+id/btnFrom"
                 app:layout_constraintRight_toRightOf="parent"/>
 
+            <TextView
+                android:visibility="gone"
+                style="@style/MediumTextView"
+                android:id="@+id/tvRequestingPairs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your currency pairs list"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:layout_marginTop="@dimen/large_margin"
+                android:layout_marginHorizontal="@dimen/xsmall_margin"
+                app:layout_constraintTop_toBottomOf="@+id/btnTo"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRequestingPairs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="true"
+                android:nestedScrollingEnabled="false"
+                android:layout_margin="@dimen/xsmall_margin"
+                android:layout_marginHorizontal="@dimen/xsmall_margin"
+                app:layout_constraintTop_toBottomOf="@+id/tvRequestingPairs"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
             <Button
                 style="@style/FX45Button"
                 android:id="@+id/btnGetHistory"
@@ -241,7 +283,7 @@
                 android:text="Get trade history"
                 android:layout_marginTop="@dimen/medium_margin"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
-                app:layout_constraintTop_toBottomOf="@+id/btnTo"
+                app:layout_constraintTop_toBottomOf="@+id/rvRequestingPairs"
                 app:layout_constraintLeft_toRightOf="@+id/btnFrom"
                 app:layout_constraintRight_toRightOf="parent"/>
 

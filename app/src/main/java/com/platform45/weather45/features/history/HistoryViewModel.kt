@@ -10,16 +10,16 @@ import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 import java.util.*
-import java.util.Set
 import kotlin.collections.ArrayList
 
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
-    private val _tradingPair: MutableLiveData<String?> = MutableLiveData()
-    val tradingPair: MutableLiveData<String?>
-        get() = _tradingPair
+    private val _currency: MutableLiveData<String> = MutableLiveData()
+    val currency: MutableLiveData<String>
+        get() = _currency
 
-    val currencyFromIndex: MutableLiveData<Int> = MutableLiveData()
-    val currencyToIndex: MutableLiveData<Int?> = MutableLiveData()
+    private val _currencyPair: MutableLiveData<String> = MutableLiveData()
+    val currencyPair: MutableLiveData<String>
+        get() = _currencyPair
 
     private val _from: MutableLiveData<String> = MutableLiveData()
     val from: MutableLiveData<String>
@@ -28,14 +28,17 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     private val _to: MutableLiveData<String> = MutableLiveData()
     val to: MutableLiveData<String>
         get() = _to
+    private val _popularCurrencyPairs: MutableLiveData<List<String?>> = MutableLiveData()
+    val popularCurrencyPairs: MutableLiveData<List<String?>>
+        get() = _popularCurrencyPairs
 
-    private val _currencies: MutableLiveData<List<String>> = MutableLiveData()
-    val currencies: MutableLiveData<List<String>>
-        get() = _currencies
+    private val _currencyPairs: MutableLiveData<List<String>> = MutableLiveData()
+    val currencyPairs: MutableLiveData<List<String>>
+        get() = _currencyPairs
 
-    private val _pairs: MutableLiveData<List<String?>?> = MutableLiveData()
-    val pairs: MutableLiveData<List<String?>?>
-        get() = _pairs
+    private val _requestedPairs: MutableLiveData<List<String?>?> = MutableLiveData()
+    val requestedPairs: MutableLiveData<List<String?>?>
+        get() = _requestedPairs
 
     private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
     val pairTradeHistories: MutableLiveData<List<PairTradeHistory>?>
@@ -44,6 +47,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     init {
         _from.value = "0000-00-00"
         _to.value = "0000-00-00"
+        showLoaderAndGetPopular()
         setCurrencies()
     }
 
@@ -52,15 +56,25 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         for(currency in Currency.getAvailableCurrencies()){
             tempList.add(currency.currencyCode)
         }
-        _currencies.value  = tempList.sortedBy { it }
+        _currencyPairs.value  = tempList.sortedBy { it }
     }
 
     fun setCurrencyPair(frmIndx: Int, ToIndx: Int){
-        val currencies = _currencies.value
-        val currencyFromIndex = currencyFromIndex.value ?: 0
-        val currencyToIndex = currencyToIndex.value ?: 0
-        val tradingPair = "${currencies?.get(frmIndx)}${currencies?.get(ToIndx)}"
-        _tradingPair.value = tradingPair
+        val currencies = _currencyPairs.value
+        val tradingPair = "${currencies?.get(frmIndx) ?: ""}${currencies?.get(ToIndx)}"
+        _currencyPair.value = tradingPair
+    }
+
+    fun addCurrentPairTolist(){
+        val tradingPair = _currencyPair.value
+        val currentPairs = _currency.value
+        _currency.value = if(currentPairs.isNullOrEmpty()) tradingPair else "$currentPairs,$tradingPair"
+    }
+
+    fun addPopularPairToList(indx: Int){
+        val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<String>
+        val tradingPair = popularCurrencyPairs[indx]
+        _currency.value = "${_currency.value ?: ""},$tradingPair"
     }
 
 /*
@@ -85,28 +99,34 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 */
 
-    fun setStartDate(startTime: String, indx: Int) {
-        when (indx) {
-            0 -> {
-
-            }
-            1 -> {
-
-            }
+    fun showLoaderAndGetPopular(){
+        //Show loader
+        ioScope.launch {
+            getPopular()
         }
     }
 
-    fun setStartTime(startTime: String, indx: Int) {
-        when (indx) {
-            0 -> {
+    suspend fun getPopular() {
+        val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
+        uiScope.launch {
+            if(!popularCurrencyPairs?.currencies.isNullOrEmpty()){
 
+                val tempList = ArrayList<String>()
+                popularCurrencyPairs?.currencies?.forEach { currencyPair ->
+                    currencyPair?.key?.let {
+                        tempList.add(currencyPair.key!!)
+                    }
+                }
+
+                _popularCurrencyPairs.value = tempList
             }
-            1 -> {
-
+            else{
+                //No popular
             }
         }
-    }
 
+
+    }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
         val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
@@ -137,7 +157,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
             }
 
             uiScope.launch {
-                _pairs.value = currencies
+                _requestedPairs.value = currencies
                 _pairTradeHistories.value = tempPairTrades
             }
         }

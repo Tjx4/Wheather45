@@ -22,7 +22,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <ImageButton
-        android:id="@+id/imbDelete"
+        android:id="@+id/btnAddCurrencyPair"
         android:layout_width="30dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_close"

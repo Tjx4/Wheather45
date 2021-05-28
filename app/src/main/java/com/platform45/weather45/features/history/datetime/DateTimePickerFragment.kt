@@ -96,7 +96,8 @@ class DateTimePickerFragment : BaseLowDialog(){
     private fun getTime(hr: Int, min: Int): String {
         val tme = Time(hr, min, 0)//seconds by default set to zero
         val formatter: Format
-        formatter = SimpleDateFormat("h:mm a")
+        //formatter = SimpleDateFormat("h:mm a")
+        formatter = SimpleDateFormat("h:mm")
         return formatter.format(tme)
     }
 

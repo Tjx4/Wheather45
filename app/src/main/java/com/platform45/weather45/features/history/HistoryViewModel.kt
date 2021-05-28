@@ -13,6 +13,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
+    private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val showLoading: MutableLiveData<Boolean>
+        get() = _showLoading
+
     private val _currency: MutableLiveData<String> = MutableLiveData()
     val currency: MutableLiveData<String>
         get() = _currency
@@ -47,6 +51,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     init {
         _from.value = "0000-00-00"
         _to.value = "0000-00-00"
+        _showLoading.value = true
         showLoaderAndGetPopular()
         setCurrencies()
     }
@@ -67,14 +72,18 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
 
     fun addCurrentPairTolist(){
         val tradingPair = _currencyPair.value
+        setCurrency(tradingPair)
+    }
+
+    private fun setCurrency(tradingPair: String?) {
         val currentPairs = _currency.value
-        _currency.value = if(currentPairs.isNullOrEmpty()) tradingPair else "$currentPairs,$tradingPair"
+        _currency.value = if (currentPairs.isNullOrEmpty()) tradingPair else "$currentPairs,$tradingPair"
     }
 
     fun addPopularPairToList(indx: Int){
         val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<String>
         val tradingPair = popularCurrencyPairs[indx]
-        _currency.value = "${_currency.value ?: ""},$tradingPair"
+        setCurrency(tradingPair)
     }
 
 /*
@@ -126,6 +135,17 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         }
 
 
+    }
+
+    fun showLoadingAndGetPairSeries(){
+        _showLoading.value = true
+        ioScope.launch {
+            val startDate = if(_from.value.equals("0000-00-00") ) "" else _to.value ?: ""
+            val endDate = if(_to.value.equals("0000-00-00")) "" else _to.value ?: ""
+            val currency = _currency.value ?: ""
+            val format = "ohlc"
+            getSeries(startDate, endDate, currency, format)
+        }
     }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {

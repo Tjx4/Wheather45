@@ -40,6 +40,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
     }
 
     private fun addObservers() {
+        historyViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it) })
         historyViewModel.currency.observe(this, Observer { onCurrencyListUpdated(it) })
         historyViewModel.currencyPairs.observe(this, Observer { onCurrenciesSet(it) })
@@ -96,7 +97,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         }
 
         btnGetHistory.setOnClickListener {
-
+            historyViewModel.showLoadingAndGetPairSeries()
         }
     }
 
@@ -123,8 +124,16 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         }
     }
 
+    private fun onShowLoading(showLoading: Boolean){
+        avlLoader.visibility = View.VISIBLE
+        clSearch.visibility = View.GONE
+        clContent.visibility = View.GONE
+    }
+
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
+        avlLoader.visibility = View.GONE
         clSearch.visibility = View.VISIBLE
+        clContent.visibility = View.GONE
     }
 
     private fun onCurrencyListUpdated(currency: String){
@@ -145,6 +154,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
     }
 
+    //Todo move
     fun getCols(columnWidthDp: Float): Int{
         val displayMetrics = requireContext().resources.displayMetrics
         val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
@@ -171,10 +181,13 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter
-        avlLoader.visibility = View.GONE
 
         val helper: SnapHelper = PagerSnapHelper()
         helper.attachToRecyclerView(rvtrades)
+
+        avlLoader.visibility = View.GONE
+        clSearch.visibility = View.GONE
+        clContent.visibility = View.VISIBLE
     }
 
     override fun onPairClicked(view: View, position: Int) {

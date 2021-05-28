@@ -17,6 +17,10 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
 
+    private val _hideLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val hideLoading: MutableLiveData<Boolean>
+        get() = _hideLoading
+
     private val _currency: MutableLiveData<String> = MutableLiveData()
     val currency: MutableLiveData<String>
         get() = _currency
@@ -140,7 +144,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     fun showLoadingAndGetPairSeries(){
         _showLoading.value = true
         ioScope.launch {
-            val startDate = if(_from.value.equals("0000-00-00") ) "" else _to.value ?: ""
+            val startDate = if(_from.value.equals("0000-00-00") ) "" else _from.value ?: ""
             val endDate = if(_to.value.equals("0000-00-00")) "" else _to.value ?: ""
             val currency = _currency.value ?: ""
             val format = "ohlc"
@@ -183,7 +187,9 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         }
         else{
             //Handle ex
-            uiScope.launch { }
+            uiScope.launch {
+                _hideLoading.value = true
+            }
         }
     }
 }

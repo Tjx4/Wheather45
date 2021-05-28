@@ -17,6 +17,7 @@ import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
+import com.platform45.weather45.helpers.showErrorDialog
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,6 +42,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
     private fun addObservers() {
         historyViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
+        historyViewModel.hideLoading.observe(this, Observer { onHideLoading(it) })
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it) })
         historyViewModel.currency.observe(this, Observer { onCurrencyListUpdated(it) })
         historyViewModel.currencyPairs.observe(this, Observer { onCurrenciesSet(it) })
@@ -115,23 +117,28 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
     override fun setTime(scheduledTime: String) {
         when (indx) {
             0 -> {
-                btnFrom.text = "${btnFrom.text} $scheduledTime"
+                btnFrom.text = "${btnFrom.text}-$scheduledTime"
             }
             1 -> {
 
-                btnTo.text = "${btnTo.text} $scheduledTime"
+                btnTo.text = "${btnTo.text}-$scheduledTime"
             }
         }
     }
 
     private fun onShowLoading(showLoading: Boolean){
-        avlLoader.visibility = View.VISIBLE
-        clSearch.visibility = View.GONE
-        clContent.visibility = View.GONE
+        flLoader.visibility = View.VISIBLE
+        //clSearch.visibility = View.GONE
+        //clContent.visibility = View.GONE
+    }
+
+    private fun onHideLoading(showLoading: Boolean){
+        flLoader.visibility = View.GONE
+        showErrorDialog(requireContext(), "Error", "Error, please try again", "Close")
     }
 
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
-        avlLoader.visibility = View.GONE
+        flLoader.visibility = View.GONE
         clSearch.visibility = View.VISIBLE
         clContent.visibility = View.GONE
     }
@@ -185,7 +192,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         val helper: SnapHelper = PagerSnapHelper()
         helper.attachToRecyclerView(rvtrades)
 
-        avlLoader.visibility = View.GONE
+        flLoader.visibility = View.GONE
         clSearch.visibility = View.GONE
         clContent.visibility = View.VISIBLE
     }

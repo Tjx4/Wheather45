@@ -110,9 +110,9 @@ class DateTimePickerFragment : BaseLowDialog(){
         super.onDestroy()
         if(isCancelled) return
 
-        val year = selectedDateDp?.year ?: 0
-        val month = selectedDateDp?.month ?: 0
-        val day = selectedDateDp?.dayOfMonth ?: 0
+        val year = selectedDateDp!!.year
+        val month = if(selectedDateDp!!.month  > 0) selectedDateDp!!.month + 1 else 0
+        val day = selectedDateDp!!.dayOfMonth
         dateTimeContext?.setDate(year, month, day)
 
         val hour = selectedTimeTp?.currentHour ?: 0

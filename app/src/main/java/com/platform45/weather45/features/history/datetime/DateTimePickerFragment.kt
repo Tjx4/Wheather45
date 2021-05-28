@@ -18,10 +18,7 @@ import java.sql.Time
 import java.text.Format
 import java.text.SimpleDateFormat
 
-
 class DateTimePickerFragment : BaseLowDialog(){
-
-    private var currentActivity: Context? = null
     private var isCancelled: Boolean = false
     private var dateTimeContext: DateTimeSetter? = null
 
@@ -35,7 +32,7 @@ class DateTimePickerFragment : BaseLowDialog(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dateTimeContext = getParentFragment() as DateTimeSetter
+        dateTimeContext = parentFragment as DateTimeSetter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -51,7 +48,6 @@ class DateTimePickerFragment : BaseLowDialog(){
         initViews(parentView)
         return parentView
     }
-
 
     fun initViews(parentView: View) {
         datePickerContainerLl = parentView.findViewById(R.id.llDatePickerContainer)
@@ -104,15 +100,11 @@ class DateTimePickerFragment : BaseLowDialog(){
         return formatter.format(tme)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        currentActivity = context
-    }
-
     override fun onBackPressed() {
         super.onBackPressed()
         isCancelled = true
     }
+
     override fun onDestroy() {
         super.onDestroy()
         if(isCancelled) return
@@ -129,6 +121,7 @@ class DateTimePickerFragment : BaseLowDialog(){
     }
 
     interface DateTimeSetter{
+        var indx: Int
         fun setDate(year: Int, month: Int, day: Int)
         fun setTime(scheduledTime: String)
     }

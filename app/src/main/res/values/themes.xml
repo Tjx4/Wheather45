@@ -86,8 +86,11 @@
     </style>
 
     <style name="DateTimePickerStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">#111</item>
-        <item name="android:headerBackground">#0f0f0f</item>
+        <item name="android:headerBackground">@color/teal_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:background">@color/darkGreyBackground</item>
         <!--
         <item name="android:scaleX">1.0</item>
         <item name="android:scaleY">0.80</item>

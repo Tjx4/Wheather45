@@ -19,12 +19,12 @@ import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
+    override var indx: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +60,12 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         }
 
         btnFrom.setOnClickListener {
+            indx = 0
             showDateTimeDialogFragment(this)
         }
 
         btnTo.setOnClickListener {
+            indx = 1
             showDateTimeDialogFragment(this)
         }
 
@@ -73,13 +75,27 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
     }
 
     override fun setDate(year: Int, month: Int, day: Int) {
-
+        when (indx) {
+            0 -> {
+                btnFrom.text = "$year-$month-$day"
+            }
+            1 -> {
+                btnTo.text = "$year-$month-$day"
+            }
+        }
     }
 
     override fun setTime(scheduledTime: String) {
+        when (indx) {
+            0 -> {
+                btnFrom.text = "${btnFrom.text} $scheduledTime"
+            }
+            1 -> {
 
+                btnTo.text = "${btnTo.text} $scheduledTime"
+            }
+        }
     }
-
 
     private fun addObservers() {
         historyViewModel.currencies.observe(this, Observer { onCurrenciesSet(it) })

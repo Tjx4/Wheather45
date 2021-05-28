@@ -21,12 +21,12 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     val currencyFromIndex: MutableLiveData<Int> = MutableLiveData()
     val currencyToIndex: MutableLiveData<Int?> = MutableLiveData()
 
-    private val _from: MutableLiveData<String?> = MutableLiveData()
-    val from: MutableLiveData<String?>
+    private val _from: MutableLiveData<String> = MutableLiveData()
+    val from: MutableLiveData<String>
         get() = _from
 
-    private val _to: MutableLiveData<String?> = MutableLiveData()
-    val to: MutableLiveData<String?>
+    private val _to: MutableLiveData<String> = MutableLiveData()
+    val to: MutableLiveData<String>
         get() = _to
 
     private val _currencies: MutableLiveData<List<String>> = MutableLiveData()
@@ -84,6 +84,28 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
 
     }
 */
+
+    fun setStartDate(startTime: String, indx: Int) {
+        when (indx) {
+            0 -> {
+
+            }
+            1 -> {
+
+            }
+        }
+    }
+
+    fun setStartTime(startTime: String, indx: Int) {
+        when (indx) {
+            0 -> {
+
+            }
+            1 -> {
+
+            }
+        }
+    }
 
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {

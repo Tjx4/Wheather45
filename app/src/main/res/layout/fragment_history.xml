@@ -130,7 +130,7 @@
                 android:id="@+id/tvComonPairs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select porpular trading pairs"
+                android:text="Select popular trading pairs"
                 android:gravity="left"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -199,11 +199,12 @@
                 app:layout_constraintLeft_toLeftOf="@+id/btnFrom"/>
 
             <Button
+                style="@style/FX4EditText"
                 android:id="@+id/btnFrom"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 tools:text="0000-00-00"
-                android:text="@{fxViewModel.from}"
+                android:text="@={fxViewModel.from}"
                 android:layout_marginTop="@dimen/xlarge_margin"
                 android:layout_marginLeft="@dimen/xsmall_margin"
                 app:layout_constraintTop_toBottomOf="@+id/tvCurrentTradingPair"
@@ -220,11 +221,12 @@
                 app:layout_constraintLeft_toLeftOf="@+id/btnTo"/>
 
             <Button
+                style="@style/FX4EditText"
                 android:id="@+id/btnTo"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 tools:text="0000-00-00"
-                android:text="@{fxViewModel.to}"
+                android:text="@={fxViewModel.to}"
                 android:layout_marginTop="@dimen/xlarge_margin"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
                 app:layout_constraintTop_toBottomOf="@+id/tvCurrentTradingPair"

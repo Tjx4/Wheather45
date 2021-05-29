@@ -12,14 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
+        style="@style/ParentView"
         tools:context=".features.history.HistoryFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:visibility="invisible"
-            style="@style/ParentView"
             android:id="@+id/clPairSeriesInfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/darkBackground">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar_layout"
@@ -113,7 +114,7 @@
             android:id="@+id/clPairSelector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lightBackground">
+            android:background="@color/darkBackground">
 
             <ImageButton
                 android:id="@+id/btnClosePairSelector"
@@ -308,13 +309,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:background="@color/lightBackground">
+            android:background="@color/darkBackground">
 
             <com.wang.avi.AVLoadingIndicatorView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:indicatorColor="@color/darkText"
+                app:indicatorColor="@color/lightText"
                 app:indicatorName="BallPulseIndicator"
                 android:layout_gravity="center"/>
 

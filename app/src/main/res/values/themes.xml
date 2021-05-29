@@ -35,7 +35,7 @@
     </style>
 
     <style name="ThemeColors">
-        <item name="android:textColor">@color/darkText</item>
+        <item name="android:textColor">@color/lightText</item>
     </style>
 
     <style name="ToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -82,7 +82,7 @@
     <style name="ParentView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/lightBackground</item>
+        <item name="android:background">@color/darkBackground</item>
     </style>
 
     <style name="DateTimePickerStyle" parent="Theme.AppCompat.Light.Dialog">

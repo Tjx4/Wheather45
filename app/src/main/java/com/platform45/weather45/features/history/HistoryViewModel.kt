@@ -6,20 +6,23 @@ import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.models.DayData
+import com.platform45.weather45.models.Error
 import com.platform45.weather45.models.PairTradeHistory
+import com.platform45.weather45.models.Series
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
     private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
 
-    private val _hideLoading: MutableLiveData<Boolean> = MutableLiveData()
-    val hideLoading: MutableLiveData<Boolean>
-        get() = _hideLoading
+    private val _showError: MutableLiveData<String> = MutableLiveData()
+    val showError: MutableLiveData<String>
+        get() = _showError
 
     private val _currency: MutableLiveData<String> = MutableLiveData()
     val currency: MutableLiveData<String>
@@ -153,8 +156,8 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
-        val series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
-        if(series?.price != null){
+        var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+        if(series is Series && series.price != null){
             val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
 
             val tempPairTrades = ArrayList<PairTradeHistory>()
@@ -185,12 +188,13 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
                 _pairTradeHistories.value = tempPairTrades
             }
         }
-        else{
-            //Handle ex
+        else {
+            series = series as LinkedTreeMap<String, LinkedTreeMap<String, String>>
             uiScope.launch {
-                _hideLoading.value = true
+                _showError.value = series["error"]?.get("info")
             }
         }
+
     }
 }
 

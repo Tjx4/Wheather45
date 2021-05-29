@@ -271,6 +271,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Get trade history"
+                android:enabled="false"
                 android:layout_marginTop="@dimen/medium_margin"
                 android:layout_marginHorizontal="@dimen/xsmall_margin"
                 app:layout_constraintTop_toBottomOf="@+id/rvRequestingPairs"
@@ -283,7 +284,9 @@
         <FrameLayout
             android:id="@+id/flLoader"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:background="@color/lightBackground">
 
             <com.wang.avi.AVLoadingIndicatorView
                 android:layout_width="wrap_content"

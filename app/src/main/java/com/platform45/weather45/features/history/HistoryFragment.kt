@@ -32,6 +32,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        myDrawerController.badFrag(this)
         myDrawerController.showMenu()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
@@ -42,7 +43,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
     private fun addObservers() {
         historyViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
-        historyViewModel.hideLoading.observe(this, Observer { onHideLoading(it) })
+        historyViewModel.showError.observe(this, Observer { onShowError(it) })
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it) })
         historyViewModel.currency.observe(this, Observer { onCurrencyListUpdated(it) })
         historyViewModel.currencyPairs.observe(this, Observer { onCurrenciesSet(it) })
@@ -132,9 +133,15 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         //clContent.visibility = View.GONE
     }
 
-    private fun onHideLoading(showLoading: Boolean){
+    private fun onShowError(erromMessage: String){
         flLoader.visibility = View.GONE
-        showErrorDialog(requireContext(), "Error", "Error, please try again", "Close")
+        showErrorDialog(requireContext(), "Error", erromMessage, "Close")
+    }
+
+     fun toggleSelector(){
+        flLoader.visibility = View.GONE
+        clSearch.visibility = View.VISIBLE
+        clContent.visibility = View.GONE
     }
 
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
@@ -155,6 +162,7 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         rvRequestingPairs?.adapter = pairsAdapter
         rvRequestingPairs?.layoutManager = pairsManager
         tvRequestingPairs.visibility = View.VISIBLE
+        btnGetHistory.isEnabled = true
     }
 
     private fun onCurrenciesSet(currecies: List<String>) {
@@ -184,7 +192,6 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         //tradesLayoutManager.initialPrefetchItemCount = tradeHistories?.size ?: 0
         rvtrades?.layoutManager = tradesLayoutManager
-        //rvtrades.layoutManager = ViewPagerLayoutManager(activity)
 
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter

@@ -3,18 +3,19 @@ package com.platform45.weather45
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.platform45.weather45.features.history.HistoryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), MyDrawerController{
     override lateinit var navController: NavController
     override var toobarMenu: Menu? = null
+    var historFrag: HistoryFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
-            R.id.action_search -> Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
+            R.id.action_find -> historFrag?.toggleSelector()
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }
@@ -66,5 +67,9 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
 
     override fun hideMenu() {
         toobarMenu?.clear()
+    }
+
+    override fun badFrag(historyFragment: HistoryFragment) {
+        historFrag = historyFragment
     }
 }

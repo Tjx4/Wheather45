@@ -14,7 +14,7 @@ interface RetrofitHelper {
     suspend fun historical(@Query("api_key") apiKey: String, @Query("date") date: String, @Query("interval") interval: String, @Query("currency") currency: String): Historical?
 
     @GET("apitimeseries")
-    suspend fun series(@Query("api_key") apiKey: String, @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("currency") currency: String, @Query("format") format: String): Series?
+    suspend fun series(@Query("api_key") apiKey: String, @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("currency") currency: String, @Query("format") format: String): Any?
 
     @GET("apicurrencies")
     suspend fun currencies(@Query("api_key") apiKey: String): Currencies?

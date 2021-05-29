@@ -13,12 +13,13 @@ import android.widget.TimePicker
 import com.platform45.weather45.R
 import com.platform45.weather45.base.fragments.BaseDialogFragment
 import com.platform45.weather45.base.fragments.BaseLowDialog
+import com.platform45.weather45.base.fragments.OnFragmentBackPressed
 import com.platform45.weather45.constants.TITLE
 import java.sql.Time
 import java.text.Format
 import java.text.SimpleDateFormat
 
-class DateTimePickerFragment : BaseLowDialog(){
+class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
     private var isCancelled: Boolean = false
     private var dateTimeContext: DateTimeSetter? = null
 

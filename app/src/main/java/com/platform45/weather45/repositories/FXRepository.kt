@@ -15,29 +15,29 @@ class FXRepository(private val retrofitHelper: RetrofitHelper) {
             retrofitHelper.convert(api_key, from, to, amount)
         }
         catch (ex: Exception){
-            Conversion(0.0, 0, 0.0, null, null)
+            null
         }
     }
 
-    suspend fun getHistorical(api_key: String, date: String, currency: String, interval: String): Historical?{
+    suspend fun getHistorical(api_key: String, date: String, currency: String, interval: String): Any?{
         return try {
-            retrofitHelper.historical(api_key, date, interval, currency)
+            retrofitHelper.historical(api_key, date, interval, currency) as Historical
         }
         catch (ex: Exception){
-            Historical(null, null)
+            null
         }
     }
 
     suspend fun getSeries(apiKey: String, startDate: String, endDate: String, currency: String, format: String) : Any?{
         return try {
-            retrofitHelper.series(apiKey, startDate, endDate, currency, format)
+            retrofitHelper.series(apiKey, startDate, endDate, currency, format) as Series
         }
         catch (ex: Exception){
-            Error("null", "null")
+            null
         }
     }
 
-    suspend fun getUSDCurrencyPairs(apiKey: String) : Currencies?{
+    suspend fun getUSDCurrencyPairs(apiKey: String) : Any?{
         return try {
             retrofitHelper.currencies(apiKey)
         }

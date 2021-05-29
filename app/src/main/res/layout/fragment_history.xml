@@ -130,8 +130,7 @@
                         android:id="@+id/tvComonPairs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select popular trading pairs"
-                        android:textStyle="bold"
+                        android:text="Select from popular trading pairs"
                         android:gravity="left"
                         android:layout_margin="@dimen/xsmall_margin"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -151,7 +150,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Select currencies and create a trading pair"
-                        android:textStyle="bold"
                         android:gravity="left"
                         android:layout_margin="@dimen/xsmall_margin"
                         app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>

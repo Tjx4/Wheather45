@@ -27,7 +27,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
+    private lateinit var snapHelper: SnapHelper
     override var indx: Int = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -182,8 +184,8 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter
 
-        val helper: SnapHelper = PagerSnapHelper()
-        helper.attachToRecyclerView(rvtrades)
+        snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(rvtrades)
 
         flLoader.visibility = View.GONE
         clSearch.visibility = View.GONE
@@ -191,8 +193,18 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     }
 
     override fun onPairClicked(view: View, position: Int) {
-        Toast.makeText(context, "$position clicked", Toast.LENGTH_SHORT).show()
         rvPairs.scrollToPosition(position)
+        rvPairs.post {
+            var view = rvPairs.layoutManager?.findViewByPosition(position);
+            if (view == null) {
+                // do nothing
+            }
+
+            var snapDistance = snapHelper.calculateDistanceToFinalSnap(rvPairs.layoutManager!!, view!!)
+            if (snapDistance?.get(0)   != 0 || snapDistance[1] != 0) {
+                rvPairs.scrollBy(snapDistance?.get(0)!!, snapDistance?.get(1));
+            }
+        }
     }
 
 }

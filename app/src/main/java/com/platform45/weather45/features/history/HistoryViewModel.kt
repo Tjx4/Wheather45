@@ -71,7 +71,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     private fun initStartAndEndDate() {
-        _startDate.value = getDaysAgo(5)
+        _startDate.value = getDaysAgo(60)
         _endDate.value = getCurrentDate()
     }
 

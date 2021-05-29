@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.internal.LinkedTreeMap
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
+import com.platform45.weather45.helpers.getCurrentDate
+import com.platform45.weather45.helpers.getDaysAgo
 import com.platform45.weather45.models.DayData
 import com.platform45.weather45.models.Error
 import com.platform45.weather45.models.PairTradeHistory
@@ -56,8 +58,8 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         get() = _pairTradeHistories
 
     init {
-        _from.value = "0000-00-00"
-        _to.value = "0000-00-00"
+        _from.value = getDaysAgo(7)
+        _to.value = getCurrentDate()
         _showLoading.value = true
         showLoaderAndGetPopular()
         setCurrencies()

@@ -1,11 +1,12 @@
 package com.platform45.weather45.extensions
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.platform45.weather45.R
 import com.platform45.weather45.constants.ACTIVITY_TRANSITION
 import com.platform45.weather45.constants.PAYLOAD_KEY
-import com.platform45.weather45.R
 import com.platform45.weather45.models.Transition
 
 val SLIDE_IN_ACTIVITY = getTransitionAnimation(R.anim.slide_right, R.anim.no_transition)
@@ -35,4 +36,10 @@ private fun getTransitionAnimation(inAnimation: Int, outAnimation: Int): Transit
     transitionProvider.inAnimation = inAnimation
     transitionProvider.outAnimation = outAnimation
     return transitionProvider
+}
+
+fun Activity.getScreenCols(columnWidthDp: Float): Int{
+    val displayMetrics = this.resources.displayMetrics
+    val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+    return (screenWidthDp / columnWidthDp + 0.5).toInt()
 }

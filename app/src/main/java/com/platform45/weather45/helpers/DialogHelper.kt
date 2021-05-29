@@ -4,11 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.platform45.weather45.R
 import com.platform45.weather45.base.fragments.BaseDialogFragment
+import com.platform45.weather45.constants.DATETIME
 import com.platform45.weather45.constants.LAYOUT
 import com.platform45.weather45.constants.TITLE
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
@@ -69,27 +71,23 @@ private fun showAlertMessage(ab: AlertDialog.Builder, context: Context) {
 }
 
 
-fun showDateTimeDialogFragment(dateTimeContext: DateTimePickerFragment.DateTimeSetter) {
+fun showDateTimeDialogFragment(dateTimeContext: DateTimePickerFragment.DateTimeSetter, dateTime: String = "") {
     var dateTimePickerFragment = DateTimePickerFragment.newInstance()
     dateTimePickerFragment.isCancelable = true
 
-    var title = "Date time picker"
-    val layout = R.layout.fragment_date_time_picker
+    val payload = dateTimePickerFragment.requireArguments()
+    payload?.putString(TITLE, "Date time picker")
+    payload?.putInt(LAYOUT, R.layout.fragment_date_time_picker)
+    payload?.putString(DATETIME, dateTime)
 
+    var newFragment = getFragmentDialog(payload, dateTimePickerFragment)
     val ft = if(dateTimeContext is Activity) (dateTimeContext as AppCompatActivity).supportFragmentManager.beginTransaction() else (dateTimeContext as Fragment).childFragmentManager.beginTransaction()
-
-    var newFragment = getFragmentDialog(title, layout, dateTimePickerFragment)
     newFragment.show(ft, "dialog")
-
     //Todo: Rethink
     //activity.activeDialogFragment = newFragment
 }
 
-private fun getFragmentDialog(title: String, Layout: Int, newFragmentBaseBase: BaseDialogFragment) : BaseDialogFragment {
-    val payload = newFragmentBaseBase.arguments
-    payload?.putString(TITLE, title)
-    payload?.putInt(LAYOUT, Layout)
-
+private fun getFragmentDialog(payload: Bundle, newFragmentBaseBase: BaseDialogFragment) : BaseDialogFragment {
     newFragmentBaseBase.arguments = payload
     return newFragmentBaseBase
 }

@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
-import com.platform45.weather45.adapters.PairAdapter
+import com.platform45.weather45.adapters.CurrenyPairAdapter
 import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
+import com.platform45.weather45.extensions.getScreenCols
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.helpers.showErrorDialog
@@ -22,7 +24,7 @@ import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
+class HistoryFragment : BaseFragment(), CurrenyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
     override var indx: Int = 0
@@ -87,12 +89,12 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
         btnFrom.setOnClickListener {
             indx = 0
-            showDateTimeDialogFragment(this)
+            showDateTimeDialogFragment(this, (it as Button).text.toString())
         }
 
         btnTo.setOnClickListener {
             indx = 1
-            showDateTimeDialogFragment(this)
+            showDateTimeDialogFragment(this, (it as Button).text.toString())
         }
 
         btnAddCurrencyPair.setOnClickListener {
@@ -152,11 +154,11 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
     private fun onCurrencyListUpdated(currency: String){
         val pairs = currency.split(",")
-        val cols = getCols(120f)
+        val cols = requireActivity().getScreenCols(120f)
         val pairsManager = GridLayoutManager(context, cols)
         pairsManager.initialPrefetchItemCount = pairs?.size
 
-        val pairsAdapter = PairAdapter(requireContext(), pairs)
+        val pairsAdapter = CurrenyPairAdapter(requireContext(), pairs)
         pairsAdapter.setPairClickListener(this)
 
         rvRequestingPairs?.adapter = pairsAdapter
@@ -169,19 +171,12 @@ class HistoryFragment : BaseFragment(), PairAdapter.AddPairClickListener, DateTi
 
     }
 
-    //Todo move
-    fun getCols(columnWidthDp: Float): Int{
-        val displayMetrics = requireContext().resources.displayMetrics
-        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
-       return (screenWidthDp / columnWidthDp + 0.5).toInt()
-    }
-
     private fun onRequestedPairsSet(pairs: List<String?>?){
-        val cols = getCols(120f)
+        val cols = requireActivity().getScreenCols(120f)
         val pairsManager = GridLayoutManager(context, cols)
         pairsManager.initialPrefetchItemCount = pairs?.size ?: 0
 
-        val pairsAdapter = PairAdapter(requireContext(), pairs)
+        val pairsAdapter = CurrenyPairAdapter(requireContext(), pairs)
         pairsAdapter.setPairClickListener(this)
 
         rvPairs?.adapter = pairsAdapter

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.platform45.weather45.R
 
 
-class PairAdapter(private val context: Context, private val addSlides: List<String?>?) : RecyclerView.Adapter<PairAdapter.ViewHolder>() {
+class CurrenyPairAdapter(private val context: Context, private val addSlides: List<String?>?) : RecyclerView.Adapter<CurrenyPairAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
     private var addPairClickListener: AddPairClickListener? = null
 

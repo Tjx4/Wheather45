@@ -14,6 +14,7 @@ import com.platform45.weather45.R
 import com.platform45.weather45.base.fragments.BaseDialogFragment
 import com.platform45.weather45.base.fragments.BaseLowDialog
 import com.platform45.weather45.base.fragments.OnFragmentBackPressed
+import com.platform45.weather45.constants.DATETIME
 import com.platform45.weather45.constants.TITLE
 import java.sql.Time
 import java.text.Format
@@ -51,14 +52,20 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
     }
 
     fun initViews(parentView: View) {
+        val dateTime = arguments?.getString(DATETIME)
+
+        val ymd = dateTime?.split("-")
+        val y = ymd?.get(0)?.toInt() ?: 0
+        val m = ymd?.get(1)?.toInt()  ?: 0
+        val d = ymd?.get(2)?.toInt()  ?: 0
+
         datePickerContainerLl = parentView.findViewById(R.id.llDatePickerContainer)
         selectedDateDp = parentView.findViewById(R.id.dpAppointmentDate)
+        selectedDateDp?.init(y, m, d, null)
 
         dateTimeNextBtn = parentView.findViewById(R.id.btnDateTimeNext)
         dateTimeNextBtn?.setOnClickListener {
             showTimePicker()
-            // onSetDate(appointMentTimeDp?.year, appointMentTimeDp?.month, appointMentTimeDp?.dayOfMonth)
-            //clientDashboardPresenter?.currentService?.timeScheduled = scheduledDate
         }
 
         timePickerContainerLl = parentView.findViewById(R.id.llTimePickerContainer)

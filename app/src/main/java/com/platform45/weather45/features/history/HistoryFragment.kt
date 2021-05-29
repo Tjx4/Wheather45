@@ -43,6 +43,12 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(rvtrades)
+    }
+
     private fun addObservers() {
         historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
         historyViewModel.showError.observe(this, Observer { onShowError(it)})
@@ -176,22 +182,11 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         rvtrades?.adapter?.notifyDataSetChanged()
     }
 
-    fun init() {
-
-    }
-
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rvtrades?.layoutManager = tradesLayoutManager
-
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter
-
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(rvtrades)
-
-
-        //Todo make update no set
         showPairSeriesInfo()
     }
 

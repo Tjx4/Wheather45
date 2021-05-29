@@ -19,4 +19,7 @@ protected lateinit var myDrawerController: MyDrawerController
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    open fun initActivity(){
+
+    }
 }

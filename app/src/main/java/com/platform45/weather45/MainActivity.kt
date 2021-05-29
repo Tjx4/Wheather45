@@ -23,13 +23,9 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         setSupportActionBar(toolbar)
          navController = this.findNavController(R.id.navControllerFragment)
          setupWithNavController(toolbar, navController)
-
-
         /*
         setSupportActionBar(toolbar)
         val navController = this.findNavController(R.id.navControllerFragment)

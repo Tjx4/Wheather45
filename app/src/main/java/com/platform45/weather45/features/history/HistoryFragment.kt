@@ -26,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
-    private lateinit var snapHelper: SnapHelper
+    private var snapHelper: SnapHelper? = null
     override var indx: Int = 0
 
 
@@ -195,27 +195,19 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rvtrades)
-
+        this.snapHelper = snapHelper
         showPairSeriesInfo()
     }
 
     override fun onPairClicked(view: View, position: Int) {
-        rvPairs.layoutManager?.scrollToPosition(position)
-
-        /*
-        rvPairs.scrollToPosition(position)
-        rvPairs.post {
-            var view = rvPairs.layoutManager?.findViewByPosition(position);
-            if (view == null) {
-                // do nothing
-            }
-
-            var snapDistance = snapHelper.calculateDistanceToFinalSnap(rvPairs.layoutManager!!, view!!)
-            if (snapDistance?.get(0)  != 0 || snapDistance[1] != 0) {
-                rvPairs.scrollBy(snapDistance?.get(0)!!, snapDistance?.get(1));
+        //rvPairs.layoutManager?.scrollToPosition(position)
+        snapHelper?.let {sh ->
+            rvPairs.layoutManager?.let {
+                sh.calculateDistanceToFinalSnap(it, rvPairs.getChildAt(1))
+                    ?.get(0)?.let { rvPairs.scrollBy(it, 0) }
             }
         }
-        */
+
     }
 
 

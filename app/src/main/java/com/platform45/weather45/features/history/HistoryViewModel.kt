@@ -3,44 +3,47 @@ package com.platform45.weather45.features.history
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.internal.LinkedTreeMap
+import com.platform45.weather45.R
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.helpers.getCurrentDate
 import com.platform45.weather45.helpers.getDaysAgo
+import com.platform45.weather45.models.Currencies
 import com.platform45.weather45.models.DayData
-import com.platform45.weather45.models.Error
 import com.platform45.weather45.models.PairTradeHistory
 import com.platform45.weather45.models.Series
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
+    val availableCurrencies: MutableLiveData<List<String>> = MutableLiveData()
+
     private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
+
+    private val _canProceed: MutableLiveData<Boolean> = MutableLiveData()
+    val canProceed: MutableLiveData<Boolean>
+        get() = _canProceed
 
     private val _showError: MutableLiveData<String> = MutableLiveData()
     val showError: MutableLiveData<String>
         get() = _showError
 
-    private val _currency: MutableLiveData<String> = MutableLiveData()
-    val currency: MutableLiveData<String>
-        get() = _currency
-
     private val _currencyPair: MutableLiveData<String> = MutableLiveData()
     val currencyPair: MutableLiveData<String>
         get() = _currencyPair
 
-    private val _from: MutableLiveData<String> = MutableLiveData()
-    val from: MutableLiveData<String>
-        get() = _from
+    private val _startDate: MutableLiveData<String> = MutableLiveData()
+    val startDate: MutableLiveData<String>
+        get() = _startDate
 
-    private val _to: MutableLiveData<String> = MutableLiveData()
-    val to: MutableLiveData<String>
-        get() = _to
+    private val _endDate: MutableLiveData<String> = MutableLiveData()
+    val endDate: MutableLiveData<String>
+        get() = _endDate
+
     private val _popularCurrencyPairs: MutableLiveData<List<String?>> = MutableLiveData()
     val popularCurrencyPairs: MutableLiveData<List<String?>>
         get() = _popularCurrencyPairs
@@ -49,51 +52,158 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     val currencyPairs: MutableLiveData<List<String>>
         get() = _currencyPairs
 
-    private val _requestedPairs: MutableLiveData<List<String?>?> = MutableLiveData()
-    val requestedPairs: MutableLiveData<List<String?>?>
-        get() = _requestedPairs
-
     private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
     val pairTradeHistories: MutableLiveData<List<PairTradeHistory>?>
         get() = _pairTradeHistories
 
+    private val _isPairsUpdated: MutableLiveData<Boolean> = MutableLiveData()
+    val isPairsUpdated: MutableLiveData<Boolean>
+        get() = _isPairsUpdated
+
     init {
-        _from.value = getDaysAgo(7)
-        _to.value = getCurrentDate()
-        _showLoading.value = true
-        showLoaderAndGetPopular()
-        setCurrencies()
+        initCurrencies()
+        initStartAndEndDate()
+        showLoaderAndGetPopularPairs()
+        _currencyPairs.value = ArrayList()
     }
 
-    fun setCurrencies() {
-        val tempList = ArrayList<String>()
+    private fun initStartAndEndDate() {
+        _startDate.value = getDaysAgo(7)
+        _endDate.value = getCurrentDate()
+    }
+
+    fun initCurrencies() {
+        availableCurrencies.value = ArrayList()
         for(currency in Currency.getAvailableCurrencies()){
-            tempList.add(currency.currencyCode)
+            (availableCurrencies.value as ArrayList<String>)?.add(currency.currencyCode)
         }
-        _currencyPairs.value  = tempList.sortedBy { it }
+        availableCurrencies.value?.sortedBy { it }
+    }
+
+    fun showLoaderAndGetPopularPairs(){
+        _showLoading.value = true
+        ioScope.launch {
+            getPopular()
+        }
+    }
+
+    suspend fun getPopular() {
+        val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
+        uiScope.launch {
+            if(popularCurrencyPairs is Currencies){
+                if(!popularCurrencyPairs?.currencies.isNullOrEmpty()){
+                    val tempList = ArrayList<String>()
+                    popularCurrencyPairs?.currencies?.forEach { currencyPair ->
+                        currencyPair?.key?.let {
+                            tempList.add(currencyPair.key!!)
+                        }
+                    }
+                    _popularCurrencyPairs.value = tempList
+                }
+                else{
+                    _showError.value = app.getString(R.string.no_popular_currency_pairs)
+                }
+            }
+            else{
+                val error = popularCurrencyPairs as LinkedTreeMap<String, LinkedTreeMap<String, String>>
+                _showError.value = error["error"]?.get("info")
+            }
+        }
+
+
     }
 
     fun setCurrencyPair(frmIndx: Int, ToIndx: Int){
-        val currencies = _currencyPairs.value
-        val tradingPair = "${currencies?.get(frmIndx) ?: ""}${currencies?.get(ToIndx)}"
-        _currencyPair.value = tradingPair
+        _currencyPair.value = "${availableCurrencies.value?.get(frmIndx) ?: ""}${availableCurrencies.value?.get(ToIndx)}"
     }
 
-    fun addCurrentPairTolist(){
-        val tradingPair = _currencyPair.value
-        setCurrency(tradingPair)
-    }
-
-    private fun setCurrency(tradingPair: String?) {
-        val currentPairs = _currency.value
-        _currency.value = if (currentPairs.isNullOrEmpty()) tradingPair else "$currentPairs,$tradingPair"
+    fun addCreatedPairToList(){
+        _currencyPair.value?.let { addCurrencyPairToList(it) }
     }
 
     fun addPopularPairToList(indx: Int){
         val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<String>
-        val tradingPair = popularCurrencyPairs[indx]
-        setCurrency(tradingPair)
+        addCurrencyPairToList(popularCurrencyPairs[indx])
     }
+
+    fun addCurrencyPairToList(currencyPair: String){
+        val currencyPairs = _currencyPairs.value as ArrayList
+        currencyPairs.add(currencyPair)
+        _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _isPairsUpdated.value = true
+    }
+
+    fun deleteCurrencyPairFromList(currencyPair: String){
+        val currencyPairs = _currencyPairs.value as ArrayList
+        currencyPairs.remove(currencyPair)
+        _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _isPairsUpdated.value = true
+    }
+
+    fun showLoadingAndGetPairSeries(){
+        _showLoading.value = true
+        ioScope.launch {
+            val startDate = _startDate.value ?: ""
+            val endDate = _endDate.value ?: ""
+            val format = "ohlc"
+            var currency = ""
+            _currencyPairs.value?.forEach { currency += if (it.isNullOrEmpty()) "$it" else ",$it" }
+            getCurrencyPairSeries(startDate, endDate, currency, format)
+        }
+    }
+
+    suspend fun getCurrencyPairSeries(startDate: String, endDate: String, currency: String, format: String) {
+        var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+        uiScope.launch {
+            if(series is Series) {
+                if (series.price != null) {
+                    val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
+                    val tempPairTrades = ArrayList<PairTradeHistory>()
+
+                    val currencies = currency.split(",")
+                    for (pairTrade in currencies) {
+                        val currencyDateData = ArrayList<DayData>()
+                        for (currentPrice in prices) {
+                            val currentDay =
+                                currentPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
+
+                            val dateData = currentDay[pairTrade]
+                            val seriesDateData = DayData(
+                                currentPrice.key,
+                                dateData?.get("close")?.toFloat(),
+                                dateData?.get("high")?.toFloat(),
+                                dateData?.get("low")?.toFloat(),
+                                dateData?.get("open")?.toFloat()
+                            )
+                            currencyDateData.add(seriesDateData)
+                        }
+                        tempPairTrades.add(
+                            PairTradeHistory(
+                                pairTrade,
+                                startDate,
+                                endDate,
+                                currencyDateData
+                            )
+                        )
+                    }
+                    _pairTradeHistories.value = tempPairTrades
+                }
+                else{
+                    _showError.value = app.getString(R.string.no_data_found)
+                }
+            }
+            else {
+                val error = series as LinkedTreeMap<String, LinkedTreeMap<String, String>>
+                _showError.value = error["error"]?.get("info")
+            }
+
+        }
+    }
+
+
+
+
+
 
 /*
     suspend fun getHistorical(date: String, currency: String, interval: String) {
@@ -116,88 +226,6 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
 
     }
 */
-
-    fun showLoaderAndGetPopular(){
-        //Show loader
-        ioScope.launch {
-            getPopular()
-        }
-    }
-
-    suspend fun getPopular() {
-        val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
-        uiScope.launch {
-            if(!popularCurrencyPairs?.currencies.isNullOrEmpty()){
-
-                val tempList = ArrayList<String>()
-                popularCurrencyPairs?.currencies?.forEach { currencyPair ->
-                    currencyPair?.key?.let {
-                        tempList.add(currencyPair.key!!)
-                    }
-                }
-
-                _popularCurrencyPairs.value = tempList
-            }
-            else{
-                //No popular
-            }
-        }
-
-
-    }
-
-    fun showLoadingAndGetPairSeries(){
-        _showLoading.value = true
-        ioScope.launch {
-            val startDate = if(_from.value.equals("0000-00-00") ) "" else _from.value ?: ""
-            val endDate = if(_to.value.equals("0000-00-00")) "" else _to.value ?: ""
-            val currency = _currency.value ?: ""
-            val format = "ohlc"
-            getSeries(startDate, endDate, currency, format)
-        }
-    }
-
-    suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
-        var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
-
-        if(series is Series && series.price != null){
-            val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
-
-            val tempPairTrades = ArrayList<PairTradeHistory>()
-            val currencies = currency.split(",")
-            for(pairTrade in currencies){
-                val currencyDateData = ArrayList<DayData>()
-                for(currentDayPrice in prices) {
-                    val currentDay =
-                    currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
-
-                    val dateData = currentDay[pairTrade]
-                    val seriesDateData = DayData(
-                        currentDayPrice.key,
-                        dateData?.get("close")?.toFloat(),
-                        dateData?.get("high")?.toFloat(),
-                        dateData?.get("low")?.toFloat(),
-                        dateData?.get("open")?.toFloat()
-                    )
-                    currencyDateData.add(seriesDateData)
-                }
-
-                tempPairTrades.add(PairTradeHistory(pairTrade, startDate, endDate, currencyDateData))
-            }
-
-            uiScope.launch {
-                _requestedPairs.value = currencies
-                _pairTradeHistories.value = tempPairTrades
-            }
-        }
-        else {
-            series = series as LinkedTreeMap<String, LinkedTreeMap<String, String>>
-            uiScope.launch {
-                _showError.value = series["error"]?.get("info")
-            }
-        }
-
-    }
 }
 
 

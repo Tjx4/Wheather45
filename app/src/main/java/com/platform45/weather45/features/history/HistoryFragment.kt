@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.FxAdapter
-import com.platform45.weather45.adapters.CurrenyPairAdapter
+import com.platform45.weather45.adapters.CurrencyPairAdapter
 import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
@@ -24,7 +24,7 @@ import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : BaseFragment(), CurrenyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
+class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
     override var indx: Int = 0
@@ -44,13 +44,13 @@ class HistoryFragment : BaseFragment(), CurrenyPairAdapter.AddPairClickListener,
     }
 
     private fun addObservers() {
-        historyViewModel.showLoading.observe(this, Observer { onShowLoading(it) })
-        historyViewModel.showError.observe(this, Observer { onShowError(it) })
-        historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it) })
-        historyViewModel.currency.observe(this, Observer { onCurrencyListUpdated(it) })
-        historyViewModel.currencyPairs.observe(this, Observer { onCurrenciesSet(it) })
-        historyViewModel.requestedPairs.observe(this, Observer { onRequestedPairsSet(it) })
-        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it) })
+        historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
+        historyViewModel.showError.observe(this, Observer { onShowError(it)})
+        historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
+        historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
+        historyViewModel.currencyPairs.observe(this, Observer { onCurrencyPairsSet(it)})
+        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it)})
+        historyViewModel.isPairsUpdated.observe(this, Observer { onPairsListUpdated(it)})
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,7 +98,7 @@ class HistoryFragment : BaseFragment(), CurrenyPairAdapter.AddPairClickListener,
         }
 
         btnAddCurrencyPair.setOnClickListener {
-            historyViewModel.addCurrentPairTolist()
+            historyViewModel.addCreatedPairToList()
         }
 
         btnGetHistory.setOnClickListener {
@@ -152,40 +152,33 @@ class HistoryFragment : BaseFragment(), CurrenyPairAdapter.AddPairClickListener,
         clContent.visibility = View.GONE
     }
 
-    private fun onCurrencyListUpdated(currency: String){
-        val pairs = currency.split(",")
-        val cols = requireActivity().getScreenCols(120f)
-        val pairsManager = GridLayoutManager(context, cols)
-        pairsManager.initialPrefetchItemCount = pairs?.size
+    private fun canProceed(proceed: Boolean){
+        btnGetHistory.isEnabled = proceed
+        tvRequestingPairs.visibility = if(proceed) View.VISIBLE else View.GONE
+    }
 
-        val pairsAdapter = CurrenyPairAdapter(requireContext(), pairs)
+    private fun onCurrencyPairsSet(pairs: List<String>) {
+        val pairsAdapter = CurrencyPairAdapter(requireContext(), historyViewModel, pairs)
         pairsAdapter.setPairClickListener(this)
 
+        val cols = requireActivity().getScreenCols(120f)
+
+        val requestingPairsManager = GridLayoutManager(context, cols)
         rvRequestingPairs?.adapter = pairsAdapter
-        rvRequestingPairs?.layoutManager = pairsManager
-        tvRequestingPairs.visibility = View.VISIBLE
-        btnGetHistory.isEnabled = true
-    }
+        rvRequestingPairs?.layoutManager = requestingPairsManager
 
-    private fun onCurrenciesSet(currecies: List<String>) {
-
-    }
-
-    private fun onRequestedPairsSet(pairs: List<String?>?){
-        val cols = requireActivity().getScreenCols(120f)
         val pairsManager = GridLayoutManager(context, cols)
-        pairsManager.initialPrefetchItemCount = pairs?.size ?: 0
-
-        val pairsAdapter = CurrenyPairAdapter(requireContext(), pairs)
-        pairsAdapter.setPairClickListener(this)
-
         rvPairs?.adapter = pairsAdapter
         rvPairs?.layoutManager = pairsManager
     }
 
+    fun onPairsListUpdated(isUpdated: Boolean){
+        rvRequestingPairs?.adapter?.notifyDataSetChanged()
+        rvPairs?.adapter?.notifyDataSetChanged()
+    }
+
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        //tradesLayoutManager.initialPrefetchItemCount = tradeHistories?.size ?: 0
         rvtrades?.layoutManager = tradesLayoutManager
 
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)

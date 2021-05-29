@@ -9,9 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.platform45.weather45.R
+import com.platform45.weather45.features.history.HistoryViewModel
 
-
-class CurrenyPairAdapter(private val context: Context, private val addSlides: List<String?>?) : RecyclerView.Adapter<CurrenyPairAdapter.ViewHolder>() {
+class CurrencyPairAdapter(private val context: Context, val historyViewModel: HistoryViewModel, private val addSlides: List<String>) : RecyclerView.Adapter<CurrencyPairAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
     private var addPairClickListener: AddPairClickListener? = null
 
@@ -24,8 +24,7 @@ class CurrenyPairAdapter(private val context: Context, private val addSlides: Li
         val currentPair = addSlides?.get(position)
         holder.conversionTv.text = currentPair
         holder.imbDeleteImgb.setOnClickListener {
-            ((addSlides) as ArrayList).remove(currentPair)
-            notifyDataSetChanged()
+            historyViewModel.deleteCurrencyPairFromList(currentPair)
             Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
         }
     }

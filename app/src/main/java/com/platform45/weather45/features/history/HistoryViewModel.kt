@@ -124,6 +124,14 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         }
     }
 
+    fun clearCurrencyPairs() {
+        _currencyPairs.value?.let {
+            val currencyPairs = it as ArrayList<String>
+            currencyPairs.clear()
+            _currencyPairs.value = it
+        }
+    }
+
     fun setCurrencyPair(frmIndx: Int, ToIndx: Int) {
         _currencyPair.value =
             "${availableCurrencies.value?.get(frmIndx) ?: ""}${availableCurrencies.value?.get(ToIndx)}"

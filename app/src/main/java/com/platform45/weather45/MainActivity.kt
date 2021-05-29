@@ -46,7 +46,10 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
             R.id.action_select -> historFrag?.showPairSelector()
-            R.id.action_close_selection -> historFrag?.showPairSeriesInfo()
+            R.id.action_close_selection -> {
+                historFrag?.showPairSeriesInfo()
+                historFrag?.resetPairData()
+            }
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }

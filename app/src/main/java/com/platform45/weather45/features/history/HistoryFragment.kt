@@ -151,6 +151,10 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         myDrawerController.showContent()
     }
 
+    fun resetPairData() {
+        historyViewModel.clearCurrencyPairs()
+    }
+
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
         showPairSelector()
     }

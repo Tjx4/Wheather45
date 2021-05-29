@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_convert"
-        android:title="@string/convert"
-        android:icon="@drawable/ic_convert"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_select"
         android:title="@string/search"
         android:icon="@drawable/ic_select"
@@ -20,5 +14,12 @@
         android:icon="@drawable/ic_close"
         android:visible="false"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_convert"
+        android:title="@string/convert"
+        android:icon="@drawable/ic_convert"
+        app:showAsAction="always"/>
+
 
 </menu>

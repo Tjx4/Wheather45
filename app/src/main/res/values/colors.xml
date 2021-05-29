@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="blue_1">#003366</color>
     <color name="red">#FF0000</color>
-    <color name="gold_1">#aa8c2c</color>
+    <color name="gold_1">#ff4d02</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightText">#DDD</color>f
     <color name="greyText">#888</color>
@@ -19,6 +19,7 @@
     <color name="pairItemBackground">#111</color>
     <color name="darkBackground">#000</color>
     <color name="darkBackground_2">#222</color>
+    <color name="darkBackground_3">#444</color>
     <color name="splashGradientStart">#000</color>
     <color name="splashGradientEnd">#111</color>
     <color name="gradientStart">#84c3f9</color>

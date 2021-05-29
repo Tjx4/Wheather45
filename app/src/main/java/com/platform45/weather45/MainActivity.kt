@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), MyDrawerController{
     override lateinit var navController: NavController
     override var toobarMenu: Menu? = null
+    var findMenuItem: MenuItem? = null
+    var closeMenuItem: MenuItem? = null
     var historFrag: HistoryFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +50,24 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
         toobarMenu = menu
+        findMenuItem = menu.findItem(R.id.action_find)
+        closeMenuItem = menu.findItem(R.id.action_close_selection)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
-            R.id.action_find -> historFrag?.showPairSelector()
+            R.id.action_find -> {
+                findMenuItem?.isVisible = false
+                closeMenuItem?.isVisible = true
+                historFrag?.showPairSelector()
+            }
+            R.id.action_close_selection -> {
+                findMenuItem?.isVisible = true
+                closeMenuItem?.isVisible = false
+                historFrag?.showPairSeriesInfo()
+            }
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }

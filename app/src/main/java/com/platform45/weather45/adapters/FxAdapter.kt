@@ -46,15 +46,15 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         }
 
         val candleDataSet = CandleDataSet(candleEntries, "Entries")
-        candleDataSet.color = Color.BLUE
-        candleDataSet.shadowColor = Color.GRAY
+        candleDataSet.color = context.resources.getColor(R.color.blue_1)
+        candleDataSet.shadowColor = context.resources.getColor(R.color.greyText)
         candleDataSet.shadowWidth = 0.7f
-        candleDataSet.decreasingColor = Color.RED
+        candleDataSet.decreasingColor = context.resources.getColor(R.color.red_2)
         candleDataSet.decreasingPaintStyle = Paint.Style.FILL
-        candleDataSet.increasingColor = Color.rgb(122, 242, 84)
+        candleDataSet.increasingColor = context.resources.getColor(R.color.green_1)
         candleDataSet.increasingPaintStyle = Paint.Style.FILL
         candleDataSet.neutralColor = Color.BLUE
-        candleDataSet.valueTextColor = Color.RED
+        candleDataSet.valueTextColor = context.resources.getColor(R.color.lightText)
         candleDataSet.setDrawValues(true)
 
         val xAxis = holder.candleStickChart.xAxis

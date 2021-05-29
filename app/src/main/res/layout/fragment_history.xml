@@ -186,7 +186,7 @@
                         android:background="@drawable/pair_item_background"
                         android:textStyle="bold"
                         android:gravity="left"
-                        android:paddingVertical="15dp"
+                        android:paddingVertical="14dp"
                         android:paddingHorizontal="@dimen/small_margin"
                         android:layout_marginTop="@dimen/xsmall_margin"
                         android:layout_marginLeft="@dimen/xsmall_margin"

@@ -11,7 +11,6 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.platform45.weather45.features.history.HistoryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : AppCompatActivity(), MyDrawerController{
     override lateinit var navController: NavController
     override var toobarMenu: Menu? = null
@@ -32,16 +31,6 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         setupActionBarWithNavController(this, navController, drawer_layout)
         setupWithNavController(nav_view, navController)
         */
-    }
-
-/*
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.navControllerFragment)
-        return NavigationUI.navigateUp(navController, drawer_layout)
-    }
-*/
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

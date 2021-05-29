@@ -8,14 +8,13 @@ import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
 import com.platform45.weather45.helpers.getCurrentDate
 import com.platform45.weather45.helpers.getDaysAgo
-import com.platform45.weather45.models.Currencies
-import com.platform45.weather45.models.DayData
-import com.platform45.weather45.models.PairTradeHistory
-import com.platform45.weather45.models.Series
+import com.platform45.weather45.models.*
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
+import java.lang.Error
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.reflect.typeOf
 
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
     val availableCurrencies: MutableLiveData<List<String>> = MutableLiveData()
@@ -68,7 +67,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     private fun initStartAndEndDate() {
-        _startDate.value = getDaysAgo(7)
+        _startDate.value = getDaysAgo(5)
         _endDate.value = getCurrentDate()
     }
 
@@ -90,10 +89,10 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     suspend fun getPopularPairs() {
         val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
         uiScope.launch {
-            when (popularCurrencyPairs) {
-                is Currencies -> handlePopularPairs(popularCurrencyPairs)
-                null -> _showError.value = "Unknown error"
-                else -> _showError.value = getErrorInfo(popularCurrencyPairs)
+            when {
+                popularCurrencyPairs == null -> _showError.value = app.getString(R.string.unknown_error)
+                popularCurrencyPairs.error != null -> _showError.value = popularCurrencyPairs.error?.info
+                else -> handlePopularPairs(popularCurrencyPairs)
             }
         }
 
@@ -166,10 +165,10 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     suspend fun getCurrencyPairSeries(startDate: String, endDate: String, currency: String, format: String) {
         var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
         uiScope.launch {
-            when (series) {
-                is Series -> processSeries(series, startDate, endDate)
-                null -> _showError.value = "Unknown error"
-                else -> _showError.value = getErrorInfo(series)
+            when {
+                series == null -> _showError.value = app.getString(R.string.unknown_error)
+                series?.error != null -> _showError.value = series.error?.info
+                else -> processSeries(series, startDate, endDate)
             }
         }
     }
@@ -212,12 +211,6 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
             _showError.value = app.getString(R.string.no_data_found)
         }
     }
-
-    fun getErrorInfo(error: Any?): String?{
-        val error = error as LinkedTreeMap<String, LinkedTreeMap<String, String>>
-        return error["error"]?.get("info")
-    }
-
 
 
 

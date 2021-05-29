@@ -2,11 +2,8 @@ package com.platform45.weather45.repositories
 
 import com.platform45.weather45.models.Conversion
 import com.platform45.weather45.models.Currencies
-import com.platform45.weather45.models.Error
-import com.platform45.weather45.models.Historical
 import com.platform45.weather45.models.Series
 import com.platform45.weather45.networking.retrofit.RetrofitHelper
-import retrofit2.http.Query
 
 class FXRepository(private val retrofitHelper: RetrofitHelper) {
 
@@ -21,23 +18,23 @@ class FXRepository(private val retrofitHelper: RetrofitHelper) {
 
     suspend fun getHistorical(api_key: String, date: String, currency: String, interval: String): Any?{
         return try {
-            retrofitHelper.historical(api_key, date, interval, currency) as Historical
+            retrofitHelper.historical(api_key, date, interval, currency)
         }
         catch (ex: Exception){
             null
         }
     }
 
-    suspend fun getSeries(apiKey: String, startDate: String, endDate: String, currency: String, format: String) : Any?{
+    suspend fun getSeries(apiKey: String, startDate: String, endDate: String, currency: String, format: String) : Series?{
         return try {
-            retrofitHelper.series(apiKey, startDate, endDate, currency, format) as Series
+            retrofitHelper.series(apiKey, startDate, endDate, currency, format)
         }
         catch (ex: Exception){
             null
         }
     }
 
-    suspend fun getUSDCurrencyPairs(apiKey: String) : Any?{
+    suspend fun getUSDCurrencyPairs(apiKey: String) : Currencies?{
         return try {
             retrofitHelper.currencies(apiKey)
         }

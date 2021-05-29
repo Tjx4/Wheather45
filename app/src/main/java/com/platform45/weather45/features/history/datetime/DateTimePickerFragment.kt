@@ -53,10 +53,10 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
 
     fun initViews(parentView: View) {
         val dateTime = arguments?.getString(DATETIME)
-
         val ymd = dateTime?.split("-")
         val y = ymd?.get(0)?.toInt() ?: 0
-        val m = ymd?.get(1)?.toInt()  ?: 0
+        var m =  ymd?.get(1)?.toInt()  ?: 0
+        m =  if(m > 0) m  - 1 else  m
         val d = ymd?.get(2)?.toInt()  ?: 0
 
         datePickerContainerLl = parentView.findViewById(R.id.llDatePickerContainer)
@@ -119,7 +119,7 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
         if(isCancelled) return
 
         val year = selectedDateDp!!.year
-        val month = if(selectedDateDp!!.month  > 0) selectedDateDp!!.month + 1 else 0
+        val month = if(selectedDateDp!!.month > 0) selectedDateDp!!.month + 1 else 0
         val day = selectedDateDp!!.dayOfMonth
         dateTimeContext?.setDate(year, month, day)
 

@@ -25,4 +25,5 @@
     <string name="convert">Convert</string>
     <string name="no_popular_currency_pairs">No popular currency pairs found</string>
     <string name="no_data_found">Sorry no data was found</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

@@ -133,6 +133,13 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         _isPairsUpdated.value = true
     }
 
+    fun deleteTradeHistoryFromList(currencyPair: String){
+        _pairTradeHistories.value.let {pairHistories ->
+            val currencyPairs = pairHistories as ArrayList
+            currencyPairs.removeAll{ it.tradingPair == currencyPair}
+        }
+    }
+
     fun deleteCurrencyPairFromList(currencyPair: String){
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.remove(currencyPair)

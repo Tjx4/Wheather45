@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
-            R.id.action_find -> historFrag?.toggleSelector()
+            R.id.action_find -> historFrag?.showPairSelector()
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }

@@ -25,6 +25,7 @@ class CurrencyPairAdapter(private val context: Context, val historyViewModel: Hi
         holder.conversionTv.text = currentPair
         holder.imbDeleteImgb.setOnClickListener {
             historyViewModel.deleteCurrencyPairFromList(currentPair)
+            historyViewModel.deleteTradeHistoryFromList(currentPair)
             Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
         }
     }

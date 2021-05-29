@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
@@ -80,6 +79,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
             }
         }
 
+        spnToCurrency.setSelection(2)
         spnToCurrency.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -97,6 +97,10 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         btnTo.setOnClickListener {
             indx = 1
             showDateTimeDialogFragment(this, (it as Button).text.toString())
+        }
+
+        btnClosePairSelector.setOnClickListener {
+            showPairSeriesInfo()
         }
 
         btnAddCurrencyPair.setOnClickListener {
@@ -135,21 +139,25 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         flLoader.visibility = View.VISIBLE
     }
 
-    private fun onShowError(erromMessage: String){
+    fun onShowError(erromMessage: String){
         flLoader.visibility = View.GONE
         showErrorDialog(requireContext(), "Error", erromMessage, "Close")
     }
 
-     fun toggleSelector(){
+    fun showPairSelector(){
         flLoader.visibility = View.GONE
-        clSearch.visibility = View.VISIBLE
-        clContent.visibility = View.GONE
+        clPairSelector.visibility = View.VISIBLE
+        clPairSeriesInfo.visibility = View.GONE
+    }
+
+    fun showPairSeriesInfo() {
+        flLoader.visibility = View.GONE
+        clPairSelector.visibility = View.GONE
+        clPairSeriesInfo.visibility = View.VISIBLE
     }
 
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
-        flLoader.visibility = View.GONE
-        clSearch.visibility = View.VISIBLE
-        clContent.visibility = View.GONE
+        showPairSelector()
     }
 
     private fun canProceed(proceed: Boolean){
@@ -175,6 +183,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     fun onPairsListUpdated(isUpdated: Boolean){
         rvRequestingPairs?.adapter?.notifyDataSetChanged()
         rvPairs?.adapter?.notifyDataSetChanged()
+        rvtrades?.adapter?.notifyDataSetChanged()
     }
 
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
@@ -187,12 +196,13 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rvtrades)
 
-        flLoader.visibility = View.GONE
-        clSearch.visibility = View.GONE
-        clContent.visibility = View.VISIBLE
+        showPairSeriesInfo()
     }
 
     override fun onPairClicked(view: View, position: Int) {
+        rvPairs.layoutManager?.scrollToPosition(position)
+
+        /*
         rvPairs.scrollToPosition(position)
         rvPairs.post {
             var view = rvPairs.layoutManager?.findViewByPosition(position);
@@ -201,10 +211,12 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
             }
 
             var snapDistance = snapHelper.calculateDistanceToFinalSnap(rvPairs.layoutManager!!, view!!)
-            if (snapDistance?.get(0)   != 0 || snapDistance[1] != 0) {
+            if (snapDistance?.get(0)  != 0 || snapDistance[1] != 0) {
                 rvPairs.scrollBy(snapDistance?.get(0)!!, snapDistance?.get(1));
             }
         }
+        */
     }
+
 
 }

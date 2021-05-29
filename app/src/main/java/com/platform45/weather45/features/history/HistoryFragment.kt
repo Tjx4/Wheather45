@@ -55,7 +55,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spnPorpularTradingPairs.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
+        spnPorpularTradingPairs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 

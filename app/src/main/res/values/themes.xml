@@ -43,7 +43,7 @@
         <item name="android:textColorPrimary">@color/lightText</item>
         <item name="colorOnPrimary">@color/lightText</item>
         <item name="titleTextColor">@color/lightText</item>
-        <item name="android:background">#000</item>
+        <item name="android:background">@color/splashGradientStart</item>
     </style>
 
     <style name="BaseTextView" parent="ThemeColors">

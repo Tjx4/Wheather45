@@ -30,7 +30,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     private var snapHelper: SnapHelper? = null
     override var indx: Int = 0
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

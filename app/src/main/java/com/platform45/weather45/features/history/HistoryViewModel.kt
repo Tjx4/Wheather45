@@ -141,6 +141,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.add(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _message.value = getPairsMessage()
         _isPairsUpdated.value = true
     }
 

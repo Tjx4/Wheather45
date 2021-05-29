@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), MyDrawerController{
     override lateinit var navController: NavController
     override var toobarMenu: Menu? = null
+    var convertMenuItem: MenuItem? = null
     var findMenuItem: MenuItem? = null
     var closeMenuItem: MenuItem? = null
     var historFrag: HistoryFragment? = null
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
         toobarMenu = menu
+        convertMenuItem = menu.findItem(R.id.action_convert)
         findMenuItem = menu.findItem(R.id.action_find)
         closeMenuItem = menu.findItem(R.id.action_close_selection)
         return true
@@ -61,11 +63,13 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
             R.id.action_find -> {
                 findMenuItem?.isVisible = false
                 closeMenuItem?.isVisible = true
+                convertMenuItem?.isVisible = false
                 historFrag?.showPairSelector()
             }
             R.id.action_close_selection -> {
                 findMenuItem?.isVisible = true
                 closeMenuItem?.isVisible = false
+                convertMenuItem?.isVisible = true
                 historFrag?.showPairSeriesInfo()
             }
         }

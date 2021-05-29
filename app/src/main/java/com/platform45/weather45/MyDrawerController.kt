@@ -11,4 +11,6 @@ interface MyDrawerController {
     fun showMenu()
     fun hideMenu()
     fun badFrag(bf: HistoryFragment)
+    fun showContent()
+    fun showSelectionMode()
 }

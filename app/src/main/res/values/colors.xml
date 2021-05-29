@@ -23,6 +23,7 @@
     <color name="darkBackground">#000</color>
     <color name="darkBackground_2">#222</color>
     <color name="darkBackground_3">#333</color>
+    <color name="darkBackground_4">#444</color>
     <color name="splashGradientStart">#000</color>
     <color name="splashGradientEnd">#111</color>
     <color name="gradientStart">#84c3f9</color>

@@ -284,7 +284,7 @@
                 android:id="@+id/btnGetHistory"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="Get trade history"
+                android:text="@string/get_trade_history"
                 android:enabled="false"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintBottom_toBottomOf="parent"

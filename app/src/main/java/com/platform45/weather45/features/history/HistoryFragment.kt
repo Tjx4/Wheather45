@@ -27,7 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
-    private var snapHelper: SnapHelper? = null
     override var indx: Int = 0
 
     override fun onCreateView(
@@ -110,24 +109,15 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     override fun setDate(year: Int, month: Int, day: Int) {
         when (indx) {
-            0 -> {
-                btnFrom.text = "$year-$month-$day"
-            }
-            1 -> {
-                btnTo.text = "$year-$month-$day"
-            }
+            0 -> btnFrom.text = "$year-$month-$day" //Todo fix
+            1 -> btnTo.text = "$year-$month-$day"
         }
     }
 
     override fun setTime(scheduledTime: String) {
         when (indx) {
-            0 -> {
-                btnFrom.text = "${btnFrom.text}-$scheduledTime"
-            }
-            1 -> {
-
-                btnTo.text = "${btnTo.text}-$scheduledTime"
-            }
+            0 -> btnFrom.text = "${btnFrom.text}-$scheduledTime"
+            1 -> btnTo.text = "${btnTo.text}-$scheduledTime"
         }
     }
 
@@ -144,12 +134,14 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         flLoader.visibility = View.GONE
         clPairSelector.visibility = View.VISIBLE
         clPairSeriesInfo.visibility = View.GONE
+        myDrawerController.showSelectionMode()
     }
 
     fun showPairSeriesInfo() {
         flLoader.visibility = View.GONE
         clPairSelector.visibility = View.GONE
         clPairSeriesInfo.visibility = View.VISIBLE
+        myDrawerController.showContent()
     }
 
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
@@ -158,7 +150,9 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     private fun canProceed(proceed: Boolean){
         btnGetHistory.isEnabled = proceed
+        btnGetHistory.background = resources.getDrawable( if(proceed) R.drawable.fx_button_background  else R.drawable.fx_disabled_button_background)
         tvRequestingPairs.visibility = if(proceed) View.VISIBLE else View.GONE
+//vDivider.visibility = View.VISIBLE
     }
 
     private fun onCurrencyPairsSet(pairs: List<String>) {
@@ -182,6 +176,10 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         rvtrades?.adapter?.notifyDataSetChanged()
     }
 
+    fun init() {
+
+    }
+
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rvtrades?.layoutManager = tradesLayoutManager
@@ -191,19 +189,14 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rvtrades)
-        this.snapHelper = snapHelper
+
+
+        //Todo make update no set
         showPairSeriesInfo()
     }
 
     override fun onPairClicked(view: View, position: Int) {
         //rvPairs.layoutManager?.scrollToPosition(position)
-        snapHelper?.let {sh ->
-            rvPairs.layoutManager?.let {
-                sh.calculateDistanceToFinalSnap(it, rvPairs.getChildAt(1))
-                    ?.get(0)?.let { rvPairs.scrollBy(it, 0) }
-            }
-        }
-
     }
 
 

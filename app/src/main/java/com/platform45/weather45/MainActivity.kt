@@ -60,18 +60,8 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
-            R.id.action_find -> {
-                findMenuItem?.isVisible = false
-                closeMenuItem?.isVisible = true
-                convertMenuItem?.isVisible = false
-                historFrag?.showPairSelector()
-            }
-            R.id.action_close_selection -> {
-                findMenuItem?.isVisible = true
-                closeMenuItem?.isVisible = false
-                convertMenuItem?.isVisible = true
-                historFrag?.showPairSeriesInfo()
-            }
+            R.id.action_find ->  historFrag?.showPairSelector()
+            R.id.action_close_selection -> historFrag?.showPairSeriesInfo()
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }
@@ -88,5 +78,17 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
 
     override fun badFrag(historyFragment: HistoryFragment) {
         historFrag = historyFragment
+    }
+
+    override fun showContent() {
+        findMenuItem?.isVisible = true
+        closeMenuItem?.isVisible = false
+        convertMenuItem?.isVisible = true
+    }
+
+    override fun showSelectionMode() {
+        findMenuItem?.isVisible = false
+        closeMenuItem?.isVisible = true
+        convertMenuItem?.isVisible = false
     }
 }

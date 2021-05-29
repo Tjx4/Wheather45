@@ -76,16 +76,17 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     private fun initCurrencyPairs() {
+        _canProceed.value = false
         _message.value = getPairsMessage()
         _currencyPairs.value = ArrayList()
     }
 
     fun initCurrencies() {
-        availableCurrencies.value = ArrayList()
+        val tmpList = ArrayList<String>()
         for (currency in Currency.getAvailableCurrencies()) {
-            (availableCurrencies.value as ArrayList<String>)?.add(currency.currencyCode)
+            tmpList.add(currency.currencyCode)
         }
-        availableCurrencies.value?.sortedBy { it }
+        availableCurrencies.value = tmpList?.sortedBy { it }
     }
 
     fun showLoaderAndGetPopularPairs() {
@@ -162,7 +163,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     fun deleteTradeHistoryFromList(currencyPair: String){
-        _pairTradeHistories.value.let {pairHistories ->
+        _pairTradeHistories.value?.let {pairHistories ->
             val currencyPairs = pairHistories as ArrayList
             currencyPairs.removeAll{ it.tradingPair == currencyPair}
         }

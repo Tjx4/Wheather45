@@ -1,8 +1,5 @@
 package com.platform45.weather45.features.history.datetime
 
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +9,13 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import com.platform45.weather45.R
 import com.platform45.weather45.base.fragments.BaseDialogFragment
-import com.platform45.weather45.base.fragments.BaseLowDialog
-import com.platform45.weather45.base.fragments.OnFragmentBackPressed
 import com.platform45.weather45.constants.DATETIME
 import com.platform45.weather45.constants.TITLE
 import java.sql.Time
 import java.text.Format
 import java.text.SimpleDateFormat
 
-class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
-    private var isCancelled: Boolean = false
+class DateTimePickerFragment : BaseDialogFragment(){
     private var dateTimeContext: DateTimeSetter? = null
 
     private var datePickerContainerLl: View? = null
@@ -37,21 +31,23 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
         dateTimeContext = parentFragment as DateTimeSetter
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        /*
         dialog?.setCancelable(false)
         dialog?.setCanceledOnTouchOutside(false)
         dialog?.window?.setDimAmount(0.8f)
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val title = arguments?.getString(TITLE)
-        dialog?.window?.setTitle(title)
+        */
+        //val title = arguments?.getString(TITLE)
+       // dialog?.window?.setTitle(title)
 
         val parentView = super.onCreateView(inflater, container, savedInstanceState)
         initViews(parentView)
         return parentView
     }
 
-    fun initViews(parentView: View) {
+    fun initViews(parentView: View?) {
         val dateTime = arguments?.getString(DATETIME)
         val ymd = dateTime?.split("-")
         val y = ymd?.get(0)?.toInt() ?: 0
@@ -59,27 +55,27 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
         m =  if(m > 0) m  - 1 else  m
         val d = ymd?.get(2)?.toInt()  ?: 0
 
-        datePickerContainerLl = parentView.findViewById(R.id.llDatePickerContainer)
-        selectedDateDp = parentView.findViewById(R.id.dpAppointmentDate)
+        datePickerContainerLl = parentView?.findViewById(R.id.llDatePickerContainer)
+        selectedDateDp = parentView?.findViewById(R.id.dpAppointmentDate)
         selectedDateDp?.init(y, m, d, null)
 
-        dateTimeNextBtn = parentView.findViewById(R.id.btnDateTimeNext)
+        dateTimeNextBtn = parentView?.findViewById(R.id.btnDateTimeNext)
         dateTimeNextBtn?.setOnClickListener {
             showTimePicker()
         }
 
-        timePickerContainerLl = parentView.findViewById(R.id.llTimePickerContainer)
-        selectedTimeTp = parentView.findViewById(R.id.tpAppointmentTime)
+        timePickerContainerLl = parentView?.findViewById(R.id.llTimePickerContainer)
+        selectedTimeTp = parentView?.findViewById(R.id.tpAppointmentTime)
 
-        dateTimeBackBtn = parentView.findViewById(R.id.btnDateTimeBack)
+        dateTimeBackBtn = parentView?.findViewById(R.id.btnDateTimeBack)
         dateTimeBackBtn?.setOnClickListener{
             showDatePicker()
         }
 
-        dateTimeDoneBtn = parentView.findViewById(R.id.btnDateTimeDone)
+        dateTimeDoneBtn = parentView?.findViewById(R.id.btnDateTimeDone)
         dateTimeDoneBtn?.setOnClickListener {
+            setTdateTime()
             dismiss()
-            //  onDateTimeSet( getTime(appointmentTimeTp?.currentHour!!, appointmentTimeTp?.currentMinute!!))
         }
 
         showDatePicker()
@@ -109,15 +105,7 @@ class DateTimePickerFragment : BaseDialogFragment(), OnFragmentBackPressed {
         return formatter.format(tme)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        isCancelled = true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if(isCancelled) return
-
+    fun setTdateTime() {
         val year = selectedDateDp!!.year
         val month = if(selectedDateDp!!.month > 0) selectedDateDp!!.month + 1 else 0
         val day = selectedDateDp!!.dayOfMonth

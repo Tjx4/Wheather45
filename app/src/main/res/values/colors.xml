@@ -29,4 +29,5 @@
     <color name="splashGradientEnd">#111</color>
     <color name="gradientStart">#84c3f9</color>
     <color name="gradientEnd">#5a49f1</color>
+    <color name="transBlack">#2445484d</color>
 </resources>

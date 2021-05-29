@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseLowDialog : BaseDialogFragment(), OnFragmentBackPressed {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.setCancelable(false)
         isCancelable = false
         dialog?.setCanceledOnTouchOutside(false)
         setStyle(STYLE_NO_TITLE, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
-        dialog?.window?.setDimAmount(0.9f)
+        dialog?.window?.setDimAmount(0.4f)
         var parentView = super.onCreateView(inflater, container, savedInstanceState)
 
         parentView?.isFocusableInTouchMode = true
@@ -23,7 +23,7 @@ abstract class BaseLowDialog : BaseDialogFragment(), OnFragmentBackPressed {
         parentView?.setOnKeyListener { v, keyCode, event ->
 
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                onBackPressed()
+                onBackBtnPressed()
                 true
             }
 
@@ -51,5 +51,5 @@ abstract class BaseLowDialog : BaseDialogFragment(), OnFragmentBackPressed {
 }
 
 interface OnFragmentBackPressed {
-    fun onBackPressed()
+    fun onBackBtnPressed()
 }

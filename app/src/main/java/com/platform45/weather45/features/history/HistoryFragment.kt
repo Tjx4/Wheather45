@@ -2,7 +2,6 @@ package com.platform45.weather45.features.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -133,9 +132,9 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         flLoader.visibility = View.VISIBLE
     }
 
-    fun onShowError(erromMessage: String){
+    private fun onShowError(errorMessage: String){
         flLoader.visibility = View.GONE
-        showErrorDialog(requireContext(), "Error", erromMessage, "Close")
+        showErrorDialog(requireContext(), "Error", errorMessage, "Close")
     }
 
     fun showPairSelector(){
@@ -160,7 +159,8 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         btnGetHistory.isEnabled = proceed
         btnGetHistory.background = resources.getDrawable( if(proceed) R.drawable.fx_button_background  else R.drawable.fx_disabled_button_background)
         tvRequestingPairs.visibility = if(proceed) View.VISIBLE else View.GONE
-//vDivider.visibility = View.VISIBLE
+        vDivider.visibility = if(proceed) View.VISIBLE else View.GONE
+        tvTitle.visibility = if(proceed) View.GONE else View.VISIBLE
     }
 
     private fun onCurrencyPairsSet(pairs: List<String>) {

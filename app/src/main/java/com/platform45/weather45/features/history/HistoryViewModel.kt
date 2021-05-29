@@ -77,7 +77,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
 
     private fun initCurrencyPairs() {
         _canProceed.value = false
-        _message.value = getPairsMessage()
+        _message.value = app.getString(R.string.no_requested_pairs)
         _currencyPairs.value = ArrayList()
     }
 
@@ -142,7 +142,6 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.add(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
-        _message.value = getPairsMessage()
         _isPairsUpdated.value = true
     }
 
@@ -150,10 +149,10 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.remove(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
-        _message.value = getPairsMessage()
         _isPairsUpdated.value = true
     }
 
+    //Todo change
     private fun getPairsMessage(): String {
         val currencyPairsZize = _currencyPairs.value?.size ?: 0
        return if (currencyPairsZize > 0)

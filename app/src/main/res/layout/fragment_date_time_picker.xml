@@ -2,21 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".features.history.datetime.DateTimePickerFragment"
-    android:background="@color/lightBackground">
+    android:background="@color/darkBackground">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:padding="0dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/llDt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="@dimen/large_margin">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/llDatePickerContainer"
@@ -27,7 +27,6 @@
                 <TextView
                     style="@style/MediumTextView"
                     android:gravity="center"
-                    android:background="@color/greyBackground"
                     android:padding="@dimen/small_margin"
                     android:text="Please select date" />
 
@@ -50,16 +49,14 @@
                 <TextView
                     style="@style/MediumTextView"
                     android:gravity="center"
-                    android:background="@color/greyBackground"
                     android:padding="@dimen/small_margin"
                     android:text="Please select time" />
-
 
                 <TimePicker
                     style="@style/DateTimePickerStyle"
                     android:id="@+id/tpAppointmentTime"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:background="@color/cardview_light_background"/>
 
@@ -71,12 +68,10 @@
             android:id="@+id/buttonsContainer"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/small_margin"
-            android:background="@color/lightBackground">
+            app:layout_constraintTop_toBottomOf="@+id/llDt">
 
             <Button
                 android:id="@+id/btnDateTimeNext"
@@ -100,6 +95,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

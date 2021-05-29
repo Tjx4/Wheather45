@@ -169,7 +169,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         val pairsAdapter = CurrencyPairAdapter(requireContext(), historyViewModel, pairs)
         pairsAdapter.setPairClickListener(this)
 
-        val cols = requireActivity().getScreenCols(120f)
+        val cols = requireActivity().getScreenCols(125f)
 
         val requestingPairsManager = GridLayoutManager(context, cols)
         rvRequestingPairs?.adapter = pairsAdapter
@@ -193,7 +193,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter
 
-        snapHelper = PagerSnapHelper()
+        val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rvtrades)
 
         showPairSeriesInfo()

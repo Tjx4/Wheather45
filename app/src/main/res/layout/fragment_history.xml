@@ -11,7 +11,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="false"
+        android:animateLayoutChanges="true"
         tools:context=".features.history.HistoryFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -50,7 +50,7 @@
                             android:id="@+id/tvTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Requested currency pairs >"
+                            android:text="@{fxViewModel.message}"
                             android:gravity="center"
                             android:layout_margin="@dimen/xsmall_margin"
                             app:layout_constraintTop_toTopOf="parent"/>
@@ -109,9 +109,8 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/clPairSelector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -305,7 +304,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/flLoader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

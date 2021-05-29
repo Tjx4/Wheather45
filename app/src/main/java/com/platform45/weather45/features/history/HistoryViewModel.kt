@@ -19,6 +19,10 @@ import kotlin.reflect.typeOf
 class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
     val availableCurrencies: MutableLiveData<List<String>> = MutableLiveData()
 
+    private val _message: MutableLiveData<String> = MutableLiveData()
+    val message: MutableLiveData<String>
+        get() = _message
+
     private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
@@ -62,8 +66,8 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     init {
         initCurrencies()
         initStartAndEndDate()
+        initCurrencyPairs()
         showLoaderAndGetPopularPairs()
-        _currencyPairs.value = ArrayList()
     }
 
     private fun initStartAndEndDate() {
@@ -71,15 +75,20 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         _endDate.value = getCurrentDate()
     }
 
+    private fun initCurrencyPairs() {
+        _message.value = getPairsMessage()
+        _currencyPairs.value = ArrayList()
+    }
+
     fun initCurrencies() {
         availableCurrencies.value = ArrayList()
-        for(currency in Currency.getAvailableCurrencies()){
+        for (currency in Currency.getAvailableCurrencies()) {
             (availableCurrencies.value as ArrayList<String>)?.add(currency.currencyCode)
         }
         availableCurrencies.value?.sortedBy { it }
     }
 
-    fun showLoaderAndGetPopularPairs(){
+    fun showLoaderAndGetPopularPairs() {
         _showLoading.value = true
         ioScope.launch {
             getPopularPairs()
@@ -90,16 +99,18 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
         uiScope.launch {
             when {
-                popularCurrencyPairs == null -> _showError.value = app.getString(R.string.unknown_error)
-                popularCurrencyPairs.error != null -> _showError.value = popularCurrencyPairs.error?.info
+                popularCurrencyPairs == null -> _showError.value =
+                    app.getString(R.string.unknown_error)
+                popularCurrencyPairs.error != null -> _showError.value =
+                    popularCurrencyPairs.error?.info
                 else -> handlePopularPairs(popularCurrencyPairs)
             }
         }
 
     }
 
-    fun handlePopularPairs(popularCurrencyPairs: Currencies){
-        if(!popularCurrencyPairs?.currencies.isNullOrEmpty()){
+    fun handlePopularPairs(popularCurrencyPairs: Currencies) {
+        if (!popularCurrencyPairs?.currencies.isNullOrEmpty()) {
             val tempList = ArrayList<String>()
             popularCurrencyPairs?.currencies?.forEach { currencyPair ->
                 currencyPair?.key?.let {
@@ -107,30 +118,46 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
                 }
             }
             _popularCurrencyPairs.value = tempList
-        }
-        else{
+        } else {
             _showError.value = app.getString(R.string.no_popular_currency_pairs)
         }
     }
 
-    fun setCurrencyPair(frmIndx: Int, ToIndx: Int){
-        _currencyPair.value = "${availableCurrencies.value?.get(frmIndx) ?: ""}${availableCurrencies.value?.get(ToIndx)}"
+    fun setCurrencyPair(frmIndx: Int, ToIndx: Int) {
+        _currencyPair.value =
+            "${availableCurrencies.value?.get(frmIndx) ?: ""}${availableCurrencies.value?.get(ToIndx)}"
     }
 
-    fun addCreatedPairToList(){
+    fun addCreatedPairToList() {
         _currencyPair.value?.let { addCurrencyPairToList(it) }
     }
 
-    fun addPopularPairToList(indx: Int){
+    fun addPopularPairToList(indx: Int) {
         val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<String>
         addCurrencyPairToList(popularCurrencyPairs[indx])
     }
 
-    fun addCurrencyPairToList(currencyPair: String){
+    fun addCurrencyPairToList(currencyPair: String) {
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.add(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
         _isPairsUpdated.value = true
+    }
+
+    fun deleteCurrencyPairFromList(currencyPair: String) {
+        val currencyPairs = _currencyPairs.value as ArrayList
+        currencyPairs.remove(currencyPair)
+        _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _message.value = getPairsMessage()
+        _isPairsUpdated.value = true
+    }
+
+    private fun getPairsMessage(): String {
+        val currencyPairsZize = _currencyPairs.value?.size ?: 0
+       return if (currencyPairsZize > 0)
+           app.getString(R.string.requested_currency_pairs, currencyPairsZize)
+       else
+           app.getString(R.string.no_requested_pairs)
     }
 
     fun deleteTradeHistoryFromList(currencyPair: String){
@@ -140,12 +167,6 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         }
     }
 
-    fun deleteCurrencyPairFromList(currencyPair: String){
-        val currencyPairs = _currencyPairs.value as ArrayList
-        currencyPairs.remove(currencyPair)
-        _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
-        _isPairsUpdated.value = true
-    }
 
     fun showLoadingAndGetPairSeries(){
         _showLoading.value = true

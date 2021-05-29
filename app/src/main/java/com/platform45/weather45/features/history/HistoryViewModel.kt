@@ -157,6 +157,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
 
     suspend fun getSeries(startDate: String, endDate: String, currency: String, format: String) {
         var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+
         if(series is Series && series.price != null){
             val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
 
@@ -164,7 +165,6 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
             val currencies = currency.split(",")
             for(pairTrade in currencies){
                 val currencyDateData = ArrayList<DayData>()
-
                 for(currentDayPrice in prices) {
                     val currentDay =
                     currentDayPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>

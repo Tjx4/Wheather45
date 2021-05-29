@@ -99,10 +99,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
             showDateTimeDialogFragment(this, (it as Button).text.toString())
         }
 
-        btnClosePairSelector.setOnClickListener {
-            showPairSeriesInfo()
-        }
-
         btnAddCurrencyPair.setOnClickListener {
             historyViewModel.addCreatedPairToList()
         }

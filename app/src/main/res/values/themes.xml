@@ -41,7 +41,6 @@
     <style name="ToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="android:textColor">@color/lightText</item>
         <item name="android:textColorPrimary">@color/lightText</item>
-        <item name="android:fillColor">@color/lightText</item>
         <item name="colorOnPrimary">@color/lightText</item>
         <item name="android:background">#000</item>
     </style>
@@ -69,13 +68,20 @@
     <style name="FX45Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:background">@drawable/rounded_background</item>
+        <item name="android:background">@drawable/fx_button_background</item>
     </style>
 
     <style name="FX4EditText" parent="ThemeColors">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:padding">@dimen/xsmall_margin</item>
+    </style>
+
+    <style name="DatePreview" parent="ThemeColors">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/date_preview_background</item>
         <item name="android:padding">@dimen/xsmall_margin</item>
     </style>
 
@@ -102,12 +108,10 @@
     </style>
 
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textColor">@color/darkText</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:background">@color/greyBackground</item>
+        <item name="android:background">@color/darkBackground_2</item>
     </style>
-
 
     <style name="SelectableItemTheme">
         <item name="colorControlHighlight">#666</item>
@@ -116,7 +120,7 @@
     <style name="PairItemBackground">
         <item name="android:theme">@style/SelectableItemTheme</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
-        <item name="android:background">@drawable/rounded_background</item>
+        <item name="android:background">@drawable/pair_item_background</item>
     </style>
 
 </resources>

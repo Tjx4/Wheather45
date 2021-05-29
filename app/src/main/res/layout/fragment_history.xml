@@ -116,21 +116,10 @@
             android:layout_height="match_parent"
             android:background="@color/darkBackground">
 
-            <ImageButton
-                android:id="@+id/btnClosePairSelector"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_close"
-                android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:layout_margin="@dimen/xsmall_margin"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
-
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@+id/btnClosePairSelector"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -194,6 +183,7 @@
                         android:layout_height="wrap_content"
                         tools:text="ZARUSD"
                         android:text="@{fxViewModel.currencyPair}"
+                        android:background="@drawable/pair_item_background"
                         android:textStyle="bold"
                         android:gravity="left"
                         android:paddingVertical="@dimen/xsmall_margin"
@@ -207,8 +197,8 @@
                         android:id="@+id/btnAddCurrencyPair"
                         android:layout_width="55dp"
                         android:layout_height="wrap_content"
-                        android:text="Add"
-                        android:textColor="@color/darkText"
+                        android:text="@string/add"
+                        android:textColor="@color/lightText"
                         android:padding="0dp"
                         android:textAllCaps="false"
                         android:background="@android:color/transparent"
@@ -227,7 +217,7 @@
                         app:layout_constraintLeft_toLeftOf="@+id/btnFrom"/>
 
                     <Button
-                        style="@style/FX4EditText"
+                        style="@style/DatePreview"
                         android:id="@+id/btnFrom"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
@@ -249,7 +239,7 @@
                         app:layout_constraintLeft_toLeftOf="@+id/btnTo"/>
 
                     <Button
-                        style="@style/FX4EditText"
+                        style="@style/DatePreview"
                         android:id="@+id/btnTo"
                         android:layout_width="0dp"
                         android:layout_height="50dp"

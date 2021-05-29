@@ -45,8 +45,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(rvtrades)
     }
 
     private fun addObservers() {
@@ -61,6 +59,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         spnPorpularTradingPairs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -111,6 +110,9 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         btnGetHistory.setOnClickListener {
             historyViewModel.showLoadingAndGetPairSeries()
         }
+
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(rvtrades)
     }
 
     override fun setDate(year: Int, month: Int, day: Int) {

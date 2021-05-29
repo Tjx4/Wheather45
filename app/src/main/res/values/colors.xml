@@ -13,7 +13,8 @@
     <color name="gold_1">#fcc201</color>
     <color name="orange_1">#ff4d02</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="lightText">#DDD</color>f
+    <color name="lightText">#DDD</color>
+    <color name="light_text_2">#bbb</color>
     <color name="greyText">#888</color>
     <color name="darkText">#111</color>
     <color name="darkGreyBackground">#bbb</color>

@@ -147,7 +147,11 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
             val endDate = _endDate.value ?: ""
             val format = "ohlc"
             var currency = ""
-            _currencyPairs.value?.forEach { currency += if (it.isNullOrEmpty()) "$it" else ",$it" }
+            _currencyPairs.value?.let {
+                for((index, pair) in it.withIndex()) {
+                    currency += if (index > 0) ",$pair" else "$pair"
+                }
+            }
             getCurrencyPairSeries(startDate, endDate, currency, format)
         }
     }

@@ -131,8 +131,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     private fun onShowLoading(showLoading: Boolean){
         flLoader.visibility = View.VISIBLE
-        //clSearch.visibility = View.GONE
-        //clContent.visibility = View.GONE
     }
 
     private fun onShowError(erromMessage: String){

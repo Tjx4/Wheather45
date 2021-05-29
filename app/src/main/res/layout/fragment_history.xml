@@ -131,7 +131,7 @@
                         android:id="@+id/tvComonPairs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select from popular trading pairs"
+                        android:text="@string/select_from_popular_trading_pairs"
                         android:gravity="left"
                         android:layout_margin="@dimen/xsmall_margin"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -147,13 +147,23 @@
 
                     <TextView
                         style="@style/MediumTextView"
+                        android:id="@+id/tvOr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="OR"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/xsmall_margin"
+                        app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>
+
+                    <TextView
+                        style="@style/MediumTextView"
                         android:id="@+id/tvTradingPair"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select currencies and create a trading pair"
+                        android:text="@string/select_currencies_and_create_a_trading_pair"
                         android:gravity="left"
                         android:layout_margin="@dimen/xsmall_margin"
-                        app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tvOr"/>
 
                     <com.platform45.weather45.customViews.MySpinner
                         style="@style/mySpinnerItemStyle"
@@ -211,7 +221,7 @@
                         android:id="@+id/tvStartDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start date"
+                        android:text="@string/start_date"
                         app:layout_constraintBottom_toTopOf="@+id/btnFrom"
                         app:layout_constraintLeft_toLeftOf="@+id/btnFrom"/>
 
@@ -233,7 +243,7 @@
                         android:id="@+id/tvEndDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End date"
+                        android:text="@string/end_date"
                         app:layout_constraintBottom_toTopOf="@+id/btnTo"
                         app:layout_constraintLeft_toLeftOf="@+id/btnTo"/>
 
@@ -298,6 +308,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
+            android:fitsSystemWindows="true"
             android:background="@color/darkBackground">
 
             <com.wang.avi.AVLoadingIndicatorView

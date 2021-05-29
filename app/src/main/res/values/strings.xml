@@ -31,4 +31,8 @@
     <string name="get_trade_history">Get trade history</string>
     <string name="please_select_a_none_weekend_date">Please select a none weekend date</string>
     <string name="please_set_time">Please set time</string>
+    <string name="select_from_popular_trading_pairs">Select from popular trading pairs</string>
+    <string name="select_currencies_and_create_a_trading_pair">Select currencies and create a trading pair</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>

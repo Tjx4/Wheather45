@@ -129,6 +129,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     }
 
     private fun onShowLoading(showLoading: Boolean){
+        myDrawerController.hideToolbar()
         flLoader.visibility = View.VISIBLE
     }
 
@@ -141,6 +142,9 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         flLoader.visibility = View.GONE
         clPairSelector.visibility = View.VISIBLE
         clPairSeriesInfo.visibility = View.GONE
+
+        vDivider.visibility = View.GONE
+
         myDrawerController.showSelectionMode()
     }
 
@@ -163,6 +167,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         btnGetHistory.isEnabled = proceed
         btnGetHistory.background = resources.getDrawable( if(proceed) R.drawable.fx_button_background  else R.drawable.fx_disabled_button_background)
         tvRequestingPairs.visibility = if(proceed) View.VISIBLE else View.GONE
+
         vDivider.visibility = if(proceed) View.VISIBLE else View.GONE
         tvTitle.visibility = if(proceed) View.GONE else View.VISIBLE
     }

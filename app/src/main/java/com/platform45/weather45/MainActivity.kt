@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
          navController = this.findNavController(R.id.navControllerFragment)
          setupWithNavController(toolbar, navController)
         /*
-        setSupportActionBar(toolbar)
         val navController = this.findNavController(R.id.navControllerFragment)
         setupActionBarWithNavController(this, navController, drawer_layout)
         setupWithNavController(nav_view, navController)
@@ -72,11 +72,17 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         findMenuItem?.isVisible = true
         closeMenuItem?.isVisible = false
         convertMenuItem?.isVisible = true
+        toolbar.isVisible = true
     }
 
     override fun showSelectionMode() {
         findMenuItem?.isVisible = false
         closeMenuItem?.isVisible = true
         convertMenuItem?.isVisible = false
+        toolbar.isVisible = true
+    }
+
+    override fun hideToolbar() {
+        toolbar.isVisible = false
     }
 }

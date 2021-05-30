@@ -202,7 +202,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
 
     fun processSeries(series: Series, startDate: String, endDate: String){
         if (series.price != null) {
-            val prices = series?.price
+            val prices = series?.price!!
             val tempPairTrades = ArrayList<PairTradeHistory>()
 
             val currencies = _currencyPairs.value!!
@@ -222,6 +222,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
                     )
                     currencyDateData.add(seriesDateData)
                 }
+
                 tempPairTrades.add(
                     PairTradeHistory(
                         pairTrade,

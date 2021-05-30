@@ -206,7 +206,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         val fxtAdapter = FxAdapter(requireContext(), pairHistories)
         rvtrades?.adapter = fxtAdapter
         showPairSeriesInfo()
-        historyViewModel.cacheHistory()
     }
 
     override fun onPairClicked(view: View, position: Int) {

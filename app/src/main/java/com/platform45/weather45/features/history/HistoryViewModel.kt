@@ -61,8 +61,8 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
     val currencyPairs: MutableLiveData<List<String>>
         get() = _currencyPairs
 
-    private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory>?> = MutableLiveData()
-    val pairTradeHistories: MutableLiveData<List<PairTradeHistory>?>
+    private val _pairTradeHistories: MutableLiveData<List<PairTradeHistory?>?> = MutableLiveData()
+    val pairTradeHistories: MutableLiveData<List<PairTradeHistory?>?>
         get() = _pairTradeHistories
 
     private val _isPairsUpdated: MutableLiveData<Boolean> = MutableLiveData()
@@ -107,7 +107,16 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         ioScope.launch {
             val cachedHistories = fXRepository.getAllPairHistoriesFromDb()
             uiScope.launch {
-                if (cachedHistories.isNullOrEmpty()) { _loadRemote.value = true }
+                if (cachedHistories.isNullOrEmpty()) {
+                    _loadRemote.value = true
+                }
+                else{
+                    val tmpPairs = ArrayList<String>()
+                    cachedHistories.forEach { it?.tradingPair?.let { tp -> tmpPairs.add(tp)} }
+                    _currencyPairs.value = tmpPairs
+                    _pairTradeHistories.value = cachedHistories
+                    _canProceed.value = true
+                }
             }
         }
     }
@@ -252,6 +261,8 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
                     )
                 )
             }
+
+cacheHistory()
             _pairTradeHistories.value = tempPairTrades
         }
         else{

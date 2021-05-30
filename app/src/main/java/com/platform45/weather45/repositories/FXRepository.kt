@@ -66,12 +66,12 @@ class FXRepository(private val retrofitHelper: RetrofitHelper, private val datab
         }
     }
 
-    suspend fun addAllPairTradeHistoriesToDb(pairTradeHistories: List<PairTradeHistory>) : DbOperation {
+    suspend fun addAllPairTradeHistoriesToDb(pairTradeHistories: List<PairTradeHistory?>?) : DbOperation {
         return try {
             val tradeTables = ArrayList<PairHistoryTable>()
             pairTradeHistories?.forEach {
                // tradeTables.add(it.toDbTable())
-                addPairTradeHistoryToDb(it)
+                it?.let { it1 -> addPairTradeHistoryToDb(it1) }
             }
             //database.pairHistoryDAO.insertAll(tradeTables)
             DbOperation(true)

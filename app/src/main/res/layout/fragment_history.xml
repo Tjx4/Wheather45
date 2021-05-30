@@ -288,7 +288,7 @@
                         android:layout_height="wrap_content"
                         android:clipToPadding="true"
                         android:nestedScrollingEnabled="false"
-                        android:layout_margin="@dimen/xsmall_margin"
+                        android:paddingTop="@dimen/xsmall_margin"
                         android:layout_marginHorizontal="@dimen/xsmall_margin"
                         android:background="@color/dark_ackground"
                         app:layout_constraintTop_toBottomOf="@+id/tvRequestingPairs"

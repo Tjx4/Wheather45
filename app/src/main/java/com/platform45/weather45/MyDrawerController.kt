@@ -6,8 +6,9 @@ import androidx.navigation.NavController
 import com.platform45.weather45.features.history.HistoryFragment
 
 interface MyDrawerController {
-     var navController: NavController
-     var toobarMenu: Menu?
+    var navController: NavController
+    var toobarMenu: Menu?
+    fun setTitle(title: String)
     fun showMenu()
     fun hideMenu()
     fun badFrag(bf: HistoryFragment)

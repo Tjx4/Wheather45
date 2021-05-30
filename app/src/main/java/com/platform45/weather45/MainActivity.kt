@@ -68,6 +68,10 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         historFrag = historyFragment
     }
 
+    override fun setTitle(title: String) {
+        toolbar?.title = title
+    }
+
     override fun showContent() {
         findMenuItem?.isVisible = true
         closeMenuItem?.isVisible = false

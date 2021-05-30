@@ -22,6 +22,8 @@ class ConversionFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         myDrawerController.hideMenu()
+        myDrawerController.setTitle(getString(R.string.convert_currencies))
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_conversion, container, false)
         binding.lifecycleOwner = this
         binding.conversionViewModel = conversionViewModel

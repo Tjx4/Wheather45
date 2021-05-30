@@ -35,6 +35,8 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
         super.onCreateView(inflater, container, savedInstanceState)
         myDrawerController.badFrag(this)
         myDrawerController.showMenu()
+        myDrawerController.setTitle(getString(R.string.app_name))
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
         binding.fxViewModel = historyViewModel

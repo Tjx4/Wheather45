@@ -25,6 +25,10 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
     val pairsMessage: MutableLiveData<String>
         get() = _pairsMessage
 
+    private val _loadRemote: MutableLiveData<Boolean> = MutableLiveData()
+    val loadRemote: MutableLiveData<Boolean>
+        get() = _loadRemote
+
     private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
@@ -66,10 +70,10 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         get() = _isPairsUpdated
 
     init {
+        showLoaderAndGetPopularPairs()
         initCurrencies()
         initStartAndEndDate()
         initCurrencyPairs()
-        showLoaderAndGetPopularPairs()
     }
 
     private fun initStartAndEndDate() {
@@ -95,6 +99,16 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         _showLoading.value = true
         ioScope.launch {
             getPopularPairs()
+        }
+    }
+
+    fun checkAndLoad() {
+
+        ioScope.launch {
+            val cachedHistories = fXRepository.getAllPairHistoriesFromDb()
+            uiScope.launch {
+                if (cachedHistories.isNullOrEmpty()) { _loadRemote.value = true }
+            }
         }
     }
 
@@ -152,7 +166,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.add(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
-        _pairsMessage.value = "You selected ${currencyPairs.size} pair${if(currencyPairs.size == 1) "" else "s"}"
+        _pairsMessage.value = "You selected ${currencyPairs.size} currency pair${if(currencyPairs.size == 1) "" else "s"}"
         _isPairsUpdated.value = true
     }
 
@@ -165,7 +179,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
     }
 
     fun deleteTradeHistoryFromList(indx: Int){
-        _pairTradeHistories.value?.let {pairHistories ->
+        _pairTradeHistories.value?.let { pairHistories ->
             val currencyPairs = pairHistories as ArrayList
             currencyPairs.removeAt(indx)
         }
@@ -196,6 +210,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
 
     suspend fun getCurrencyPairSeries(startDate: String, endDate: String, currency: String, format: String) {
         var series = fXRepository.getSeries(API_KEY, startDate, endDate, currency, format)
+
         uiScope.launch {
             when {
                 series == null -> _showError.value = app.getString(R.string.unknown_error)
@@ -204,7 +219,6 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
             }
         }
     }
-
 
     fun processSeries(series: Series, startDate: String, endDate: String){
         if (series.price != null) {
@@ -244,6 +258,13 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
             _showError.value = app.getString(R.string.no_data_found)
         }
     }
+
+    fun cacheHistory(){
+        ioScope.launch {
+            _pairTradeHistories.value?.let { fXRepository.addAllPairTradeHistoriesToDb(it) }
+        }
+    }
 }
+
 
 

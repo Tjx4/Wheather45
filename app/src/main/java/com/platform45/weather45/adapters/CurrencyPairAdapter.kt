@@ -23,7 +23,7 @@ class CurrencyPairAdapter(private val context: Context, private val addSlides: L
         val currentPair = addSlides?.get(position)
         holder.conversionTv.text = currentPair
         holder.imbDeleteImgb.setOnClickListener {
-            userInteractions?.onDeleteClicked(position)
+            userInteractions?.onDeleteClicked(currentPair, position)
         }
     }
 
@@ -42,7 +42,7 @@ class CurrencyPairAdapter(private val context: Context, private val addSlides: L
 
     interface UserInteractions {
         fun onPairClicked(view: View, position: Int)
-        fun onDeleteClicked(position: Int)
+        fun onDeleteClicked(pair: String, position: Int)
     }
 
     fun setPairClickListener(userInteractions: UserInteractions) {

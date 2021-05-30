@@ -51,6 +51,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
 
     private fun addObservers() {
         historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
+        historyViewModel.loadRemote.observe(this, Observer { onLoadFromRemote(it)})
         historyViewModel.showError.observe(this, Observer { onShowError(it)})
         historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
@@ -162,8 +163,11 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         historyViewModel.clearCurrencyPairs()
     }
 
-    private fun onPopularCurrencyPairsSet(currency: List<String?>){
+    private fun onLoadFromRemote(loadFromRemote: Boolean){
         showPairSelector()
+    }
+    private fun onPopularCurrencyPairsSet(currency: List<String?>){
+        historyViewModel.checkAndLoad()
     }
 
     private fun canProceed(proceed: Boolean){
@@ -202,17 +206,17 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         val fxtAdapter = FxAdapter(requireContext(), pairHistories)
         rvtrades?.adapter = fxtAdapter
         showPairSeriesInfo()
+        historyViewModel.cacheHistory()
     }
 
     override fun onPairClicked(view: View, position: Int) {
         //rvPairs.layoutManager?.scrollToPosition(position)
     }
 
-    override fun onDeleteClicked(position: Int) {
+    override fun onDeleteClicked(pair: String, position: Int) {
         historyViewModel.deleteCurrencyPairFromList(position)
         historyViewModel.deleteTradeHistoryFromList(position)
-        val currentPair = historyViewModel.currencyPairs.value?.get(position)
-        Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "$pair deleted", Toast.LENGTH_SHORT).show()
     }
 
 

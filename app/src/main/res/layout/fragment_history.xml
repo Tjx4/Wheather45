@@ -16,7 +16,7 @@
         tools:context=".features.history.HistoryFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/clPairSeriesInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -56,6 +56,7 @@
                             android:id="@+id/tvTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            tools:text="Select pairs"
                             android:text="@{fxViewModel.message}"
                             android:gravity="left"
                             android:layout_margin="@dimen/medium_margin"
@@ -114,7 +115,7 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="invisible"
+            android:visibility="gone"
             android:id="@+id/clPairSelector"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -312,7 +313,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/flLoader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

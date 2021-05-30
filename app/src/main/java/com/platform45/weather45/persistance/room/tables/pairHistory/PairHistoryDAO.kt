@@ -8,6 +8,9 @@ interface PairHistoryDAO {
     @Insert
     fun insert(pairHistoryTable: PairHistoryTable)
 
+    //@Insert(onConflict = OnConflictStrategy.REPLACE)
+    //suspend fun insertAll(pairHistories: List<PairHistoryTable>)
+
     @Update
     fun update(pairHistoryTable: PairHistoryTable)
 

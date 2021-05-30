@@ -16,6 +16,6 @@ data class PairHistoryTable (
     var startDate: String?,
     @ColumnInfo(name = "end_date")
     var endDate: String?,
-   // @ColumnInfo(name ="price")
-  //  var price: Object?,
+    @ColumnInfo(name ="price")
+    var price: String?,
 ): Parcelable

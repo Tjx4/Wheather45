@@ -21,6 +21,10 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
     val message: MutableLiveData<String>
         get() = _message
 
+    private val _pairsMessage: MutableLiveData<String> = MutableLiveData()
+    val pairsMessage: MutableLiveData<String>
+        get() = _pairsMessage
+
     private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
     val showLoading: MutableLiveData<Boolean>
         get() = _showLoading
@@ -148,6 +152,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.add(currencyPair)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _pairsMessage.value = "You selected ${currencyPairs.size} pair${if(currencyPairs.size == 1) "" else "s"}"
         _isPairsUpdated.value = true
     }
 
@@ -155,6 +160,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
         val currencyPairs = _currencyPairs.value as ArrayList
         currencyPairs.removeAt(indx)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+        _pairsMessage.value = "You selected ${currencyPairs.size} pair${if(currencyPairs.size == 1) "" else "s"}"
         _isPairsUpdated.value = true
     }
 

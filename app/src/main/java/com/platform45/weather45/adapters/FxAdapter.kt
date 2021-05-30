@@ -78,7 +78,6 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         holder.candleStickChart.data = candleData
         //candleStickChart.animateXY(5000, 4000)
         holder.candleStickChart.invalidate()
-
     }
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

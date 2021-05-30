@@ -29,7 +29,7 @@
     <string name="requested_currency_pairs">Requested currency pairs (%1$d)</string>
     <string name="no_requested_pairs">Please request currency pairs history</string>
     <string name="add">Add</string>
-    <string name="get_trade_history">Get trade history</string>
+    <string name="view_trade_history">View trade history</string>
     <string name="please_select_a_none_weekend_date">Please select a none weekend date</string>
     <string name="please_set_time">Please set time</string>
     <string name="select_from_popular_trading_pairs">Select from popular trading pairs</string>

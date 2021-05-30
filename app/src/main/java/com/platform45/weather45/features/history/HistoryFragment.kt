@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
@@ -23,7 +24,7 @@ import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener, DateTimePickerFragment.DateTimeSetter{
+class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
     override var indx: Int = 0
@@ -175,7 +176,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     }
 
     private fun onCurrencyPairsSet(pairs: List<String>) {
-        val pairsAdapter = CurrencyPairAdapter(requireContext(), historyViewModel, pairs)
+        val pairsAdapter = CurrencyPairAdapter(requireContext(), pairs)
         pairsAdapter.setPairClickListener(this)
 
         val cols = requireActivity().getScreenCols(125f)
@@ -205,6 +206,13 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
 
     override fun onPairClicked(view: View, position: Int) {
         //rvPairs.layoutManager?.scrollToPosition(position)
+    }
+
+    override fun onDeleteClicked(position: Int) {
+        historyViewModel.deleteCurrencyPairFromList(position)
+        historyViewModel.deleteTradeHistoryFromList(position)
+        val currentPair = historyViewModel.currencyPairs.value?.get(position)
+        Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
     }
 
 

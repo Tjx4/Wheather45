@@ -9,11 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.platform45.weather45.R
-import com.platform45.weather45.features.history.HistoryViewModel
 
-class CurrencyPairAdapter(private val context: Context, val historyViewModel: HistoryViewModel, private val addSlides: List<String>) : RecyclerView.Adapter<CurrencyPairAdapter.ViewHolder>() {
+class CurrencyPairAdapter(private val context: Context, private val addSlides: List<String>) : RecyclerView.Adapter<CurrencyPairAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
-    private var addPairClickListener: AddPairClickListener? = null
+    private var userInteractions: UserInteractions? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = layoutInflater.inflate(R.layout.pair_layout, parent, false)
@@ -24,9 +23,7 @@ class CurrencyPairAdapter(private val context: Context, val historyViewModel: Hi
         val currentPair = addSlides?.get(position)
         holder.conversionTv.text = currentPair
         holder.imbDeleteImgb.setOnClickListener {
-            historyViewModel.deleteCurrencyPairFromList(position)
-            historyViewModel.deleteTradeHistoryFromList(position)
-            Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
+            userInteractions?.onDeleteClicked(position)
         }
     }
 
@@ -39,16 +36,17 @@ class CurrencyPairAdapter(private val context: Context, val historyViewModel: Hi
         }
 
         override fun onClick(view: View) {
-            addPairClickListener?.onPairClicked(view, adapterPosition)
+            userInteractions?.onPairClicked(view, adapterPosition)
         }
     }
 
-    interface AddPairClickListener {
+    interface UserInteractions {
         fun onPairClicked(view: View, position: Int)
+        fun onDeleteClicked(position: Int)
     }
 
-    fun setPairClickListener(addPairClickListener: AddPairClickListener) {
-        this.addPairClickListener = addPairClickListener
+    fun setPairClickListener(userInteractions: UserInteractions) {
+        this.userInteractions = userInteractions
     }
 
     override fun getItemCount() = addSlides?.size

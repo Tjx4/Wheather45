@@ -21,10 +21,10 @@ interface PairHistoryDAO {
     fun getLastUser(): PairHistoryTable?
 
     @Query("SELECT * FROM pairHistories ORDER BY id DESC")
-    fun getAllUsersLiveData(): LiveData<List<PairHistoryTable>>
+    fun getAllHistoriesLiveData(): LiveData<List<PairHistoryTable>>
 
     @Query("SELECT * FROM pairHistories ORDER BY id DESC")
-    fun getAllUsers():List<PairHistoryTable>?
+    fun getAllHistories():List<PairHistoryTable>?
 
     @Query("DELETE  FROM pairHistories")
     fun clear()

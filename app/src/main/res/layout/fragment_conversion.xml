@@ -14,6 +14,12 @@
     android:animateLayoutChanges="true"
     tools:context=".features.convertion.ConversionFragment">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.1"
+        android:src="@drawable/bg_image"/>
+
     <EditText
         style="@style/FX4EditText"
         android:id="@+id/tvFrom"

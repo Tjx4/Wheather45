@@ -42,7 +42,7 @@ class ConversionViewModel(application: Application, val fXRepository: FXReposito
     }
 
     suspend fun convertCurrency(from: String, to: String, amount: Int) {
-        val conversion = fXRepository.getConvertion(API_KEY, from, to , amount.toString())
+        val conversion = fXRepository.getConversion(API_KEY, from, to , amount.toString())
         uiScope.launch {
             if(conversion != null){
                 _convert.value = conversion

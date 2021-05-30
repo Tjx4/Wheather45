@@ -11,12 +11,10 @@ import com.platform45.weather45.helpers.getDaysAgo
 import com.platform45.weather45.models.*
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
-import java.lang.Error
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.reflect.typeOf
 
-class HistoryViewModel(application: Application, private val fXRepository: FXRepository) : BaseVieModel(application) {
+class HistoryViewModel(val app: Application, private val fXRepository: FXRepository) : BaseVieModel(app) {
     val availableCurrencies: MutableLiveData<List<String>> = MutableLiveData()
 
     private val _message: MutableLiveData<String> = MutableLiveData()
@@ -97,7 +95,7 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
     }
 
     suspend fun getPopularPairs() {
-        val popularCurrencyPairs = fXRepository.getUSDCurrencyPairs(API_KEY)
+        val popularCurrencyPairs = fXRepository.getPopularCurrencyPairs(API_KEY)
         uiScope.launch {
             when {
                 popularCurrencyPairs == null -> _showError.value =

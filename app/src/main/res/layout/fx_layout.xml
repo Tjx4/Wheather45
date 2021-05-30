@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusableInTouchMode="false"
-    android:background="@color/darkBackground">
+    android:background="@color/dark_ackground">
 
     <TextView
         style="@style/MediumTextView"

@@ -290,6 +290,8 @@
                         android:nestedScrollingEnabled="false"
                         android:layout_margin="@dimen/xsmall_margin"
                         android:layout_marginHorizontal="@dimen/xsmall_margin"
+                        android:paddingTop="@dimen/xsmall_margin"
+                        android:background="@color/dark_background_3"
                         app:layout_constraintTop_toBottomOf="@+id/tvRequestingPairs"
                         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -317,7 +319,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:background="@color/darkBackground">
+            android:background="@color/dark_ackground">
 
             <com.wang.avi.AVLoadingIndicatorView
                 android:layout_width="wrap_content"

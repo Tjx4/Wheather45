@@ -12,8 +12,10 @@ data class PairHistoryTable (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id:Long = 0L,
-
-    @ColumnInfo(name = "pairHistory")
-    var pairHistory:String? = null
-
+    @ColumnInfo(name ="start_date")
+    var startDate: String?,
+    @ColumnInfo(name = "end_date")
+    var endDate: String?,
+   // @ColumnInfo(name ="price")
+  //  var price: Object?,
 ): Parcelable

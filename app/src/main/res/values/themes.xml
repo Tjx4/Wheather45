@@ -22,7 +22,7 @@
     <style name="NoActionBarTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/lightBackground</item>
+        <item name="android:windowBackground">@color/light_background</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -90,7 +90,7 @@
     <style name="ParentView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/darkBackground</item>
+        <item name="android:background">@color/dark_ackground</item>
     </style>
 
     <style name="DateTimePickerStyle" parent="Theme.AppCompat.Light.Dialog">
@@ -98,7 +98,7 @@
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="android:background">@color/darkBackground_2</item>
+        <item name="android:background">@color/dark_background_2</item>
         <!--
         <item name="android:scaleX">1.0</item>
         <item name="android:scaleY">0.80</item>
@@ -112,7 +112,7 @@
     <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:background">@color/darkBackground_2</item>
+        <item name="android:background">@color/dark_background_2</item>
     </style>
 
     <style name="SelectableItemTheme">

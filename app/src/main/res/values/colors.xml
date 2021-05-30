@@ -18,12 +18,12 @@
     <color name="greyText">#888</color>
     <color name="darkText">#111</color>
     <color name="darkGreyBackground">#bbb</color>
-    <color name="greyBackground">#EEE</color>
-    <color name="lightBackground">#FFF</color>
+    <color name="grey_background">#EEE</color>
+    <color name="light_background">#FFF</color>
     <color name="pairItemBackground">#111</color>
-    <color name="darkBackground">#000</color>
-    <color name="darkBackground_2">#222</color>
-    <color name="darkBackground_3">#333</color>
+    <color name="dark_ackground">#000</color>
+    <color name="dark_background_2">#222</color>
+    <color name="dark_background_3">#333</color>
     <color name="darkBackground_4">#444</color>
     <color name="splashGradientStart">#000</color>
     <color name="splashGradientEnd">#111</color>

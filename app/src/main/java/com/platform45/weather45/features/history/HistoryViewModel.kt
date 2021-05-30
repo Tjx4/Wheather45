@@ -153,26 +153,17 @@ class HistoryViewModel(application: Application, private val fXRepository: FXRep
         _isPairsUpdated.value = true
     }
 
-    fun deleteCurrencyPairFromList(currencyPair: String) {
+    fun deleteCurrencyPairFromList(indx: Int) {
         val currencyPairs = _currencyPairs.value as ArrayList
-        currencyPairs.remove(currencyPair)
+        currencyPairs.removeAt(indx)
         _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
         _isPairsUpdated.value = true
     }
 
-    //Todo change
-    private fun getPairsMessage(): String {
-        val currencyPairsZize = _currencyPairs.value?.size ?: 0
-       return if (currencyPairsZize > 0)
-           app.getString(R.string.requested_currency_pairs, currencyPairsZize)
-       else
-           app.getString(R.string.no_requested_pairs)
-    }
-
-    fun deleteTradeHistoryFromList(currencyPair: String){
+    fun deleteTradeHistoryFromList(indx: Int){
         _pairTradeHistories.value?.let {pairHistories ->
             val currencyPairs = pairHistories as ArrayList
-            currencyPairs.removeAll{ it.tradingPair == currencyPair}
+            currencyPairs.removeAt(indx)
         }
     }
 

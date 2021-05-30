@@ -24,8 +24,8 @@ class CurrencyPairAdapter(private val context: Context, val historyViewModel: Hi
         val currentPair = addSlides?.get(position)
         holder.conversionTv.text = currentPair
         holder.imbDeleteImgb.setOnClickListener {
-            historyViewModel.deleteCurrencyPairFromList(currentPair)
-            historyViewModel.deleteTradeHistoryFromList(currentPair)
+            historyViewModel.deleteCurrencyPairFromList(position)
+            historyViewModel.deleteTradeHistoryFromList(position)
             Toast.makeText(context, "$currentPair deleted", Toast.LENGTH_SHORT).show()
         }
     }
@@ -51,6 +51,6 @@ class CurrencyPairAdapter(private val context: Context, val historyViewModel: Hi
         this.addPairClickListener = addPairClickListener
     }
 
-    override fun getItemCount() = addSlides?.size ?: 0
+    override fun getItemCount() = addSlides?.size
 
 }

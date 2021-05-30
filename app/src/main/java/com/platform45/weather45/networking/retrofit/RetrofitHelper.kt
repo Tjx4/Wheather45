@@ -10,9 +10,6 @@ interface RetrofitHelper {
     @GET("apiconvert")
     suspend fun convert(@Query("api_key") apiKey: String, @Query("from") from: String, @Query("to") to: String, @Query("amount")  amount: String): Conversion?
 
-    @GET("apihistorical")
-    suspend fun historical(@Query("api_key") apiKey: String, @Query("date") date: String, @Query("interval") interval: String, @Query("currency") currency: String): Historical?
-
     @GET("apitimeseries")
     suspend fun series(@Query("api_key") apiKey: String, @Query("start_date") startDate: String, @Query("end_date") endDate: String, @Query("currency") currency: String, @Query("format") format: String): Series?
 

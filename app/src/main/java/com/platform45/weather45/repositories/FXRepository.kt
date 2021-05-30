@@ -19,15 +19,6 @@ class FXRepository(private val retrofitHelper: RetrofitHelper, private val datab
         }
     }
 
-    suspend fun getHistorical(api_key: String, date: String, currency: String, interval: String): Any?{
-        return try {
-            retrofitHelper.historical(api_key, date, interval, currency)
-        }
-        catch (ex: Exception){
-            null
-        }
-    }
-
     suspend fun getSeries(apiKey: String, startDate: String, endDate: String, currency: String, format: String) : Series?{
         return try {
             retrofitHelper.series(apiKey, startDate, endDate, currency, format)

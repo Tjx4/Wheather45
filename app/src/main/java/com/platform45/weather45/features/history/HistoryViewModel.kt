@@ -202,7 +202,7 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
 
     fun processSeries(series: Series, startDate: String, endDate: String){
         if (series.price != null) {
-            val prices = series?.price as LinkedTreeMap<String?, LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>?>?>
+            val prices = series?.price
             val tempPairTrades = ArrayList<PairTradeHistory>()
 
             val currencies = _currencyPairs.value!!
@@ -237,30 +237,6 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
             _showError.value = app.getString(R.string.no_data_found)
         }
     }
-
-
-
-/*
-    suspend fun getHistorical(date: String, currency: String, interval: String) {
-        val historical = fXRepository.getHistorical(API_KEY, date, currency, interval)
-
-            if(historical?.price != null){
-                val prices = historical?.price as LinkedTreeMap<String?, Double?>
-                val currencies = currency.split(",")
-                for(currentCurrency in currencies){
-                    val currentPrice = prices[currentCurrency]
-                    val dd = currentPrice
-                }
-
-                uiScope.launch { }
-            }
-            else{
-                //Handle ex
-                uiScope.launch { }
-            }
-
-    }
-*/
 }
 
 

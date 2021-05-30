@@ -65,6 +65,8 @@ class FxAdapter(private val context: Context, private val addSlides: List<PairTr
         xAxis.labelRotationAngle = -90f
         xAxis.setLabelCount(xValues.count(),  false)
         xAxis.textColor = context.resources.getColor(R.color.light_text_2)
+        xAxis.axisMinimum = 10f
+        //xAxis.spaceMax = 1f
         //candleStickChart.extraBottomOffset = 160f
 
         val aAxisRight = holder.candleStickChart.axisRight

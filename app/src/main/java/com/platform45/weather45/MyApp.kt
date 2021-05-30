@@ -1,10 +1,8 @@
 package com.platform45.weather45
 
 import android.app.Application
-import com.platform45.weather45.di.ModuleLoadHelper
+import com.platform45.weather45.di.*
 import com.platform45.weather45.di.networkingModule
-import com.platform45.weather45.di.repositoryModule
-import com.platform45.weather45.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -17,6 +15,7 @@ class MyApp : Application(){
                 listOf(
                     viewModelModule,
                     repositoryModule,
+                    persistanceModule,
                     networkingModule
                 ) + ModuleLoadHelper.getBuildSpecialModuleList()
             )

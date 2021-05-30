@@ -15,7 +15,7 @@ class MyApp : Application(){
                 listOf(
                     viewModelModule,
                     repositoryModule,
-                    persistanceModule,
+                    persistenceModule,
                     networkingModule
                 ) + ModuleLoadHelper.getBuildSpecialModuleList()
             )

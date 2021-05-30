@@ -9,6 +9,6 @@ val networkingModule = module {
     single { API.retrofit }
 }
 
-val persistanceModule = module {
+val persistenceModule = module {
     single { FX45Db.getInstance(androidApplication())}
 }

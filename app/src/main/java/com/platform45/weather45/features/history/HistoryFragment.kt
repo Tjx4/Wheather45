@@ -194,7 +194,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.AddPairClickListener
     }
 
     fun onTradeHistorySet(tradeHistories: List<PairTradeHistory?>?){
-        val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rvtrades?.layoutManager = tradesLayoutManager
         val fxtAdapter = FxAdapter(requireContext(), tradeHistories)
         rvtrades?.adapter = fxtAdapter

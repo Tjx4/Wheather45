@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.paging.LoadState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
     private val historyViewModel: HistoryViewModel by viewModel()
     lateinit var fxPagingAdapter: FxPagingAdapter
     override var indx: Int = 0
+    var isFirstTime = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,12 +46,11 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         super.onCreateView(inflater, container, savedInstanceState)
         myDrawerController.badFrag(this)
         myDrawerController.showMenu()
-        myDrawerController.setTitle(getString(R.string.app_name))
+        //myDrawerController.setTitle(getString(R.string.app_name))
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
         binding.fxViewModel = historyViewModel
-        addObservers()
         return binding.root
     }
 
@@ -66,6 +67,16 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Navigation.findNavController(view).currentDestination?.label = getString(R.string.app_name)
+
+
+        if(isFirstTime){
+            isFirstTime = false
+        }else{
+            return
+        }
+
+        addObservers()
 
         spnPorpularTradingPairs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -123,9 +134,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         snapHelper.attachToRecyclerView(rvtrades)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

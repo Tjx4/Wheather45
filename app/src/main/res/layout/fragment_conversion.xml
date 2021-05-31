@@ -10,7 +10,6 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     style="@style/ParentView"
-    android:padding="@dimen/small_margin"
     android:animateLayoutChanges="true"
     tools:context=".features.convertion.ConversionFragment">
 
@@ -18,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.2"
+        android:scaleType="fitXY"
         android:src="@drawable/bg_image"/>
 
     <EditText
@@ -27,6 +27,8 @@
         android:hint="From"
         android:textColorHint="@color/greyText"
         android:text="@={conversionViewModel.from}"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        android:layout_marginLeft="@dimen/xsmall_margin"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -39,7 +41,8 @@
         android:hint="To"
         android:textColorHint="@color/greyText"
         android:text="@={conversionViewModel.to}"
-        android:layout_marginLeft="@dimen/xsmall_margin"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        android:layout_marginHorizontal="@dimen/xsmall_margin"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvFrom"
@@ -54,6 +57,7 @@
         android:textColorHint="@color/greyText"
         android:text="@={``+conversionViewModel.amount}"
         android:layout_marginTop="@dimen/xsmall_margin"
+        android:layout_marginHorizontal="@dimen/xsmall_margin"
         app:layout_constraintTop_toBottomOf="@+id/tvFrom"
         app:layout_constraintEnd_toStartOf="@+id/tvFrom"
         app:layout_constraintStart_toStartOf="parent" />
@@ -63,6 +67,7 @@
         android:id="@+id/btnConvert"
         android:text="Convert"
         android:layout_marginTop="@dimen/xsmall_margin"
+        android:layout_marginHorizontal="@dimen/xsmall_margin"
         app:layout_constraintTop_toBottomOf="@+id/tvAmount"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

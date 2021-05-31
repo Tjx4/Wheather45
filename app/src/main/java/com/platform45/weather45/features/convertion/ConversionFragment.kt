@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import com.platform45.weather45.R
 import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.databinding.FragmentConversionBinding
@@ -33,18 +34,17 @@ class ConversionFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        Navigation.findNavController(view).currentDestination?.label = getString(R.string.convert_currencies)
+
+        btnConvert.setOnClickListener {
+            conversionViewModel.checkAndConvert()
+        }
     }
 
     private fun addObservers() {
         conversionViewModel.convert.observe(this, Observer { onConversion(it) })
     }
 
-    private fun init() {
-        btnConvert.setOnClickListener {
-            conversionViewModel.checkAndConvert()
-        }
-    }
 
     private fun onConversion(conversion: Conversion?){
         tvTotal.visibility = View.VISIBLE

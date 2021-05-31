@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
@@ -26,13 +27,18 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         setSupportActionBar(toolbar)
          navController = this.findNavController(R.id.navControllerFragment)
          setupWithNavController(toolbar, navController)
+         //NavigationUI.setupActionBarWithNavController(this, navController)
         /*
         val navController = this.findNavController(R.id.navControllerFragment)
         setupActionBarWithNavController(this, navController, drawer_layout)
         setupWithNavController(nav_view, navController)
         */
     }
-
+/*
+    override fun onSupportNavigateUp(): Boolean {
+        return Navigation.findNavController(this, R.id.navControllerFragment).navigateUp();
+    }
+*/
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
         toobarMenu = menu
@@ -48,7 +54,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
             R.id.action_select -> historFrag?.showPairSelector()
             R.id.action_close_selection -> {
                 historFrag?.showPairSeriesInfo()
-                historFrag?.resetPairData()
+               // historFrag?.resetPairData()
             }
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)

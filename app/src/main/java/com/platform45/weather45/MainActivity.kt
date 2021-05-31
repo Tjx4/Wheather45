@@ -25,15 +25,17 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-         navController = this.findNavController(R.id.navControllerFragment)
-         setupWithNavController(toolbar, navController)
-         //NavigationUI.setupActionBarWithNavController(this, navController)
+        navController = this.findNavController(R.id.navControllerFragment)
+        setupWithNavController(toolbar, navController)
+
+        //NavigationUI.setupActionBarWithNavController(this, navController)
         /*
         val navController = this.findNavController(R.id.navControllerFragment)
         setupActionBarWithNavController(this, navController, drawer_layout)
         setupWithNavController(nav_view, navController)
         */
     }
+
 /*
     override fun onSupportNavigateUp(): Boolean {
         return Navigation.findNavController(this, R.id.navControllerFragment).navigateUp();
@@ -41,10 +43,10 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
 */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
-        toobarMenu = menu
         convertMenuItem = menu.findItem(R.id.action_convert)
         findMenuItem = menu.findItem(R.id.action_select)
         closeMenuItem = menu.findItem(R.id.action_close_selection)
+        toobarMenu = menu
         return true
     }
 
@@ -52,10 +54,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         when (item.itemId) {
             R.id.action_convert -> navController.navigate(R.id.history_to_conversion)
             R.id.action_select -> historFrag?.showPairSelector()
-            R.id.action_close_selection -> {
-                historFrag?.showPairSeriesInfo()
-               // historFrag?.resetPairData()
-            }
+            R.id.action_close_selection -> historFrag?.showPairSeriesInfo()
         }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }
@@ -63,6 +62,9 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
     override fun showMenu() {
         toobarMenu?.let {
             menuInflater.inflate(R.menu.history_menu, it)
+            convertMenuItem = it.findItem(R.id.action_convert)
+            findMenuItem = it.findItem(R.id.action_select)
+            closeMenuItem = it.findItem(R.id.action_close_selection)
         }
     }
 
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity(), MyDrawerController{
         toobarMenu?.clear()
     }
 
-    override fun badFrag(historyFragment: HistoryFragment) {
+    override fun setHistoryFragment(historyFragment: HistoryFragment) {
         historFrag = historyFragment
     }
 

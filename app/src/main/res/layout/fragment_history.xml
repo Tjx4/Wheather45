@@ -16,7 +16,7 @@
         tools:context=".features.history.HistoryFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/clPairSeriesInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -140,7 +140,7 @@
 
                     <TextView
                         style="@style/MediumTextView"
-                        android:id="@+id/tvComonPairs"
+                        android:id="@+id/tvPopPairs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/select_from_popular_trading_pairs"
@@ -153,9 +153,46 @@
                         android:id="@+id/spnPorpularTradingPairs"
                         android:layout_marginHorizontal="@dimen/xsmall_margin"
                         android:entries="@{fxViewModel.popularCurrencyPairs}"
-                        app:layout_constraintTop_toBottomOf="@+id/tvComonPairs"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPopPairs"
                         app:layout_constraintRight_toLeftOf="@+id/spnToCurrency"
                         app:layout_constraintLeft_toLeftOf="parent"/>
+
+                  <androidx.constraintlayout.widget.ConstraintLayout
+                      android:id="@+id/clPopLoading"
+                      android:layout_width="0dp"
+                      android:layout_height="0dp"
+                      android:clickable="true"
+                      app:layout_constraintRight_toRightOf="@+id/spnPorpularTradingPairs"
+                      app:layout_constraintLeft_toLeftOf="@+id/spnPorpularTradingPairs"
+                      app:layout_constraintTop_toTopOf="@+id/tvPopPairs"
+                      app:layout_constraintBottom_toBottomOf="@+id/spnPorpularTradingPairs"
+                      android:background="@color/dark_background_2">
+
+                      <TextView
+                          style="@style/MediumTextView"
+                          android:id="@+id/tvPopLoading"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:text="Loading porpular pairs"
+                          android:gravity="left"
+                          android:layout_marginLeft="@dimen/small_margin"
+                          app:layout_constraintLeft_toLeftOf="parent"
+                          app:layout_constraintTop_toTopOf="parent"
+                          app:layout_constraintBottom_toBottomOf="parent"/>
+
+                      <com.wang.avi.AVLoadingIndicatorView
+                          android:id="@+id/avlPorpular"
+                          android:layout_width="25dp"
+                          android:layout_height="25dp"
+                          android:visibility="visible"
+                          app:indicatorColor="@color/lightText"
+                          app:indicatorName="LineSpinFadeLoaderIndicator"
+                          android:layout_marginLeft="@dimen/xsmall_margin"
+                          app:layout_constraintTop_toTopOf="@+id/tvPopLoading"
+                          app:layout_constraintBottom_toBottomOf="@+id/tvPopLoading"
+                          app:layout_constraintLeft_toRightOf="@+id/tvPopLoading"/>
+
+                  </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         style="@style/MediumTextView"
@@ -305,7 +342,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="@string/view_trade_history"
-                android:enabled="false"
                 android:layout_margin="@dimen/xsmall_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

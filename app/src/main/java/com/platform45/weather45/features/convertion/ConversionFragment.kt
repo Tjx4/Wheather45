@@ -1,5 +1,6 @@
 package com.platform45.weather45.features.convertion
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -17,14 +18,17 @@ class ConversionFragment : BaseFragment() {
     private lateinit var binding: FragmentConversionBinding
     private val conversionViewModel: ConversionViewModel by viewModel()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myDrawerController.setTitle(getString(R.string.convert_currencies))
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         myDrawerController.hideMenu()
-        myDrawerController.setTitle(getString(R.string.convert_currencies))
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_conversion, container, false)
         binding.lifecycleOwner = this
         binding.conversionViewModel = conversionViewModel

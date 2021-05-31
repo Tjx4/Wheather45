@@ -78,7 +78,6 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         get() = _isPairsUpdated
 
     init {
-        showLoaderAndGetPopularPairs()
         initCurrencies()
         initStartAndEndDate()
         initCurrencyPairs()
@@ -90,7 +89,6 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     }
 
     private fun initCurrencyPairs() {
-        _canProceed.value = false
         _message.value = app.getString(R.string.no_requested_pairs)
         _currencyPairs.value = ArrayList()
     }
@@ -101,15 +99,18 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
             tmpList.add(currency.currencyCode)
         }
         availableCurrencies.value = tmpList?.sortedBy { it }
-    }
 
-    fun showLoaderAndGetPopularPairs() {
-        _showLoading.value = true
         ioScope.launch {
             getPopularPairs()
         }
     }
 
+    fun checkState() {
+        _canProceed.value = !_currencyPairs.value.isNullOrEmpty()
+    }
+
+
+    /*
     fun checkAndLoad() {
         ioScope.launch {
             val cachedHistories = fXRepository.getAllPairHistoriesFromDb()
@@ -122,12 +123,11 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
                     cachedHistories.forEach { it?.tradingPair?.let { tp -> tmpPairs.add(tp)} }
                     _currencyPairs.value = tmpPairs
                     _pairTradeHistories.value = cachedHistories
-                    _canProceed.value = true
                 }
             }
         }
     }
-
+*/
     suspend fun getPopularPairs() {
         val popularCurrencyPairs = fXRepository.getPopularCurrencyPairs(API_KEY)
         uiScope.launch {
@@ -201,7 +201,7 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         }
     }
 
-
+/*
     fun showLoadingAndGetPairSeries(){
         _showLoading.value = true
         ioScope.launch {
@@ -225,7 +225,7 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         }
     }
 
-    fun processSeries(series: Series, startDate: String, endDate: String){
+       fun processSeries(series: Series, startDate: String, endDate: String){
         if (series.price != null) {
             _pairTradeHistories.value = getPairHistoryList(startDate, endDate, _currencyPairs.value!!, series?.price!!)
             cacheHistory()
@@ -236,8 +236,12 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     }
 
 
-
-
+    fun cacheHistory(){
+        ioScope.launch {
+            _pairTradeHistories.value?.let { fXRepository.addAllPairTradeHistoriesToDb(it) }
+        }
+    }
+*/
 
     val catImagesFlow = Pager(config = PagingConfig(pageSize = 3)) {
         PairPagingSource(_startDate.value ?: "", _endDate.value ?: "", getCurrencyPairsString(), fXRepository)
@@ -261,16 +265,6 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         val dfdf = pairHistory
     }
 
-
-
-
-
-
-
-
-
-
-
     fun getCurrencyPairsString(): String{
         var currency = ""
         _currencyPairs.value?.let {
@@ -281,11 +275,6 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         return currency
     }
 
-    fun cacheHistory(){
-        ioScope.launch {
-            _pairTradeHistories.value?.let { fXRepository.addAllPairTradeHistoriesToDb(it) }
-        }
-    }
 }
 
 

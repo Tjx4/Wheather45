@@ -11,7 +11,7 @@ interface MyDrawerController {
     fun setTitle(title: String)
     fun showMenu()
     fun hideMenu()
-    fun badFrag(bf: HistoryFragment)
+    fun setHistoryFragment(bf: HistoryFragment)
     fun showContent()
     fun showSelectionMode()
     fun hideToolbar()

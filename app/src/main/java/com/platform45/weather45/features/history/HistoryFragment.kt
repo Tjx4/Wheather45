@@ -24,11 +24,9 @@ import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.extensions.getScreenCols
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
-import com.platform45.weather45.features.history.paging.HistoryEvent
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.helpers.showErrorDialog
 import com.platform45.weather45.models.PairTradeHistory
-import com.platform45.weather45.persistance.room.tables.pairHistory.PairHistoryTable
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,15 +37,18 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
     override var indx: Int = 0
     var isFirstTime = true
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myDrawerController.setHistoryFragment(this)
+        myDrawerController.setTitle(getString(R.string.app_name))
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        myDrawerController.badFrag(this)
         myDrawerController.showMenu()
-        //myDrawerController.setTitle(getString(R.string.app_name))
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = this
         binding.fxViewModel = historyViewModel
@@ -56,7 +57,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
 
     private fun addObservers() {
         historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
-        historyViewModel.loadRemote.observe(this, Observer { onLoadFromRemote(it)})
+        //historyViewModel.loadRemote.observe(this, Observer { onLoadFromRemote(it)})
         historyViewModel.showError.observe(this, Observer { onShowError(it)})
         historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
@@ -69,14 +70,8 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         super.onViewCreated(view, savedInstanceState)
         Navigation.findNavController(view).currentDestination?.label = getString(R.string.app_name)
 
-
-        if(isFirstTime){
-            isFirstTime = false
-        }else{
-            return
-        }
-
         addObservers()
+        historyViewModel.checkState()
 
         spnPorpularTradingPairs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -126,7 +121,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         }
 
         btnGetHistory.setOnClickListener {
-            //historyViewModel.showLoadingAndGetPairSeries()
             initPaging()
         }
 
@@ -134,9 +128,12 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         snapHelper.attachToRecyclerView(rvtrades)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+    }
+
+    fun initPaging(){
         fxPagingAdapter = FxPagingAdapter(requireContext())
 
         rvtrades.apply {
@@ -145,26 +142,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
             adapter = fxPagingAdapter
         }
 
-        /*
-        rvtrades?.adapter = fxPagingAdapter.withLoadStateFooter(
-            footer = LoadStateAdapter(fxPagingAdapter)
-        )
-        */
-
-
-        /*
-        lifecycleScope.launch {
-            fxPagingAdapter.loadStateFlow.collectLatest {
-                when (it.refresh) {
-                    is LoadState.Error -> displayErrorMessage(getString(R.string.error))
-                   // is LoadState.NotLoading -> swipeRefresh?.isRefreshing = false
-                }
-            }
-        }
-        */
-    }
-
-    fun initPaging(){
         lifecycleScope.launch {
             historyViewModel.catImagesFlow.collectLatest {
                 fxPagingAdapter.submitData(it)
@@ -189,23 +166,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
             }
         }
     }
-
-    //Todo maybe remove
-    private fun onImageFavouriteClicked(adapterPos: Int, pairHistory: PairHistoryTable, isFavoured: Boolean) {
-        historyViewModel.onViewEvent(
-            HistoryEvent.pairHistoryChanged(
-                position = adapterPos,
-                pairHistory = pairHistory
-            )
-        )
-    }
-
-    
-    
-    
-    
-    
-    
 
     override fun setDate(year: Int, month: Int, day: Int) {
         when (indx) {
@@ -235,9 +195,7 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         flLoader.visibility = View.GONE
         clPairSelector.visibility = View.VISIBLE
         clPairSeriesInfo.visibility = View.GONE
-
         vDivider.visibility = View.GONE
-
         myDrawerController.showSelectionMode()
     }
 
@@ -252,11 +210,8 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         historyViewModel.clearCurrencyPairs()
     }
 
-    private fun onLoadFromRemote(loadFromRemote: Boolean){
-        showPairSelector()
-    }
     private fun onPopularCurrencyPairsSet(currency: List<String?>){
-        historyViewModel.checkAndLoad()
+        clPopLoading.visibility = View.GONE
     }
 
     private fun canProceed(proceed: Boolean){

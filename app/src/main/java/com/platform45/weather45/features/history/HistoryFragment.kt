@@ -132,12 +132,11 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         super.onActivityCreated(savedInstanceState)
 
     }
-
     fun initPaging(){
         fxPagingAdapter = FxPagingAdapter(requireContext())
 
         rvtrades.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = fxPagingAdapter
         }
@@ -195,7 +194,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         flLoader.visibility = View.GONE
         clPairSelector.visibility = View.VISIBLE
         clPairSeriesInfo.visibility = View.GONE
-        vDivider.visibility = View.GONE
         myDrawerController.showSelectionMode()
     }
 
@@ -218,9 +216,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         btnGetHistory.isEnabled = proceed
         btnGetHistory.background = resources.getDrawable( if(proceed) R.drawable.fx_button_background  else R.drawable.fx_disabled_button_background)
         tvRequestingPairs.visibility = if(proceed) View.VISIBLE else View.GONE
-
-        vDivider.visibility = if(proceed) View.VISIBLE else View.GONE
-        tvTitle.visibility = if(proceed) View.GONE else View.VISIBLE
     }
 
     private fun onCurrencyPairsSet(pairs: List<String>) {

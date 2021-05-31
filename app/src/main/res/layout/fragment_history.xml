@@ -99,31 +99,18 @@
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/small_margin">
 
-                    <TextView
-                        style="@style/MediumTextView"
-                        android:id="@+id/tvWelcomeMessage"
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvtrades"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Please select currency pairs and view their history"
-                        android:gravity="left"
-                        android:layout_marginTop="@dimen/medium_margin"
+                        android:layout_marginTop="@dimen/xsmall_margin"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <ImageView
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:src="@mipmap/ic_launcher_round"
-                        android:scaleType="fitXY"
-                        android:layout_marginTop="@dimen/medium_margin"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvWelcomeMessage"/>
-
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvtrades"
+                        android:id="@+id/rvPorpularCp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/xsmall_margin"

@@ -51,7 +51,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="largeTextView" parent="BaseTextView">
+    <style name="LargeTextView" parent="BaseTextView">
         <item name="android:textSize">@dimen/large_text</item>
         <item name="android:gravity">center</item>
     </style>

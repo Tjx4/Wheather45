@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.*
 import com.platform45.weather45.R
 import com.platform45.weather45.adapters.CurrencyPairAdapter
+import com.platform45.weather45.adapters.FavouriteCPAdapter
 import com.platform45.weather45.adapters.FxPagingAdapter
 import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.customViews.MySpinner
@@ -26,11 +27,12 @@ import com.platform45.weather45.extensions.getScreenCols
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.helpers.showErrorDialog
+import com.platform45.weather45.models.CurrencyPair
 import com.platform45.weather45.models.PairTradeHistory
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, DateTimePickerFragment.DateTimeSetter{
+class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener, CurrencyPairAdapter.UserInteractions, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
     lateinit var fxPagingAdapter: FxPagingAdapter
@@ -130,21 +132,12 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-    }
-    fun initPaging(){
         fxPagingAdapter = FxPagingAdapter(requireContext())
 
         rvtrades.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = fxPagingAdapter
-        }
-
-        lifecycleScope.launch {
-            historyViewModel.catImagesFlow.collectLatest {
-                fxPagingAdapter.submitData(it)
-            }
         }
 
         fxPagingAdapter.addLoadStateListener { loadState ->
@@ -164,6 +157,15 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
                 // errorState?.let { Toast.makeText(this, it.error.message, Toast.LENGTH_LONG).show() }
             }
         }
+
+    }
+    fun initPaging(){
+        lifecycleScope.launch {
+            historyViewModel.pairHistoryFlow.collectLatest {
+                fxPagingAdapter.submitData(it)
+            }
+        }
+
     }
 
     override fun setDate(year: Int, month: Int, day: Int) {
@@ -208,8 +210,13 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         historyViewModel.clearCurrencyPairs()
     }
 
-    private fun onPopularCurrencyPairsSet(currency: List<String?>){
+    private fun onPopularCurrencyPairsSet(currencyPairs: List<CurrencyPair?>){
         clPopLoading.visibility = View.GONE
+        val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rvPorpularCp?.layoutManager = tradesLayoutManager
+        val favouriteCPAdapter = FavouriteCPAdapter(requireContext(), currencyPairs)
+        favouriteCPAdapter.setPairClickListener(this)
+        rvPorpularCp?.adapter = favouriteCPAdapter
     }
 
     private fun canProceed(proceed: Boolean){
@@ -250,13 +257,18 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
     }
 
     override fun onPairClicked(view: View, position: Int) {
-        //rvPairs.layoutManager?.scrollToPosition(position)
+        rvPairs.layoutManager?.scrollToPosition(position)
     }
 
     override fun onDeleteClicked(pair: String, position: Int) {
         historyViewModel.deleteCurrencyPairFromList(position)
         historyViewModel.deleteTradeHistoryFromList(position)
         Toast.makeText(context, "$pair deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPairClicked(position: Int) {
+        //View pair history
+        Toast.makeText(context, "${ historyViewModel.popularCurrencyPairs.value?.get(position)} clicked", Toast.LENGTH_SHORT).show()
     }
 
 

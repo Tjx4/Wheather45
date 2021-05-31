@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.platform45.weather45.R
 
@@ -50,5 +49,6 @@ class CurrencyPairAdapter(private val context: Context, private val addSlides: L
     }
 
     override fun getItemCount() = addSlides?.size
+
 
 }

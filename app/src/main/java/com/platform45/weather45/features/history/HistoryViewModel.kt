@@ -61,8 +61,8 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     val endDate: MutableLiveData<String>
         get() = _endDate
 
-    private val _popularCurrencyPairs: MutableLiveData<List<String?>> = MutableLiveData()
-    val popularCurrencyPairs: MutableLiveData<List<String?>>
+    private val _popularCurrencyPairs: MutableLiveData<List<CurrencyPair?>> = MutableLiveData()
+    val popularCurrencyPairs: MutableLiveData<List<CurrencyPair?>>
         get() = _popularCurrencyPairs
 
     private val _currencyPairs: MutableLiveData<List<String>> = MutableLiveData()
@@ -84,7 +84,7 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     }
 
     private fun initStartAndEndDate() {
-        _startDate.value = getDaysAgo(30)
+        _startDate.value = getDaysAgo(28)
         _endDate.value = getCurrentDate()
     }
 
@@ -144,10 +144,10 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
 
     fun handlePopularPairs(popularCurrencyPairs: Currencies) {
         if (!popularCurrencyPairs?.currencies.isNullOrEmpty()) {
-            val tempList = ArrayList<String>()
+            val tempList = ArrayList<CurrencyPair?>()
             popularCurrencyPairs?.currencies?.forEach { currencyPair ->
                 currencyPair?.key?.let {
-                    tempList.add(currencyPair.key!!)
+                    tempList.add(CurrencyPair(currencyPair.key, currencyPair.value))
                 }
             }
             _popularCurrencyPairs.value = tempList
@@ -243,7 +243,7 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     }
 */
 
-    val catImagesFlow = Pager(config = PagingConfig(pageSize = 3)) {
+    val pairHistoryFlow = Pager(config = PagingConfig(pageSize = 3)) {
         PairPagingSource(_startDate.value ?: "", _endDate.value ?: "", getCurrencyPairsString(), fXRepository)
     }.flow.cachedIn(viewModelScope)
 

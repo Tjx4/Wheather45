@@ -2,6 +2,7 @@ package com.platform45.weather45.repositories
 
 import com.platform45.weather45.extensions.toDbTable
 import com.platform45.weather45.extensions.toPairHistory
+import com.platform45.weather45.helpers.getPairHistoryList
 import com.platform45.weather45.models.*
 import com.platform45.weather45.networking.retrofit.RetrofitHelper
 import com.platform45.weather45.persistance.room.FX45Db
@@ -33,6 +34,23 @@ class FXRepository(private val retrofitHelper: RetrofitHelper, private val datab
         }
         catch (ex: Exception){
             null
+        }
+    }
+
+    suspend fun getSeriesCache(apiKey: String, startDate: String, endDate: String, currency: String, format: String) : List<PairHistoryTable>{
+        return try {
+            val historyTables = ArrayList<PairHistoryTable>()
+            val currencyPairs = currency.split(",")
+            val price = retrofitHelper.series(apiKey, startDate, endDate, currency, format)?.price
+            val pairHistories = getPairHistoryList(startDate, endDate, currencyPairs, price)
+            pairHistories?.forEach {
+                it?.let { pairHistory -> historyTables.add(pairHistory?.toDbTable()) }
+            }
+
+            historyTables
+        }
+        catch (ex: Exception){
+            ArrayList<PairHistoryTable>()
         }
     }
 

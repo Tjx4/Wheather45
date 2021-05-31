@@ -2,19 +2,27 @@ package com.platform45.weather45.features.history
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.internal.LinkedTreeMap
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.platform45.weather45.R
 import com.platform45.weather45.base.viewmodels.BaseVieModel
 import com.platform45.weather45.constants.API_KEY
+import com.platform45.weather45.features.history.paging.HistoryState
+import com.platform45.weather45.features.history.paging.HistoryEvent
+import com.platform45.weather45.features.history.paging.PairPagingSource
 import com.platform45.weather45.helpers.getCurrentDate
 import com.platform45.weather45.helpers.getDaysAgo
+import com.platform45.weather45.helpers.getPairHistoryList
 import com.platform45.weather45.models.*
+import com.platform45.weather45.persistance.room.tables.pairHistory.PairHistoryTable
 import com.platform45.weather45.repositories.FXRepository
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HistoryViewModel(val app: Application, private val fXRepository: FXRepository) : BaseVieModel(app) {
+class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : BaseVieModel(app) {
     val availableCurrencies: MutableLiveData<List<String>> = MutableLiveData()
 
     private val _message: MutableLiveData<String> = MutableLiveData()
@@ -103,7 +111,6 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
     }
 
     fun checkAndLoad() {
-
         ioScope.launch {
             val cachedHistories = fXRepository.getAllPairHistoriesFromDb()
             uiScope.launch {
@@ -202,19 +209,8 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
             val endDate = _endDate.value ?: ""
             val format = "ohlc"
             var currency = getCurrencyPairsString()
-
             getCurrencyPairSeries(startDate, endDate, currency, format)
         }
-    }
-
-    private fun getCurrencyPairsString(): String{
-        var currency = ""
-        _currencyPairs.value?.let {
-            for((index, pair) in it.withIndex()) {
-                currency += if (index > 0) ",$pair" else "$pair"
-            }
-        }
-        return currency
     }
 
     suspend fun getCurrencyPairSeries(startDate: String, endDate: String, currency: String, format: String) {
@@ -231,43 +227,58 @@ class HistoryViewModel(val app: Application, private val fXRepository: FXReposit
 
     fun processSeries(series: Series, startDate: String, endDate: String){
         if (series.price != null) {
-            val prices = series?.price!!
-            val tempPairTrades = ArrayList<PairTradeHistory>()
-
-            val currencies = _currencyPairs.value!!
-            for (pairTrade in currencies) {
-                val currencyDateData = ArrayList<DayData>()
-                for (currentPrice in prices) {
-                    val currentDay =
-                        currentPrice.value as LinkedTreeMap<String?, LinkedTreeMap<String?, Double?>>
-
-                    val dateData = currentDay[pairTrade]
-                    val seriesDateData = DayData(
-                        currentPrice.key,
-                        dateData?.get("close")?.toFloat(),
-                        dateData?.get("high")?.toFloat(),
-                        dateData?.get("low")?.toFloat(),
-                        dateData?.get("open")?.toFloat()
-                    )
-                    currencyDateData.add(seriesDateData)
-                }
-
-                tempPairTrades.add(
-                    PairTradeHistory(
-                        pairTrade,
-                        startDate,
-                        endDate,
-                        currencyDateData
-                    )
-                )
-            }
-
-cacheHistory()
-            _pairTradeHistories.value = tempPairTrades
+            _pairTradeHistories.value = getPairHistoryList(startDate, endDate, _currencyPairs.value!!, series?.price!!)
+            cacheHistory()
         }
         else{
             _showError.value = app.getString(R.string.no_data_found)
         }
+    }
+
+
+
+
+
+    val catImagesFlow = Pager(config = PagingConfig(pageSize = 3)) {
+        PairPagingSource(_startDate.value ?: "", _endDate.value ?: "", getCurrencyPairsString(), fXRepository)
+    }.flow.cachedIn(viewModelScope)
+
+    val viewState = MutableLiveData<HistoryState>()
+
+    fun onViewEvent(historyEvent: HistoryEvent) = when (historyEvent) {
+        is HistoryEvent.Refresh -> refresh()
+        is HistoryEvent.pairHistoryChanged -> onPairHistoryChanged(
+            position = historyEvent.position,
+            pairHistory = historyEvent.pairHistory
+        )
+    }
+
+    private fun refresh() {
+        viewState.value = HistoryState.Load()
+    }
+
+    private fun onPairHistoryChanged(position: Int, pairHistory: PairHistoryTable) {
+        val dfdf = pairHistory
+    }
+
+
+
+
+
+
+
+
+
+
+
+    fun getCurrencyPairsString(): String{
+        var currency = ""
+        _currencyPairs.value?.let {
+            for((index, pair) in it.withIndex()) {
+                currency += if (index > 0) ",$pair" else "$pair"
+            }
+        }
+        return currency
     }
 
     fun cacheHistory(){

@@ -1,5 +1,6 @@
 package com.platform45.weather45.features.history
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,24 +10,31 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.*
 import com.platform45.weather45.R
-import com.platform45.weather45.adapters.FxAdapter
 import com.platform45.weather45.adapters.CurrencyPairAdapter
+import com.platform45.weather45.adapters.FxPagingAdapter
 import com.platform45.weather45.base.fragments.BaseFragment
 import com.platform45.weather45.customViews.MySpinner
 import com.platform45.weather45.databinding.FragmentHistoryBinding
 import com.platform45.weather45.extensions.getScreenCols
 import com.platform45.weather45.features.history.datetime.DateTimePickerFragment
+import com.platform45.weather45.features.history.paging.HistoryEvent
 import com.platform45.weather45.helpers.showDateTimeDialogFragment
 import com.platform45.weather45.helpers.showErrorDialog
 import com.platform45.weather45.models.PairTradeHistory
+import com.platform45.weather45.persistance.room.tables.pairHistory.PairHistoryTable
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, DateTimePickerFragment.DateTimeSetter{
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel: HistoryViewModel by viewModel()
+    lateinit var fxPagingAdapter: FxPagingAdapter
     override var indx: Int = 0
 
     override fun onCreateView(
@@ -43,10 +51,6 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         binding.fxViewModel = historyViewModel
         addObservers()
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     private fun addObservers() {
@@ -111,12 +115,89 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
         }
 
         btnGetHistory.setOnClickListener {
-            historyViewModel.showLoadingAndGetPairSeries()
+            //historyViewModel.showLoadingAndGetPairSeries()
+            initPaging()
         }
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rvtrades)
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        fxPagingAdapter = FxPagingAdapter(requireContext())
+
+        rvtrades.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = fxPagingAdapter
+        }
+
+        /*
+        rvtrades?.adapter = fxPagingAdapter.withLoadStateFooter(
+            footer = LoadStateAdapter(fxPagingAdapter)
+        )
+        */
+
+
+        /*
+        lifecycleScope.launch {
+            fxPagingAdapter.loadStateFlow.collectLatest {
+                when (it.refresh) {
+                    is LoadState.Error -> displayErrorMessage(getString(R.string.error))
+                   // is LoadState.NotLoading -> swipeRefresh?.isRefreshing = false
+                }
+            }
+        }
+        */
+    }
+
+    fun initPaging(){
+        lifecycleScope.launch {
+            historyViewModel.catImagesFlow.collectLatest {
+                fxPagingAdapter.submitData(it)
+            }
+        }
+
+        fxPagingAdapter.addLoadStateListener { loadState ->
+            if (loadState.refresh is LoadState.Loading){
+                flLoader.visibility = View.VISIBLE
+            }
+            else{
+                flLoader.visibility = View.GONE
+
+                // getting the error
+                val error = when {
+                    loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                    else -> null
+                }
+                // errorState?.let { Toast.makeText(this, it.error.message, Toast.LENGTH_LONG).show() }
+            }
+        }
+    }
+
+    //Todo maybe remove
+    private fun onImageFavouriteClicked(adapterPos: Int, pairHistory: PairHistoryTable, isFavoured: Boolean) {
+        historyViewModel.onViewEvent(
+            HistoryEvent.pairHistoryChanged(
+                position = adapterPos,
+                pairHistory = pairHistory
+            )
+        )
+    }
+
+    
+    
+    
+    
+    
+    
 
     override fun setDate(year: Int, month: Int, day: Int) {
         when (indx) {
@@ -201,11 +282,13 @@ class HistoryFragment : BaseFragment(), CurrencyPairAdapter.UserInteractions, Da
     }
 
     fun onTradeHistorySet(pairHistories: List<PairTradeHistory?>?){
+        /*
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rvtrades?.layoutManager = tradesLayoutManager
         val fxtAdapter = FxAdapter(requireContext(), pairHistories)
         rvtrades?.adapter = fxtAdapter
         showPairSeriesInfo()
+       */
     }
 
     override fun onPairClicked(view: View, position: Int) {

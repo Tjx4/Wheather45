@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.CandleStickChart
 import com.github.mikephil.charting.components.XAxis
@@ -15,22 +17,26 @@ import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.platform45.weather45.R
-import com.platform45.weather45.models.PairTradeHistory
+import com.platform45.weather45.helpers.toDayDataList
+import com.platform45.weather45.persistance.room.tables.pairHistory.PairHistoryTable
 
-class FxAdapter(private val context: Context, private val pairHistories: List<PairTradeHistory?>?) : RecyclerView.Adapter<FxAdapter.ViewHolder>() {
+class FxPagingAdapter(val context: Context) : PagingDataAdapter<PairHistoryTable, FxPagingAdapter.HistoryViewHolder>(HistoryComparator) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.fx_layout, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.fx_layout,
+            parent,
+            false
+        )
+        return HistoryViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentFx = pairHistories?.get(position)
+    override fun onBindViewHolder(holderHistory: HistoryViewHolder, position: Int) {
+        val currentFx = getItem(position)
+        holderHistory.conversionTv.text = currentFx?.tradingPair
+        holderHistory.timePeriodTv.text = "From: ${currentFx?.startDate} to ${currentFx?.endDate}"
 
-        holder.conversionTv.text = currentFx?.tradingPair
-        holder.timePeriodTv.text = "From: ${currentFx?.startDate} to ${currentFx?.endDate}"
-
-        val dayData = currentFx?.history
+        val dayData = currentFx?.history?.toDayDataList()
 
         val xValues = ArrayList<String>()
         val candleEntries = ArrayList<CandleEntry>()
@@ -57,7 +63,7 @@ class FxAdapter(private val context: Context, private val pairHistories: List<Pa
         candleDataSet.valueTextColor = context.resources.getColor(R.color.lightText)
         candleDataSet.setDrawValues(true)
 
-        val xAxis = holder.candleStickChart.xAxis
+        val xAxis = holderHistory.candleStickChart.xAxis
         xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f
@@ -69,31 +75,31 @@ class FxAdapter(private val context: Context, private val pairHistories: List<Pa
         //xAxis.spaceMax = 1f
         //candleStickChart.extraBottomOffset = 160f
 
-        val aAxisRight = holder.candleStickChart.axisRight
+        val aAxisRight = holderHistory.candleStickChart.axisRight
         aAxisRight.textColor = context.resources.getColor(R.color.light_text_2)
 
         val candleData = CandleData(candleDataSet)
-        holder.candleStickChart.setDrawGridBackground(false)
-        holder.candleStickChart.axisLeft.isEnabled = false
-        holder.candleStickChart.axisRight.isEnabled = true
-        holder.candleStickChart.description.isEnabled = false
-        holder.candleStickChart.data = candleData
+        holderHistory.candleStickChart.setDrawGridBackground(false)
+        holderHistory.candleStickChart.axisLeft.isEnabled = false
+        holderHistory.candleStickChart.axisRight.isEnabled = true
+        holderHistory.candleStickChart.description.isEnabled = false
+        holderHistory.candleStickChart.data = candleData
         //candleStickChart.animateXY(5000, 4000)
-        holder.candleStickChart.invalidate()
+        holderHistory.candleStickChart.invalidate()
     }
 
-    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class HistoryViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var conversionTv = itemView.findViewById<TextView>(R.id.tvConversion)
         internal var timePeriodTv = itemView.findViewById<TextView>(R.id.tvTimePeriod)
         internal var candleStickChart = itemView.findViewById<CandleStickChart>(R.id.candleStickChart)
 
         init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(view: View) {
+           // itemView.setOnClickListener(this)
         }
     }
+}
 
-    override fun getItemCount() = pairHistories?.size ?: 0
+object HistoryComparator : DiffUtil.ItemCallback<PairHistoryTable>() {
+    override fun areItemsTheSame(oldItem: PairHistoryTable, newItem: PairHistoryTable) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: PairHistoryTable, newItem: PairHistoryTable) = oldItem == newItem
 }

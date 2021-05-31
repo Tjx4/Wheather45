@@ -119,10 +119,20 @@
         <item name="colorControlHighlight">#666</item>
     </style>
 
+    <style name="SelectableItemTheme2">
+        <item name="colorControlHighlight">#222</item>
+    </style>
+
     <style name="PairItemBackground">
         <item name="android:theme">@style/SelectableItemTheme</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:background">@drawable/pair_item_background</item>
+    </style>
+
+    <style name="PairItem2Background">
+        <item name="android:theme">@style/SelectableItemTheme2</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">@drawable/cp_background</item>
     </style>
 
 </resources>

@@ -150,79 +150,13 @@
 
                     <TextView
                         style="@style/MediumTextView"
-                        android:id="@+id/tvPopPairs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_from_popular_trading_pairs"
-                        android:gravity="left"
-                        android:layout_margin="@dimen/xsmall_margin"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <com.platform45.weather45.customViews.MySpinner
-                        style="@style/mySpinnerItemStyle"
-                        android:id="@+id/spnPorpularTradingPairs"
-                        android:layout_marginHorizontal="@dimen/xsmall_margin"
-                        android:entries="@{fxViewModel.popularCurrencyPairs}"
-                        app:layout_constraintTop_toBottomOf="@+id/tvPopPairs"
-                        app:layout_constraintRight_toLeftOf="@+id/spnToCurrency"
-                        app:layout_constraintLeft_toLeftOf="parent"/>
-
-                  <androidx.constraintlayout.widget.ConstraintLayout
-                      android:id="@+id/clPopLoading"
-                      android:layout_width="0dp"
-                      android:layout_height="0dp"
-                      android:clickable="true"
-                      app:layout_constraintRight_toRightOf="@+id/spnPorpularTradingPairs"
-                      app:layout_constraintLeft_toLeftOf="@+id/spnPorpularTradingPairs"
-                      app:layout_constraintTop_toTopOf="@+id/tvPopPairs"
-                      app:layout_constraintBottom_toBottomOf="@+id/spnPorpularTradingPairs"
-                      android:background="@color/dark_background_2">
-
-                      <TextView
-                          style="@style/MediumTextView"
-                          android:id="@+id/tvPopLoading"
-                          android:layout_width="0dp"
-                          android:layout_height="wrap_content"
-                          android:text="Loading porpular pairs"
-                          android:gravity="left"
-                          android:layout_marginLeft="@dimen/small_margin"
-                          app:layout_constraintLeft_toLeftOf="parent"
-                          app:layout_constraintTop_toTopOf="parent"
-                          app:layout_constraintBottom_toBottomOf="parent"/>
-
-                      <com.wang.avi.AVLoadingIndicatorView
-                          android:id="@+id/avlPorpular"
-                          android:layout_width="25dp"
-                          android:layout_height="25dp"
-                          android:visibility="visible"
-                          app:indicatorColor="@color/lightText"
-                          app:indicatorName="LineSpinFadeLoaderIndicator"
-                          android:layout_marginLeft="@dimen/xsmall_margin"
-                          app:layout_constraintTop_toTopOf="@+id/tvPopLoading"
-                          app:layout_constraintBottom_toBottomOf="@+id/tvPopLoading"
-                          app:layout_constraintLeft_toRightOf="@+id/tvPopLoading"/>
-
-                  </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        style="@style/MediumTextView"
-                        android:id="@+id/tvOr"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="OR"
-                        android:gravity="center"
-                        android:layout_margin="@dimen/xsmall_margin"
-                        app:layout_constraintTop_toBottomOf="@+id/spnPorpularTradingPairs"/>
-
-                    <TextView
-                        style="@style/MediumTextView"
                         android:id="@+id/tvTradingPair"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/select_currencies_and_create_a_trading_pair"
                         android:gravity="left"
                         android:layout_margin="@dimen/xsmall_margin"
-                        app:layout_constraintTop_toBottomOf="@+id/tvOr"/>
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <com.platform45.weather45.customViews.MySpinner
                         style="@style/mySpinnerItemStyle"
@@ -368,11 +302,11 @@
             android:background="@color/dark_ackground">
 
             <com.wang.avi.AVLoadingIndicatorView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:visibility="visible"
                 app:indicatorColor="@color/lightText"
-                app:indicatorName="BallPulseIndicator"
+                app:indicatorName="LineSpinFadeLoaderIndicator"
                 android:layout_gravity="center"/>
 
         </FrameLayout>

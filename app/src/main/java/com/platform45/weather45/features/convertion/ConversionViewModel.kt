@@ -10,6 +10,10 @@ import kotlinx.coroutines.launch
 
 class ConversionViewModel(application: Application, val fXRepository: FXRepository) : BaseVieModel(application) {
 
+    private val _showLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val showLoading: MutableLiveData<Boolean>
+        get() = _showLoading
+
     private val _from: MutableLiveData<String> = MutableLiveData()
     val from: MutableLiveData<String>
         get() = _from
@@ -33,6 +37,7 @@ class ConversionViewModel(application: Application, val fXRepository: FXReposito
     }
 
     fun checkAndConvert(){
+        _showLoading.value = true
         val from = _from.value ?: ""
         val to = _to.value ?: ""
         val amount = _amount.value ?: 0

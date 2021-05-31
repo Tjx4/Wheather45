@@ -14,7 +14,6 @@ import com.platform45.weather45.features.history.paging.HistoryEvent
 import com.platform45.weather45.features.history.paging.PairPagingSource
 import com.platform45.weather45.helpers.getCurrentDate
 import com.platform45.weather45.helpers.getDaysAgo
-import com.platform45.weather45.helpers.getPairHistoryList
 import com.platform45.weather45.models.*
 import com.platform45.weather45.persistance.room.tables.pairHistory.PairHistoryTable
 import com.platform45.weather45.repositories.FXRepository
@@ -78,6 +77,7 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
         get() = _isPairsUpdated
 
     init {
+        _showLoading.value = true
         initCurrencies()
         initStartAndEndDate()
         initCurrencyPairs()
@@ -174,8 +174,8 @@ class HistoryViewModel(val app: Application, val fXRepository: FXRepository) : B
     }
 
     fun addPopularPairToList(indx: Int) {
-        val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<String>
-        addCurrencyPairToList(popularCurrencyPairs[indx])
+        val popularCurrencyPairs = _popularCurrencyPairs.value as ArrayList<CurrencyPair?>
+        popularCurrencyPairs[indx]?.pair?.let { addCurrencyPairToList(it) }
     }
 
     fun addCurrencyPairToList(currencyPair: String) {

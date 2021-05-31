@@ -7,13 +7,13 @@
     android:paddingBottom="@dimen/xsmall_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/PairItem2Background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingVertical="@dimen/small_margin"
-        android:paddingHorizontal="@dimen/large_margin"
-        android:background="@drawable/cp_background">
+        android:paddingHorizontal="@dimen/large_margin">
 
         <TextView
             style="@style/LargeTextView"

@@ -57,37 +57,12 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
         return binding.root
     }
 
-    private fun addObservers() {
-        historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
-        //historyViewModel.loadRemote.observe(this, Observer { onLoadFromRemote(it)})
-        historyViewModel.showError.observe(this, Observer { onShowError(it)})
-        historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
-        historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
-        historyViewModel.currencyPairs.observe(this, Observer { onCurrencyPairsSet(it)})
-        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it)})
-        historyViewModel.isPairsUpdated.observe(this, Observer { onPairsListUpdated(it)})
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Navigation.findNavController(view).currentDestination?.label = getString(R.string.app_name)
 
         addObservers()
         historyViewModel.checkState()
-
-        spnPorpularTradingPairs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if((parent as MySpinner).isInit){
-                    historyViewModel.addPopularPairToList(position)
-                }
-                else{
-                    parent.isInit = true
-                }
-            }
-        }
 
         spnFrmCurrency.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -159,6 +134,18 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
         }
 
     }
+
+    private fun addObservers() {
+        historyViewModel.showLoading.observe(this, Observer { onShowLoading(it)})
+        //historyViewModel.loadRemote.observe(this, Observer { onLoadFromRemote(it)})
+        historyViewModel.showError.observe(this, Observer { onShowError(it)})
+        historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
+        historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
+        historyViewModel.currencyPairs.observe(this, Observer { onCurrencyPairsSet(it)})
+        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it)})
+        historyViewModel.isPairsUpdated.observe(this, Observer { onPairsListUpdated(it)})
+    }
+
     fun initPaging(){
         lifecycleScope.launch {
             historyViewModel.pairHistoryFlow.collectLatest {
@@ -206,17 +193,17 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
         myDrawerController.showContent()
     }
 
-    fun resetPairData() {
-        historyViewModel.clearCurrencyPairs()
-    }
+fun resetPairData() {
+    historyViewModel.clearCurrencyPairs()
+}
 
     private fun onPopularCurrencyPairsSet(currencyPairs: List<CurrencyPair?>){
-        clPopLoading.visibility = View.GONE
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rvPorpularCp?.layoutManager = tradesLayoutManager
         val favouriteCPAdapter = FavouriteCPAdapter(requireContext(), currencyPairs)
         favouriteCPAdapter.setPairClickListener(this)
         rvPorpularCp?.adapter = favouriteCPAdapter
+        showPairSeriesInfo()
     }
 
     private fun canProceed(proceed: Boolean){
@@ -246,15 +233,17 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
         rvtrades?.adapter?.notifyDataSetChanged()
     }
 
+    /*
     fun onTradeHistorySet(pairHistories: List<PairTradeHistory?>?){
-        /*
+
         val tradesLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rvtrades?.layoutManager = tradesLayoutManager
         val fxtAdapter = FxAdapter(requireContext(), pairHistories)
         rvtrades?.adapter = fxtAdapter
         showPairSeriesInfo()
-       */
+
     }
+    */
 
     override fun onPairClicked(view: View, position: Int) {
         rvPairs.layoutManager?.scrollToPosition(position)
@@ -267,9 +256,8 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
     }
 
     override fun onPairClicked(position: Int) {
-        //View pair history
-        Toast.makeText(context, "${ historyViewModel.popularCurrencyPairs.value?.get(position)} clicked", Toast.LENGTH_SHORT).show()
+        historyViewModel.addPopularPairToList(position)
+        Toast.makeText(context, "${ historyViewModel.popularCurrencyPairs.value?.get(position)?.pair} clicked", Toast.LENGTH_SHORT).show()
     }
-
 
 }

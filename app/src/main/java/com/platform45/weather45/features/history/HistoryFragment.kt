@@ -142,7 +142,7 @@ class HistoryFragment : BaseFragment(), FavouriteCPAdapter.AddPairClickListener,
         historyViewModel.canProceed.observe(this, Observer { canProceed(it)})
         historyViewModel.popularCurrencyPairs.observe(this, Observer { onPopularCurrencyPairsSet(it)})
         historyViewModel.currencyPairs.observe(this, Observer { onCurrencyPairsSet(it)})
-        historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it)})
+        //historyViewModel.pairTradeHistories.observe(this, Observer { onTradeHistorySet(it)})
         historyViewModel.isPairsUpdated.observe(this, Observer { onPairsListUpdated(it)})
     }
 
